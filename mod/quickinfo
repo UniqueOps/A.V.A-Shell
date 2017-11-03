@@ -2,22 +2,28 @@
 # Description: Quick information for servers
 # Contributors: Casey McLaughlin
 
-#Initialize variables to default values.
-OPT_V=V #Standard Flag for Verbose Mode
+# Initialize variables to default values.
+OPT_V=V #Standard Flag for Output Mode
+OPT_S=S #Standard Flag for Silent Mode
 OPT_T=T #Standard Flag for Ticket Mode
 
-#Help function
+# Help function
 function HELP() {
-  echo -e "\n$Color_Blue====================$Color_Reset Uptime, Load Averages and Other Logged In Users $Color_Blue====================$Color_Reset";
-  echo -e "Help documentation for ${Color_Bold}Switches Template.${Color_Reset}"\\n
+  echo -e "\n$H1===================================$H2 Switches Template $H1===================================$RS\n";
+  echo -e "Help documentation for ${BOLD}Switches Template.${RESET}"\\n
   echo -e "Command line switches are optional. The following switches are recognized."
-  echo -e "${Color_Inverted}-v${Color_Reset}  --Enables Verbose Mode: Displays standard output of a script."
-  echo -e "${Color_Inverted}-t${Color_Reset}  --Enables Ticket Mode: Displays output into a ticket format."
-  echo -e "${Color_Inverted}-h${Color_Reset}  --Displays this help message. No further functions performed."\\n
-  echo -e "\n$Color_Blue=========================================================================================$Color_Reset";
+  echo -e "${HIGHLIGHT}-c${RESET}  --Enables Checklist Mode: Print's in a quick format form"
+  echo -e "${HIGHLIGHT}-n${RESET}  --Enables Noob Mode: Shows you what commands used."
+  echo -e "${HIGHLIGHT}-o${RESET}  --Enables Output Mode: Displays standard output of a script."
+  echo -e "${HIGHLIGHT}-s${RESET}  --Enables Silent Mode: Display only informative information."
+  echo -e "${HIGHLIGHT}-t${RESET}  --Enables Ticket Mode: Displays output into a ticket format."
+  echo -e "${HIGHLIGHT}-h${RESET}  --Displays this help message. No further functions performed."\\n
+  echo -e "Example: ${BOLD}bash <(curl -ks https://codesilo.dimenoc.com/caseym/SSH-Scripts/raw/master/VersionChecker.sh) -h${RESET}"
+  echo -e "\n$H1=========================================================================================$RS";
+  exit 1
 }
 
-#Check the number of arguments. If none are passed, print help and exit.
+# Check the number of arguments. If none are passed, print help and exit.
 NUMARGS=$#
 if [ $NUMARGS -eq 0 ]; then
   HELP
@@ -30,32 +36,13 @@ fi
 while getopts ":cnosth" FLAG; do
   case "${FLAG}" in
     v)
-      echo -e "\n$Color_Blue====================$Color_Reset Uptime, Load Averages and Other Logged In Users $Color_Blue====================$Color_Reset\n";
-      w;
-      echo -e "\n$Color_Blue=========================================================================================$Color_Reset";
-      # Detect any screens and what is currently running in them
-      SCREEN=$(screen -ls 2>/dev/null | grep -v "No Sockets found in /var/run/screen/S-root."); 
-      INFO=$(ps faux | grep -v grep | grep -A2 "SCREEN" | egrep "SCREEN|_"); 
-      if [[ -n $INFO ]]; then echo -e "\n$Color_Blue========================================$Color_Reset Screens $Color_Blue========================================$Color_Reset\n $SCREEN \n$INFO \n$Color_Blue=========================================================================================$Color_Reset"; fi
+      echo "You Picked v!"
+      ;;
+    s)
+      echo "You Picked s!"
       ;;
     t)
-      echo -e "- Performed \`w\`";
-      echo -e "\`\`\`";
-      w;
-      echo -e "\`\`\`";
-      # Detect any screens and what is currently running in them
-      SCREEN=$(screen -ls 2>/dev/null | grep -v "No Sockets found in /var/run/screen/S-root."); 
-      INFO=$(ps faux | grep -v grep | grep -A2 "SCREEN" | egrep "SCREEN|_"); 
-      if [[ -n $INFO ]]; then 
-        echo -e "- Performed \`screen -ls 2>/dev/null | grep -v \"No Sockets found in /var/run/screen/S-root.\"\`";
-        echo -e "\`\`\`";
-        echo -en "$SCREEN";
-        echo -e "\`\`\`";        
-        echo -e "- Performed \`ps faux | grep -v grep | grep -A2 \"SCREEN\" | egrep \"SCREEN|_\"\`";
-        echo -e "\`\`\`";
-        echo -e "$INFO";
-        echo -e "\`\`\`";
-      fi
+      echo "You Picked t!"
       ;;
     h)
       HELP
