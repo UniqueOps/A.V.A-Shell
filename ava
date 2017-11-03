@@ -18,6 +18,11 @@ echo -e "$Color_Green[OK]$Color_Reset Splash of color has now been detected"
 echo -e "[--] Loading global vairables"
 eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/var/global)"; # Splash of Color
 echo -e "$Color_Green[OK]$Color_Reset Global variables have now been activated"
+
+echo -e "[--] Loading the table library"
+eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/sys/tables)"; # Splash of Color
+echo -e "$Color_Green[OK]$Color_Reset Table library has been successfully loaded"
+
 echo -e "[--] Begining troubleshoot and analysis workflow\n"
 
 bash <(curl -ks https://gitlab.com/uniqueops/ava/raw/master/mod/quickinfo) -o
