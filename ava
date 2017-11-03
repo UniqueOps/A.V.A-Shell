@@ -20,5 +20,5 @@ eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/var/global)"; # Spl
 echo -e "$Color_Green[OK]$Color_Reset Global variables have now been activated"
 echo -e "[--] Begining troubleshoot and analysis workflow\n"
 
-eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/mod/quickinfo -v)"; # Include quick information
+eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/mod/quickinfo) -v"; # Include quick information
 echo -e "";
