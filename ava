@@ -2,3 +2,13 @@
 # SSH Command: eval "$(curl -ks https://gitlab.com/uniqueops/)";
 # Description: This is the launcher for Project: A.V.A
 # Contributors: Casey McLaughlin
+
+echo "     _    __     __    _    ";
+echo "    / \   \ \   / /   / \   ";
+echo "   / _ \   \ \ / /   / _ \  ";
+echo "  / ___ \  _\ V /_  / ___ \ ";
+echo " /_/   \_\(_)\_/(_)/_/   \_\";
+echo "============================";
+
+echo "Project: Ava Launcher Initiated";
+echo "Version 0.1 Detected";
