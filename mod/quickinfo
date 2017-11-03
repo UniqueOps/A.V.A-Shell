@@ -2,12 +2,11 @@
 # Description: Quick information for servers
 # Contributors: Casey McLaughlin
 
-w; #Uptime, Load Averages and Other Logged In Users
-
+echo -e "\n$H1====================$H2 Uptime, Load Averages and Other Logged In Users $H1====================$RS\n";
+w;
+echo -e "\n$H1=========================================================================================$RS";
 # Detect any screens and what is currently running in them
 SCREEN=$(screen -ls 2>/dev/null | grep -v "No Sockets found in /var/run/screen/S-root."); 
 INFO=$(ps faux | grep -v grep | grep -A2 "SCREEN" | egrep "SCREEN|_"); 
-#if [[ -n $INFO ]]; then 
- echo -e "\n$SCREEN"
- echo -e "\n$INFO\n"
-#fi
+if [[ -n $INFO ]]; then echo -e "\n$H1========================================$H2 Screens $H1========================================$RS\n $SCREEN \n$INFO \n$H1=========================================================================================$RS"; fi
+;;
