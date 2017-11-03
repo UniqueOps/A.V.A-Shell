@@ -1,5 +1,7 @@
 #!/bin/bash
 # Description: Global Variables
+# Contributors: Casey McLaughlin
+
 
 # Basic Server Information
 Core_Server_Hostname=$(hostname);
