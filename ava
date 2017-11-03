@@ -1,0 +1,4 @@
+#!/bin/bash
+# SSH Command: eval "$(curl -ks https://gitlab.com/uniqueops/)";
+# Description: This is the launcher for Project: A.V.A
+# Contributors: Casey McLaughlin
