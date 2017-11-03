@@ -3,7 +3,7 @@
 # Contributors: Casey McLaughlin
 
 # Initialize variables to default values.
-OPT_V=V #Standard Flag for Output Mode
+OPT_O=O #Standard Flag for Output Mode
 OPT_S=S #Standard Flag for Silent Mode
 OPT_T=T #Standard Flag for Ticket Mode
 
@@ -12,8 +12,6 @@ function HELP() {
   echo -e "\n$H1===================================$H2 Switches Template $H1===================================$RS\n";
   echo -e "Help documentation for ${BOLD}Switches Template.${RESET}"\\n
   echo -e "Command line switches are optional. The following switches are recognized."
-  echo -e "${HIGHLIGHT}-c${RESET}  --Enables Checklist Mode: Print's in a quick format form"
-  echo -e "${HIGHLIGHT}-n${RESET}  --Enables Noob Mode: Shows you what commands used."
   echo -e "${HIGHLIGHT}-o${RESET}  --Enables Output Mode: Displays standard output of a script."
   echo -e "${HIGHLIGHT}-s${RESET}  --Enables Silent Mode: Display only informative information."
   echo -e "${HIGHLIGHT}-t${RESET}  --Enables Ticket Mode: Displays output into a ticket format."
@@ -35,8 +33,8 @@ fi
 
 while getopts ":cnosth" FLAG; do
   case "${FLAG}" in
-    v)
-      echo "You Picked v!"
+    o)
+      echo "You Picked o!"
       ;;
     s)
       echo "You Picked s!"
