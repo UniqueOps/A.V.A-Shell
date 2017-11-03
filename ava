@@ -17,7 +17,8 @@ eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/var/colors)"; # Spl
 echo -e "$Color_Green[OK]$Color_Reset Splash of color has now been detected"
 echo -e "[--] Loading global vairables"
 eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/var/global)"; # Splash of Color
-echo -e "$Color_Green[OK]$Color_Reset Global variables have now been activated\n"
+echo -e "$Color_Green[OK]$Color_Reset Global variables have now been activated"
+echo -e "[--] Begining troubleshoot and analysis workflow\n"
 
 eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/mod/quickinfo)"; # Include quick information
 echo -e "";
