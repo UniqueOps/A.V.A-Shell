@@ -29,8 +29,8 @@ echo -e "- Silent: Standard script output but minimized where possible";
 echo -e "- Ticket: Will display the Silent output mode and at the end make a ticket formatted section\n"
 
 PS3='Which output would you like: '
-options=("Verbose" "Silent" "Ticket" "Quit\n")
-select opt in "${options[@]}"
+options=("Verbose" "Silent" "Ticket" "Quit")
+select opt in "${options[@]}\n"
 do
     case $opt in
         "Verbose")
