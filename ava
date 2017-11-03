@@ -10,4 +10,4 @@ echo -e " /_/   \_\(_)\_/(_)/_/   \_\ ";
 echo -e "=============================";
 echo -e "                             ";
 echo -e "[I] Project: Ava Launcher has been initiated";
-echo -e "[I] Version 0.1 is detected";
+echo -e "[I] Version 0.1 is detected/n";
