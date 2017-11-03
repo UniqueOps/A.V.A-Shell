@@ -1,0 +1,13 @@
+#!/bin/bash
+# Description: Quick information for servers
+# Contributors: Casey McLaughlin
+
+w; #Uptime, Load Averages and Other Logged In Users
+
+# Detect any screens and what is currently running in them
+SCREEN=$(screen -ls 2>/dev/null | grep -v "No Sockets found in /var/run/screen/S-root."); 
+INFO=$(ps faux | grep -v grep | grep -A2 "SCREEN" | egrep "SCREEN|_"); 
+#if [[ -n $INFO ]]; then 
+ echo -e "\n$SCREEN"
+ echo -e "\n$INFO\n"
+#fi
