@@ -15,7 +15,6 @@ function HELP() {
   echo -e "${Color_Inverted}-t${Color_Reset}  --Enables Ticket Mode: Displays output into a ticket format."
   echo -e "${Color_Inverted}-h${Color_Reset}  --Displays this help message. No further functions performed."\\n
   echo -e "\n$Color_Blue=========================================================================================$Color_Reset";
-  exit 1
 }
 
 #Check the number of arguments. If none are passed, print help and exit.
