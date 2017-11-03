@@ -2,6 +2,7 @@
 # SSH Command: eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/ava)";
 # Description: This is the launcher for Project: A.V.A
 # Contributors: Casey McLaughlin
+
 echo -e "     _    __     __    _     ";
 echo -e "    / \   \ \   / /   / \    ";
 echo -e "   / _ \   \ \ / /   / _ \   ";
@@ -17,3 +18,6 @@ echo -e "$Color_Green[OK]$Color_Reset Splash of color has now been detected"
 echo -e "[--] Loading global vairables"
 eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/var/global)"; # Splash of Color
 echo -e "$Color_Green[OK]$Color_Reset Global variables have now been activated\n"
+
+eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/mod/quickinfo)"; # Include quick information
+echo -e "";
