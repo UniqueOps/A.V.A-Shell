@@ -9,5 +9,12 @@ echo -e "  / ___ \  _\ V /_  / ___ \  ";
 echo -e " /_/   \_\(_)\_/(_)/_/   \_\ ";
 echo -e "=============================";
 echo -e "                             ";
-echo -e "[I] Project: Ava launcher has been initiated";
-echo -e "[I] Version 0.1 of project has been detected\n";
+echo -e "[--] Project: Ava launcher has been initiated";
+echo -e "[--] Version 0.1 of project has been detected\n";
+echo -e "[--] Loading a splash of color for visual appeal"
+eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/var/colors)"; # Splash of Color
+echo -e "$Color_Green[OK]$Color_Reset Splash of color has now been detected"
+echo -e "[--] Loading global vairables"
+eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/var/colors)"; # Splash of Color
+eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/var/global)"; # Splash of Color
+echo -e "$Color_Green[OK]$Color_Reset Loading a splash of color for visual appeal\n"
