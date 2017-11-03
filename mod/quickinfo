@@ -8,4 +8,4 @@ echo -e "$Color_Blue============================================================
 # Detect any screens and what is currently running in them
 SCREEN=$(screen -ls 2>/dev/null | grep -v "No Sockets found in /var/run/screen/S-root."); 
 INFO=$(ps faux | grep -v grep | grep -A2 "SCREEN" | egrep "SCREEN|_"); 
-if [[ -n $INFO ]]; then echo -e "$Color_Blue========================================$Color_Reset Screens $Color_Blue========================================$Color_Reset\n $SCREEN $INFO \n$Color_Blue=========================================================================================$Color_Reset"; fi
+if [[ -n $INFO ]]; then echo -e "$Color_Blue========================================$Color_Reset Screens $Color_Blue========================================$Color_Reset\n$SCREEN $INFO \n$Color_Blue=========================================================================================$Color_Reset"; fi
