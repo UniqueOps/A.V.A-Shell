@@ -28,7 +28,7 @@ echo -e "- Verbose: Standard script output";
 echo -e "- Silent: Standard script output but minimized where possible";
 echo -e "- Ticket: Will display the Silent output mode and at the end make a ticket formatted section\n"
 
-PS3='\nWhich output would you like: '
+PS3=\n'Which output would you like: '
 options=("Verbose" "Silent" "Ticket" "Quit")
 select opt in "${options[@]}"
 do
