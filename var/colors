@@ -1,0 +1,45 @@
+#!/bin/bash
+# Description: Add some colors to scripts
+# https://misc.flogisoft.com/bash/tip_colors_and_formatting
+
+# Standard Formatting
+Color_Reset="\e[0m";                        # Reset
+Color_Bold="\e[1m";                         # Bold/Bright
+Color_Underline="\e[2m";                    # Underlined
+Color_Inverted="\e[7m";                     # Inverted
+
+# Basic Colors
+Color_Black="\e[30m";                       # Black
+Color_Red="\e[31m";                         # Red
+Color_Red_Light="\e[91m";                   # Light Red
+Color_Green="\e[32m";                       # Green
+Color_Green_Light="\e[92m";                 # Light Green
+Color_Yellow="\e[33m";                      # Yellow
+Color_Yellow_Light="\e[93m";                # Light Yellow
+Color_Blue="\e[34m";                        # Blue
+Color_Blue_Light="\e[94m";                  # Light Blue
+Color_Magenta="\e[35m";                     # Magenta
+Color_Magenta_Light="\e[95m";               # Light Magenta
+Color_Cyan="\e[36m";                        # Cyan
+Color_Cyan_Light="\e[96m";                  # Light Cyan
+Color_Gray="\e[90m";                        # Gray
+Color_Gray_Light="\e[37m";                  # Light Gray
+Color_White="\e[97m";                       # White
+
+# Background
+Color_Background_Black="\e[40m";            # Black Background
+Color_Background_Red="\e[41m";              # Red Background
+Color_Background_Red_Light="\e[101m";       # Light Red Background
+Color_Background_Green="\e[42m";            # Green Background
+Color_Background_Green_Light="\e[102m";     # Light Green Background
+Color_Background_Yellow="\e[43m";           # Yellow Background
+Color_Background_Yellow_Light="\e[103m";    # Light Yellow Background
+Color_Background_Blue="\e[44m";             # Blue Background
+Color_Background_Blue_Light="\e[104m";      # Light Blue Background
+Color_Background_Magenta="\e[45m";          # Magenta Background
+Color_Background_Magenta_Light="\e[105m";   # Light Magenta Background
+Color_Background_Cyan="\e[46m";             # Cyan Background
+Color_Background_Cyan_Light="\e[106m";      # Light Cyan Background
+Color_Background_Gray="\e[47m";             # Gray Background
+Color_Background_Gray_Dark="\e[100m";       # Light Gray Background
+Color_Background_White="\e[107m";           # White Background
