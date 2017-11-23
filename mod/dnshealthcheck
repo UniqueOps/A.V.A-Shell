@@ -3,12 +3,13 @@
 # Contributors: Casey McLaughlin
 
 ## Local Variables ##
-Parent_NameServers=' | ' read -r -a array <<< "dig ns +short uniqueops.com | sed 's/.$//' | sort | sed -e :a -e '$!N; s/\n/ | /; ta'"
-IFS='| ' read -r -a array <<< "$Parent_NameServers"
-for element in "${array[@]}"
-do
-    echo "$element"
-done
+IFS="|";
+Parent_NameServers="dig ns +short google.com | sed 's/.$//' | sort | sed -e :a -e '$!N; s/\n/|/; ta'";
+Parent_NameServers_Array=($Parent_NameServers);
+for ((i=0; i<${#Parent_NameServers_Array[@]}; ++i)); do echo "NameServer $i: ${Parent_NameServers_Array[$i]}"; done
+
+
+
 
 ## Parent Table Fields ##
 
