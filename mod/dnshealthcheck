@@ -2,11 +2,13 @@
 # Description: Domain DNS Health Checker
 # Contributors: Casey McLaughlin
 
-## Local Variables ##
+## Declare Local Settings ##
 IFS="|";
-Parent_NameServers=$(dig ns +short google.com | sed 's/.$//' | sort | sed -e :a -e '$!N; s/\n/|/; ta');
-Parent_NameServers_Array=($Parent_NameServers);
-for ((i=0; i<${#Parent_NameServers_Array[@]}; ++i)); do echo "NameServer $i: ${Parent_NameServers_Array[$i]}"; done
+
+## Local Variables ##
+
+
+
 
 
 
@@ -14,6 +16,8 @@ for ((i=0; i<${#Parent_NameServers_Array[@]}; ++i)); do echo "NameServer $i: ${P
 ## Parent Table Fields ##
 
 # Domain NS Records
+Parent_NameServers=$(dig ns +short google.com | sed 's/.$//' | sort | sed -e :a -e '$!N; s/\n/|/; ta');
+for ((i=0; i<${#Parent_NameServers[@]}; ++i)); do echo "${Parent_NameServers[$i]}"; done
 
 # TLD Parent Check
 
