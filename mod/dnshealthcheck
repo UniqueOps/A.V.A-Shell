@@ -4,7 +4,7 @@
 
 ## Local Variables ##
 IFS="|";
-Parent_NameServers="dig ns +short google.com | sed 's/.$//' | sort | sed -e :a -e '$!N; s/\n/|/; ta'";
+Parent_NameServers=$(dig ns +short google.com | sed 's/.$//' | sort | sed -e :a -e '$!N; s/\n/|/; ta');
 Parent_NameServers_Array=($Parent_NameServers);
 for ((i=0; i<${#Parent_NameServers_Array[@]}; ++i)); do echo "NameServer $i: ${Parent_NameServers_Array[$i]}"; done
 
