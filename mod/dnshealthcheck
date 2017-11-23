@@ -2,197 +2,62 @@
 # Description: Domain DNS Health Checker
 # Contributors: Casey McLaughlin
 
+## Local Variables ##
+Parent_NameServers=' | ' read -r -a array <<< "dig ns +short uniqueops.com | sed 's/.$//' | sort | sed -e :a -e '$!N; s/\n/ | /; ta'"
+IFS='| ' read -r -a array <<< "$Parent_NameServers"
+for element in "${array[@]}"
+do
+    echo "$element"
+done
 
-#!/bin/bash
-#
-# Author:
-# Graham Lupton
-# Level 1 Support Technician
-#
-# Codesilo:
-# https://codesilo.dimenoc.com/grahaml/utils/blob/master/server_info
+## Parent Table Fields ##
 
-# This script finds
-# * Hostname
-# * IP
-# * OS version
-# * Number of CPUs
-# * Amount of RAM
-# * Load Averages
-# * Number of users logged in
-# * Current time, and timezone
+# Domain NS Records
 
-# Colors
-RS="\e[0;00m"		#Reset;
+# TLD Parent Check
 
-R1="\e[1;31m"         # Red
-Y1="\e[1;33m"         # Yellow
-G1="\e[1;32m"         # Green
+# Nameservers Listed Check
 
-RU="\e[4;49;91m"      # Red    and underline
-YU="\e[4;49;93m"      # Yellow and underline
+# DNS Parent Glue Check
 
-H1="\e[1m\e[34m"      #BOLD and BLUE
-H2="\e[1m\e[97m"      #BOLD and WHITE
+# Nameservers A Record Check
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Field 1 - Hostname
 hostname_label="Hostname"
 hostname=$(hostname)
 (( hostname_size = ${#hostname} >= ${#hostname_label} ? ${#hostname} : ${#hostname_label} )) # column width
 
-# Field 2 - IP
-ip_label="IP"
-ip=$(hostname -i)
-(( ip_size = ${#ip} >= ${#ip_label} ? ${#ip} : ${#ip_label} )) # column width
-
-# Field 3 - OS version
-os_label="OS"
-os=""
-
-# Check for CentOS which requires the version be parsed differently.
-# This could likely be simplified to just use regex.
-os_v=$(awk '{print $3}' /etc/redhat-release | cut -f 1 -d '.')
-
-# If the third field is "release", it's CentOS 7.
-if [ "$os_v" = "release" ]; then 
-  os_distro=$(awk '{print $1}' /etc/redhat-release)
-  os_v=$(awk '{print $4}' /etc/redhat-release | cut -f 1 -d '.')
-else
-  os_distro=$(awk '{print $1}' /etc/redhat-release)
-  os_v=$(awk '{print $3}' /etc/redhat-release | cut -f 1,2 -d '.')
-fi
-
-# We need the major version number on its own for later.
-os_v_major=$(echo "$os_v" | cut -d '.' -f 1)
-
-# Store the distro, and version numbers into a single variable.
-os="$os_distro $os_v"
-
-# Calculate the column width, and then the spacer for color codes.
-(( os_size = ${#os} >= ${#os_label} ? ${#os} : ${#os_label} )) # column width
-(( os_spacer = os_size - ${#os} ))
-
-# This if-else block determines the color codes applied.
-# CentOS 6 -> Green.
-# CentOS 5, 7, or CloudLinux -> Yellow
-# CentOS 4, or lower, or a non-CentOS/CloudLinux distro -> Red
-if [[ $os_distro = "CentOS" ]]; then
-
-  if [[ $os_v_major -ge 7 || $os_v_major -eq 5 ]]; then
-    os="$Y1$os$RS"
-  elif [[ $os_v_major -le 4 ]]; then
-    os="$R1$os$RS"
-  else
-    os="$os"
-  fi
-
-elif [[ $os_distro = "CloudLinux" ]]; then
-  os="$Y1$os$RS"
-else
-  os="$R1$os$RS"
-fi
-
-# Field 4 - # of CPUs
-cpus_label="CPUs"
-cpus=$(grep -c proc /proc/cpuinfo)
-(( cpus_size=${#cpus} >= ${#cpus_label} ? ${#cpus} : ${#cpus_label} )) # column width
-
-# Field 5 - Amount of RAM
-ram_label="RAM"
-ram=0;
-
-# The value returned is in "gibibytes" (GiB) but displays the unit GB to
-# ironically avoid confusion.
-ram="$(bash <(curl -ks https://codesilo.dimenoc.com/grahaml/ramcheck/raw/master/ramcheck.sh))"
-
-(( ram_size = ${#ram} >= ${#ram_label} ? ${#ram} : ${#ram_label} )) # column width
-
-# Field 6 - Load Averages
-load_label="Load Averages"
-
-load=$(cat /proc/loadavg | awk '{print $1, $2, $3}')
-
-# Calculate the column width, and then the spacer for color codes.
-(( load_size = ${#load}>=${#load_label} ? ${#load} : ${#load_label} ))
-(( load_spacer = load_size - ${#load} ))
-
-# This field uses color. The color is determined by the highest load average,
-# and it checks to see if it crosses a threshold.
-
-# Store each load value into its own variable for later.
-# BASH does not support floating point numbers so the load averages will need
-# to be converted to integers.
-# To do so, these values are effectively multiplied by 100 by removing the '.', 
-# and trimming the leading zeroes.
-load_1=$(cut -d " " -f1 <(echo $load) | tr -d '.' | sed 's/^0*//' )
-load_5=$(cut -d " " -f2 <(echo $load) | tr -d '.' | sed 's/^0*//' )
-load_15=$(cut -d " " -f3 <(echo $load) | tr -d '.' | sed 's/^0*//' )
-
-# Initialize variable to highest load value to load_1
-load_high=$load_1
-
-# Set load_high to the max of load_1, load_5, and load_15
-if [[ load_5 -ge load_high ]]; then
-  load_high=$load_5
-fi
-
-if [[ load_15 -ge load_high ]]; then
-  load_high=$load_15
-fi
-
-# Set thresholds for high warnings at:
-# Half the number of CPUs for "caution" -> Yellow
-# 90% of the CPUs for "warning" -> Red
-
-# Again, bash does not support floating point numbers so to create a threshold
-# using the number of CPUs, the value will need to be multiplied or divided by
-# an integer. The load averages were "multipled" by 100 earlier so the
-# number of CPUs will need to be adjusted accordingly.
-# The threshold coefficient is calculated by multiplying 100 and the percentage
-# of CPUs you want to use for the threshold.
-(( LOAD_CAUTION = cpus * 50 ))
-(( LOAD_WARN = cpus * 90 ))
-
-if [[ load_high -ge LOAD_WARN ]]; then
-  load="$R1$load$RS"
-elif [[ load_high -ge LOAD_CAUTION ]]; then
-  load="$Y1$load$RS"
-else
-  load="$load"
-fi
-
-# Field 7 - Number of users
-users_label="Users"
-users=$(( $(w | wc -l) - 2 ))
-
-# Calculate the column width, and then the spacer for color codes.
-(( users_size = ${#users} >= ${#users_label} ? ${#users} : ${#users_label} ))
-(( users_spacer = users_size - ${#users} ))
-
-# This if-else block determines the color codes applied.
-# 1 user (or less) -> Green
-# Exactly 2 users -> Yellow and underlined
-# 3 or more users -> Red and underline
-if [[ users -eq 2 ]]; then
-  users="$YU$users$RS"
-elif [[ users -gt 2 ]]; then
-  users="$RU$users$RS"
-else
-  users="$users"
-fi
-
-# Field 8 - Time, Timezone, Offset
-time_label="Time"
-time_tz=$(date +"%H:%M %Z (%z)")
-(( time_size = ${#time_tz} >= ${#time_label} ? ${#time_tz} : ${#time_label} )) # column width
-
 # Formatting
 
 # Set title and save the length
-TITLE="Server Info"
+TITLE="Parent"
 TITLE_SIZE=${#TITLE}
 
-num_fields=8;
+num_fields=3;
 
 header_format=" %-${hostname_size}s | %${ip_size}s | %${os_size}s | %${cpus_size}s | %${ram_size}s | %${load_size}s | %${users_size}s | %${time_size}s\n"
 row_format=" %-${hostname_size}s | %${ip_size}s | %${os_spacer}s%b | %${cpus_size}s | %${ram_size}s | %${load_spacer}s%b | %${users_spacer}s%b | %${time_size}s\n"
