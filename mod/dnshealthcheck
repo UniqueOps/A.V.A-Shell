@@ -9,6 +9,38 @@ IFS="|";
 
 
 
+# Table Title
+TITLE="DNS Check (Parent)"
+TITLE_SIZE=${#TITLE}
+num_fields=3;
+
+Status|TestName|Info
+
+
+header_format=" %-${hostname_size}s | %${ip_size}s | %${os_size}s | %${cpus_size}s | %${ram_size}s | %${load_size}s | %${users_size}s | %${time_size}s\n"
+row_format=" %-${hostname_size}s | %${ip_size}s | %${os_spacer}s%b | %${cpus_size}s | %${ram_size}s | %${load_spacer}s%b | %${users_spacer}s%b | %${time_size}s\n"
+
+# Width is the sum of the field labels plus 2 for a space on either end
+# and plus an additional 3 for each field partition (# of fields - 1)
+width=$(( 2 + ( 3 * ( num_fields - 1 ) ) + hostname_size + ip_size + os_size + cpus_size + ram_size + load_size + users_size + time_size ));
+
+if [ "$TITLE_SIZE" -gt "$width" ]; then
+  width=$TITLE_SIZE
+fi
+
+# Find the number of '=' needed on either side of the title
+title_divider=$(( ( width - ( TITLE_SIZE + 2 ) ) / 2 )); # divide the difference of the width and the title size + 2 (for spaces) by two
+title_divider_2=$title_divider; # 
+
+# If the parity of $width and $title_size are not the same then an extra '=' 
+# is needed to center the title.
+if [ $(( width % 2 )) -ne $(( TITLE_SIZE % 2 )) ]; then
+    ((title_divider_2++));
+fi
+
+
+
+
 
 
 
