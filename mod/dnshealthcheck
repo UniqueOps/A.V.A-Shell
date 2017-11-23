@@ -17,7 +17,7 @@ IFS="|";
 
 # Domain NS Records
 Parent_NameServers=$(dig ns +short google.com | sed 's/.$//' | sort | sed -e :a -e '$!N; s/\n/|/; ta');
-Parent_NameServers_Array=(Parent_NameServers);
+Parent_NameServers_Array=($Parent_NameServers);
 for ((i=0; i<${#Parent_NameServers_Array[@]}; ++i)); do echo "${Parent_NameServers_Array[$i]}"; done
 
 # TLD Parent Check
