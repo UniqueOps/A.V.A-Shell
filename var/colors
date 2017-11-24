@@ -4,43 +4,43 @@
 # Contributors: Casey McLaughlin
 
 # Standard Formatting
-Color_Reset="\e[0m";                        # Reset
-Color_Bold="\e[1m";                         # Bold/Bright
-Color_Underline="\e[2m";                    # Underlined
-Color_Inverted="\e[7m";                     # Inverted
+readonly Color_Reset="\e[0m";                        # Reset
+readonly Color_Bold="\e[1m";                         # Bold/Bright
+readonly Color_Underline="\e[2m";                    # Underlined
+readonly Color_Inverted="\e[7m";                     # Inverted
 
 # Basic Colors
-Color_Black="\e[30m";                       # Black
-Color_Red="\e[31m";                         # Red
-Color_Red_Light="\e[91m";                   # Light Red
-Color_Green="\e[32m";                       # Green
-Color_Green_Light="\e[92m";                 # Light Green
-Color_Yellow="\e[33m";                      # Yellow
-Color_Yellow_Light="\e[93m";                # Light Yellow
-Color_Blue="\e[34m";                        # Blue
-Color_Blue_Light="\e[94m";                  # Light Blue
-Color_Magenta="\e[35m";                     # Magenta
-Color_Magenta_Light="\e[95m";               # Light Magenta
-Color_Cyan="\e[36m";                        # Cyan
-Color_Cyan_Light="\e[96m";                  # Light Cyan
-Color_Gray="\e[90m";                        # Gray
-Color_Gray_Light="\e[37m";                  # Light Gray
-Color_White="\e[97m";                       # White
+readonly Color_Black="\e[30m";                       # Black
+readonly Color_Red="\e[31m";                         # Red
+readonly Color_Red_Light="\e[91m";                   # Light Red
+readonly Color_Green="\e[32m";                       # Green
+readonly Color_Green_Light="\e[92m";                 # Light Green
+readonly Color_Yellow="\e[33m";                      # Yellow
+readonly Color_Yellow_Light="\e[93m";                # Light Yellow
+readonly Color_Blue="\e[34m";                        # Blue
+readonly Color_Blue_Light="\e[94m";                  # Light Blue
+readonly Color_Magenta="\e[35m";                     # Magenta
+readonly Color_Magenta_Light="\e[95m";               # Light Magenta
+readonly Color_Cyan="\e[36m";                        # Cyan
+readonly Color_Cyan_Light="\e[96m";                  # Light Cyan
+readonly Color_Gray="\e[90m";                        # Gray
+readonly Color_Gray_Light="\e[37m";                  # Light Gray
+readonly Color_White="\e[97m";                       # White
 
 # Background
-Color_Background_Black="\e[40m";            # Black Background
-Color_Background_Red="\e[41m";              # Red Background
-Color_Background_Red_Light="\e[101m";       # Light Red Background
-Color_Background_Green="\e[42m";            # Green Background
-Color_Background_Green_Light="\e[102m";     # Light Green Background
-Color_Background_Yellow="\e[43m";           # Yellow Background
-Color_Background_Yellow_Light="\e[103m";    # Light Yellow Background
-Color_Background_Blue="\e[44m";             # Blue Background
-Color_Background_Blue_Light="\e[104m";      # Light Blue Background
-Color_Background_Magenta="\e[45m";          # Magenta Background
-Color_Background_Magenta_Light="\e[105m";   # Light Magenta Background
-Color_Background_Cyan="\e[46m";             # Cyan Background
-Color_Background_Cyan_Light="\e[106m";      # Light Cyan Background
-Color_Background_Gray="\e[47m";             # Gray Background
-Color_Background_Gray_Dark="\e[100m";       # Light Gray Background
-Color_Background_White="\e[107m";           # White Background
+readonly Color_Background_Black="\e[40m";            # Black Background
+readonly Color_Background_Red="\e[41m";              # Red Background
+readonly Color_Background_Red_Light="\e[101m";       # Light Red Background
+readonly Color_Background_Green="\e[42m";            # Green Background
+readonly Color_Background_Green_Light="\e[102m";     # Light Green Background
+readonly Color_Background_Yellow="\e[43m";           # Yellow Background
+readonly Color_Background_Yellow_Light="\e[103m";    # Light Yellow Background
+readonly Color_Background_Blue="\e[44m";             # Blue Background
+readonly Color_Background_Blue_Light="\e[104m";      # Light Blue Background
+readonly Color_Background_Magenta="\e[45m";          # Magenta Background
+readonly Color_Background_Magenta_Light="\e[105m";   # Light Magenta Background
+readonly Color_Background_Cyan="\e[46m";             # Cyan Background
+readonly Color_Background_Cyan_Light="\e[106m";      # Light Cyan Background
+readonly Color_Background_Gray="\e[47m";             # Gray Background
+readonly Color_Background_Gray_Dark="\e[100m";       # Light Gray Background
+readonly Color_Background_White="\e[107m";           # White Background
