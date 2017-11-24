@@ -4,8 +4,8 @@
 
 
 # Basic Server Information
-Core_Server_Hostname=$(hostname);
-Core_Server_IP=$(hostname -i);
-Core_Server_Processors=$(nproc);
-Core_Server_Uptime=$(uptime | awk '{print $3,$4}' | tr ',' ' ');
+readonly Core_Server_Hostname=$(hostname);
+readonly Core_Server_IP=$(hostname -i);
+readonly Core_Server_Processors=$(nproc);
+readonly Core_Server_Uptime=$(uptime | awk '{print $3,$4}' | tr ',' ' ');
 #Core_Server_OS=$(lsb_release -a | awk 'FNR==3 {$1=""; $6=""; print}' | tr 'C' 'C'); #Not Working
