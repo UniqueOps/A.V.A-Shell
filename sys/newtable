@@ -3,6 +3,8 @@
  Table_Glyph_Row='-'
  Table_Glyph_Header='='
 
+Color_Blue="Test Worked!";
+
  Table_Glyph_Column_Color=${!Color_Blue}
  Table_Glyph_Row_Color=${!Color_Blue}
  Table_Glyph_Header_Color=${!Color_Blue}
