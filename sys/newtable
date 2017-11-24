@@ -1,9 +1,11 @@
+# Includes
+eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/var/colors)"; # Splash of Color
+eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/var/global)"; # Splash of Color
+
  # Table Design
  Table_Glyph_Column='|'
  Table_Glyph_Row='-'
  Table_Glyph_Header='='
-
-Color_Blue="Test Worked!";
 
  Table_Glyph_Column_Color=${Color_Blue}
  Table_Glyph_Row_Color=${Color_Blue}
