@@ -24,7 +24,9 @@ row_format=" %-${hostname_size}s | %${ip_size}s\n"
 # and plus an additional 3 for each field partition (# of fields - 1)
 width=$(( 2 + ( 3 * ( Table_Columns_Number - 1 ) ) + hostname_size + ip_size ));
 
-if [ "$Table_Title_Size" -gt "$width" ]; then width=$Table_Title_Size fi
+if [ "$Table_Title_Size" -gt "$width" ]; then 
+    width=$Table_Title_Size 
+fi
 
 # Create the table title
 title_divider=$(( ( width - ( Table_Title_Size + 2 ) ) / 2 ));
