@@ -196,4 +196,4 @@ printf "$header_format" "$hostname_label" "$ip_label" "$os_label" "$cpus_label" 
 
 printf "%*s\n" $width | tr ' ' '=';
 
-printf "$row_format" "$hostname" "$ip" "" "$os" "$cpus" "$ram" "" "$load" "" "$users" "$time_tz"      ;;
+printf "$row_format" "$hostname" "$ip" "" "$os" "$cpus" "$ram" "" "$load" "" "$users" "$time_tz"
