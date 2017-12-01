@@ -13,29 +13,26 @@ ip=$(hostname -i)
 # Formatting
 
 # Set title and save the length
-TITLE="Server Info"
-TITLE_SIZE=${#TITLE}
-
-num_fields=2;
+Table_Title="Server Info"
+Table_Title_Size=${#TITLE}
+Table_Columns_Number=2;
 
 header_format=" %-${hostname_size}s | %${ip_size}s\n"
 row_format=" %-${hostname_size}s | %${ip_size}s\n"
 
 # Width is the sum of the field labels plus 2 for a space on either end
 # and plus an additional 3 for each field partition (# of fields - 1)
-width=$(( 2 + ( 3 * ( num_fields - 1 ) ) + hostname_size + ip_size ));
+width=$(( 2 + ( 3 * ( Table_Columns_Number - 1 ) ) + hostname_size + ip_size ));
 
-if [ "$TITLE_SIZE" -gt "$width" ]; then
-  width=$TITLE_SIZE
-fi
+if [ "$Table_Title_Size" -gt "$width" ]; then width=$Table_Title_Size fi
 
-# Find the number of '=' needed on either side of the title
-title_divider=$(( ( width - ( TITLE_SIZE + 2 ) ) / 2 )); # divide the difference of the width and the title size + 2 (for spaces) by two
-title_divider_2=$title_divider; # 
+# Create the table title
+title_divider=$(( ( width - ( Table_Title_Size + 2 ) ) / 2 ));
+title_divider_2=$title_divider; 
 
 # If the parity of $width and $title_size are not the same then an extra '=' 
 # is needed to center the title.
-if [ $(( width % 2 )) -ne $(( TITLE_SIZE % 2 )) ]; then
+if [ $(( width % 2 )) -ne $(( Table_Title_Size % 2 )) ]; then
     ((title_divider_2++));
 fi
 
@@ -45,13 +42,10 @@ fi
 printf "\n$H1%*s$H2" $title_divider | tr ' ' '='; 
 
 # Print the title with a space on either side
-printf " %s " "$TITLE"
+printf " %s " "$Table_Title"
 
 # Print spaces on the right and translate them to '='
 printf "$H1%*s$RS\n" $title_divider_2 | tr ' ' '='
-
 printf "$header_format" "$hostname_label" "$ip_label"
-
 printf "%*s\n" $width | tr ' ' '=';
-
 printf "$row_format" "$hostname" "$ip"
