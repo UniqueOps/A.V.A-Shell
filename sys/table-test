@@ -1,53 +1,52 @@
 #!/bin/bash
 
+# Table Header Information
+Table_Title="Server Info"
+Table_Header_Labels=('Hostname' 'IP'); # echo ${Table_Header_Labels[0]}
+
+## Table Field Function Area ##
+
 # Field 1 - Hostname
 hostname_label="Hostname"
-hostname=$(hostname)
-(( hostname_size = ${#hostname} >= ${#hostname_label} ? ${#hostname} : ${#hostname_label} )) # column width
+hostname="vps.domain.com"
+(( hostname_size = ${#hostname} >= ${#hostname_label} ? ${#hostname} : ${#hostname_label} ))
 
 # Field 2 - IP
 ip_label="IP"
-ip=$(hostname -i)
-(( ip_size = ${#ip} >= ${#ip_label} ? ${#ip} : ${#ip_label} )) # column width
+ip="192.168.1.100"
+(( ip_size = ${#ip} >= ${#ip_label} ? ${#ip} : ${#ip_label} ))
 
-# Formatting
+## End Table Field Function Area ##
 
-# Set title and save the length
-Table_Title="Server Info"
-Table_Title_Size=${#TITLE}
-Table_Columns_Number=2;
+#                                #
+# Assign Functions to Row Fields #
+#                                #
 
-header_format=" %-${hostname_size}s | %${ip_size}s\n"
-row_format=" %-${hostname_size}s | %${ip_size}s\n"
+#                                             #
+# Loop Created Here To Create _Size Variables #
+#                                             #
 
-# Width is the sum of the field labels plus 2 for a space on either end
-# and plus an additional 3 for each field partition (# of fields - 1)
-width=$(( 2 + ( 3 * ( Table_Columns_Number - 1 ) ) + hostname_size + ip_size ));
+# Automated Variables
+Table_Columns=${#Table_Header_Labels[@]}                                        # Table Number of Columns
+Table_Title_Size=${#Table_Title}                                                # Detect Title Size
+Table_Header_Format=" %-${hostname_size}s | %-${ip_size}s\n"                    # Calculates Total Header Length
+Table_Row_Format=" %-${hostname_size}s | %-${ip_size}s\n"                       # Calculates Total Row Length
+Table_Width=$(( 2 + ( 3 * ( Table_Columns - 1 ) ) + hostname_size + ip_size));  # Calculate Table Total Width
 
-if [ "$Table_Title_Size" -gt "$width" ]; then 
-    width=$Table_Title_Size 
+# Format Table Title
+if [ "$Table_Title_Size" -gt "$Table_Width" ]; then
+  Table_Width=$Table_Title_Size
+fi
+Table_Title_Divider=$(( ( Table_Width - ( Table_Title_Size + 2 ) ) / 2 ));
+Table_Title_Divider_2=$Table_Title_Divider;
+if [ $(( Table_Width % 2 )) -ne $(( Table_Title_Size % 2 )) ]; then
+    ((Table_Title_Divider_2++));
 fi
 
-# Create the table title
-title_divider=$(( ( width - ( Table_Title_Size + 2 ) ) / 2 ));
-title_divider_2=$title_divider; 
-
-# If the parity of $width and $title_size are not the same then an extra '=' 
-# is needed to center the title.
-if [ $(( width % 2 )) -ne $(( Table_Title_Size % 2 )) ]; then
-    ((title_divider_2++));
-fi
-
-# Print the table
-
-# Print spaces on the left and translate them to '='
-printf "\n$H1%*s$H2" $title_divider | tr ' ' '='; 
-
-# Print the title with a space on either side
-printf " %s " "$Table_Title"
-
-# Print spaces on the right and translate them to '='
-printf "$H1%*s$RS\n" $title_divider_2 | tr ' ' '='
-printf "$header_format" "$hostname_label" "$ip_label"
-printf "%*s\n" $width | tr ' ' '=';
-printf "$row_format" "$hostname" "$ip";
+# Print the Table
+printf "\n$Color_Blue%*s$Color_Reset" $Table_Title_Divider | tr ' ' '=';        # Print Title Left Glyfs
+printf " %s " "$Table_Title"                                                    # Print Title
+printf "$Color_Blue%*s$Color_Reset\n" $Table_Title_Divider_2 | tr ' ' '='       # Print Title Right Glyfs
+printf "$Table_Header_Format" "$hostname_label" "$ip_label"                     # Print Headers
+printf "%*s\n" $Table_Width | tr ' ' '=';                                       # Print Header Divider
+printf "$Table_Row_Format" "$hostname" "$ip"                                    # Print Row
