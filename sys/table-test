@@ -48,4 +48,4 @@ printf " %s " "$Table_Title"
 printf "$H1%*s$RS\n" $title_divider_2 | tr ' ' '='
 printf "$header_format" "$hostname_label" "$ip_label"
 printf "%*s\n" $width | tr ' ' '=';
-printf "$row_format" "$hostname" "$ip"
+printf "$row_format" "$hostname" "$ip";
