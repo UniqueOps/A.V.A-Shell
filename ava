@@ -11,7 +11,7 @@ echo -e " /_/   \_\(_)\_/(_)/_/   \_\ ";
 echo -e "=============================";
 echo -e "                             ";
 echo -e "[--] Project: Ava launcher has been initiated";
-echo -e "[--] Version 0.1 of project has been detected\n";
+echo -e "[--] Version 0.1 of project has been detected\\n";
 echo -e "[--] Loading a splash of color for visual appeal"
 eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/var/colors)"; # Splash of Color
 echo -e "$Color_Green[OK]$Color_Reset Splash of color has now been detected"
@@ -21,12 +21,12 @@ echo -e "$Color_Green[OK]$Color_Reset Global variables have now been activated"
 echo -e "[--] Loading the table library"
 eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/sys/tables)"; # Splash of Color
 echo -e "$Color_Green[OK]$Color_Reset Table library has been successfully loaded"
-echo -e "[--] Begining troubleshoot and analysis workflow\n"
+echo -e "[--] Begining troubleshoot and analysis workflow\\n"
 
 echo -e "Output Options:";
 echo -e "- Verbose: Standard script output";
 echo -e "- Silent: Standard script output but minimized where possible";
-echo -e "- Ticket: Will display the Silent output mode and at the end make a ticket formatted section\n"
+echo -e "- Ticket: Will display the Silent output mode and at the end make a ticket formatted section\\n"
 
 PS3='Which output would you like: '
 options=("Verbose" "Silent" "Ticket" "Quit")
