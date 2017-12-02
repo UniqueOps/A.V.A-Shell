@@ -7,35 +7,29 @@ declare -a Table_Header_Labels=('Hostname' 'IP'); # echo ${Table_Header_Labels[0
 ## Table Field Function Area ##
 
 # Field 1 - Hostname
-hostname_label="Hostname"
-hostname="vps.domain.com"
-(( hostname_size = ${#hostname} >= ${#hostname_label} ? ${#hostname} : ${#hostname_label} ))    
+Hostname_Label="Hostname"
+Hostname="vps.domain.com"
+(( Hostname_Size = ${#Hostname} >= ${#Hostname_Label} ? ${#Hostname} : ${#Hostname_Label} )) # Will be deleted    
 
 # Field 2 - IP
-ip_label="IP"
-ip="192.168.1.100"
-(( ip_size = ${#ip} >= ${#ip_label} ? ${#ip} : ${#ip_label} ))
+IP_Label="IP"
+IP="192.168.1.100"
+(( IP_Size = ${#IP} >= ${#IP_Label} ? ${#IP} : ${#IP_Label} )) # Will be deleted
 
 ## End Table Field Function Area ##
 
-#                                             #
-# Loop Created Here To Create _Size Variables #
-#                                             #
-for i in ${Table_Header_Labels[@]} 
+# Generate Size Variables
+for i in ${Table_Header_Labels[0]} 
 do
 	Element=${i}
 	Element_Size="${i}_Size"
 	Element_Label="${i}_Label"
 	
-	echo "$Element"
-	echo "$Element_Size"
-	echo "$Element_Label"
-	
 	# Print the generated one
 	echo "(( $Element_Size = ${#Element} >= ${#Element_Label} ? ${#Element} : ${#Element_Label} ))"
 	
 	# Print correct one to compare
-	echo "(( hostname_size = ${#hostname} >= ${#hostname_label} ? ${#hostname} : ${#hostname_label} ))"
+	echo "(( Hostname_Size = ${#Hostname} >= ${#Hostname_Label} ? ${#Hostname} : ${#Hostname_Label} ))"
 	
 done
 
@@ -43,9 +37,9 @@ done
 # Automated Variables
 Table_Columns=${#Table_Header_Labels[@]}                                        # Table Number of Columns
 Table_Title_Size=${#Table_Title}                                                # Detect Title Size
-Table_Header_Format=" %-${hostname_size}s | %-${ip_size}s\\n"                   # Calculates Total Header Length
-Table_Row_Format=" %-${hostname_size}s | %-${ip_size}s\\n"                      # Calculates Total Row Length
-Table_Width=$(( 2 + ( 3 * ( Table_Columns - 1 ) ) + hostname_size + ip_size));  # Calculate Table Total Width
+Table_Header_Format=" %-${Hostname_Size}s | %-${IP_Size}s\\n"                   # Calculates Total Header Length
+Table_Row_Format=" %-${Hostname_Size}s | %-${IP_Size}s\\n"                      # Calculates Total Row Length
+Table_Width=$(( 2 + ( 3 * ( Table_Columns - 1 ) ) + Hostname_Size + IP_Size));  # Calculate Table Total Width
 
 # Format Table Title
 if [ "$Table_Title_Size" -gt "$Table_Width" ]; then
@@ -61,6 +55,6 @@ fi
 printf "\\n$Color_Blue%*s$Color_Reset" $Table_Title_Divider | tr ' ' '=';       # Print Title Left Glyfs
 printf " %s " "$Table_Title"                                                    # Print Title
 printf "$Color_Blue%*s$Color_Reset\\n" $Table_Title_Divider_2 | tr ' ' '='      # Print Title Right Glyfs
-printf "$Table_Header_Format" "$hostname_label" "$ip_label"                     # Print Headers
+printf "$Table_Header_Format" "$Hostname_Label" "$IP_Label"                     # Print Headers
 printf "%*s\\n" "$Table_Width" | tr ' ' '=';                                    # Print Header Divider
-printf "$Table_Row_Format" "$hostname" "$ip"                                    # Print Row
+printf "$Table_Row_Format" "$Hostname" "$IP"                                    # Print Row
