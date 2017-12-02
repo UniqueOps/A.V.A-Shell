@@ -9,7 +9,7 @@ Table_Header_Labels=('Hostname' 'IP'); # echo ${Table_Header_Labels[0]}
 # Field 1 - Hostname
 hostname_label="Hostname"
 hostname="vps.domain.com"
-(( hostname_size = ${#hostname} >= ${#hostname_label} ? ${#hostname} : ${#hostname_label} ))
+(( hostname_size = ${#hostname} >= ${#hostname_label} ? ${#hostname} : ${#hostname_label} ))    
 
 # Field 2 - IP
 ip_label="IP"
@@ -18,13 +18,27 @@ ip="192.168.1.100"
 
 ## End Table Field Function Area ##
 
-#                                #
-# Assign Functions to Row Fields #
-#                                #
-
 #                                             #
 # Loop Created Here To Create _Size Variables #
 #                                             #
+for i in "${Table_Header_Labels[0]}"
+do
+	Element=${i}
+	Element_Size="${i}_Size"
+	Element_Label="${i}_Label"
+	
+	echo $Element
+	echo $Element_Size
+	echo $Element_Label
+	
+	# Print the generated one
+	echo "(( $Element_Size = ${#Element} >= ${#Element_Label} ? ${#Element} : ${#Element_Label} ))"
+	
+	# Print correct one to compare
+	echo "(( hostname_size = ${#hostname} >= ${#hostname_label} ? ${#hostname} : ${#hostname_label} ))"
+	
+done
+
 
 # Automated Variables
 Table_Columns=${#Table_Header_Labels[@]}                                        # Table Number of Columns
