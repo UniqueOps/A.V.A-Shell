@@ -1,13 +1,13 @@
 #!/bin/bash
 
-###################################################################################
-# Notes                                                                           #
-# - Convert Table_Row_Output to contain all variables for fields                  #
-# - Convert Size Variable Loop to use this array instead                          #
-# - Attempt to make column headers space friendly (Sed spaces to _?)              #
-# - Convert print table to function form                                          #
-# - Convert Print Row to Self Generating Forum (Table_Row_Output may be solution) #
-###################################################################################
+#############################################################################
+# Notes                                                                     #
+# - Convert Table_Row_Output to contain all row output variables for fields #
+#   - Convert Size Variable Loop to use this array instead                  #
+#   - Convert Print Row to Self Generating Forum                            #
+# - Attempt to make column headers space friendly (Sed spaces to _?)        #
+# - Convert print table to function form                                    #
+#############################################################################
 
 Table_Title="Server Info"                                                               # Declare Table Title
 declare -a Table_Header_Labels=('Hostname' 'IP');                                       # Declare Column Headers
