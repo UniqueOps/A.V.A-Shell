@@ -2,11 +2,7 @@
 
 # Checks:
 #  * cPanel / cpsrvd
-#  * BIND / named
 #  * Apache / httpd
-#  * MySQL (MariaDB) / mysqld
-#  * Exim / exim
-#  * Dovecot / dovecot
 
 # Constants
 
@@ -323,62 +319,6 @@ function check_control_panel() {
   new_service "$cpanel_label" "$cpanel_v" "$cpanel_d" "$cpanel_state" "$cpanel_ports"
 }
 
-function check_dns() {
-  # To-Do
-  # * Add NSD check
-  #   * BIND and NSD are NOT mutually exclusive.
-  
-  # BIND / Named
-  
-  bind_label="BIND"
-  bind_v=$(named -v 2>/dev/null | awk '{print $2}' | cut -d '.' -f 1,2,3 | cut -d '-' -f 1)
-  bind_d="named"
-  bind_state="$STATE_DOWN"
-  bind_ports=$(get_ports $bind_d)
-
-  if [[ $(pgrep "$bind_d") ]]; then
-    bind_state="$STATE_UP"
-  fi
-  
-  new_service "$bind_label" "$bind_v" "$bind_d" "$bind_state" "$bind_ports"
-}
-
-function check_nameserver() {
-  
-  ns="$(/usr/local/cpanel/scripts/setupnameserver --current \
-      | awk '{print $4}')"
-  
-  case "$ns" in
-    "bind" )    
-      ns_label="BIND"
-      ns_v=$(named -v 2>/dev/null \
-           | awk '{print $2}' \
-           | cut -d '.' -f 1,2,3 \
-           | cut -d '-' -f 1)
-      ns_d="named"
-      ;;
-    "nsd" )      
-      ns_label="NSD"
-      ns_v="$(nsd -v 2>&1 | awk 'NR==1 {print $3}')"
-      ns_d="nsd"
-      ;;
-    "powerdns" ) 
-      ns_label="PowerDNS"
-      ns_v="$(pdns_control version)"
-      ns_d="pdns_server"
-      ;;
-  esac
-  
-  ns_state="$STATE_DOWN"
-  ns_ports=$(get_ports "$ns_d")
-
-  if [[ $(pgrep "$ns_d") ]]; then
-    ns_state="$STATE_UP"
-  fi
-  
-  new_service "$ns_label" "$ns_v" "$ns_d" "$ns_state" "$ns_ports"
-}
-
 function check_webserver() {
   # To-Do
   # * Test NGINX check
@@ -425,128 +365,6 @@ function check_webserver() {
     
     new_service "$nginx_label" "$nginx_v" "$nginx_d" "$nginx_state" "$nginx_ports"
   fi
-}
-
-function check_db() {
-  # To-Do
-  # * Check possible DBs other than MySQL like PostgreSQL
-
-  # MySQL
-
-  mysql_label="MySQL"
-
-  if ! mysql_v="$(mysql -V 2>/dev/null | awk '{print $5}' | cut -d '.' -f 1,2,3 | cut -d ',' -f1)"
-  then
-    # This is a fallback in case `mysql -V` doesn't work. This can happen in
-    # very rare cases.
-    # Ex: the variable `bind-address` is set in `my.cnf` for versions of MySQL
-    # prior to 5.6.
-    mysql_v="$(
-        mysql --no-defaults --user=root --password="$(grep password /root/.my.cnf \
-      | cut -d '"' -f2)" -e "SHOW VARIABLES LIKE \"%version%\";" 2>/dev/null \
-      | grep version \
-      | grep -v "_" \
-      | awk '{print $2}')"
-  fi
-  mysql_d="mysqld"
-  mysql_state="$STATE_DOWN"
-  mysql_ports=$(get_ports $mysql_d)
-
-  if [[ "$(mysql -V | awk '{print $5}' | tr -d ',' | cut -f 2 -d '-')" = "MariaDB" ]]; then
-    mysql_label="MariaDB"
-  fi
-
-  if [[ $(pgrep "$mysql_d") ]]; then
-        mysql_state="$STATE_UP"
-  fi
-
-  new_service "$mysql_label" "$mysql_v" "$mysql_d" "$mysql_state" "$mysql_ports"
-}
-
-function check_mta() {
-  # To-Do
-  # * Check for other MTAs such as Postfix.
-    
-  # Exim
-
-  exim_label="Exim"
-  exim_v=$(exim -bV 2>/dev/null | head -1 | awk '{print $3}')
-  exim_d="exim"
-  exim_state="$STATE_DOWN"
-
-  exim_ports=$(get_ports $exim_d)
-
-  if [[ $(pgrep "$exim_d") ]]; then
-    exim_state="$STATE_UP"
-  fi
-
-  new_service "$exim_label" "$exim_v" "$exim_d" "$exim_state" "$exim_ports"
-}
-
-function check_mailserver() {
-  # To-Do
-  # * Find a way to get the Courier version.
-
-  # Dovecot or Courier
-
-  mailserver_label=""
-  mailserver_v=""
-  mailserver_d=$(/scripts/setupmailserver --current 2>/dev/null | awk 'FNR==1' | awk '{print $4}')
-  mailserver_state="$STATE_DOWN"
-
-  if [[ "$mailserver_d" == "dovecot" ]]; then
-    mailserver_label="Dovecot"
-    mailserver_v=$(dovecot --version 2>/dev/null | awk '{print $1}')
-    if [[ $(pgrep "$mailserver_d") ]]; then
-      mailserver_state="$STATE_UP"
-    fi
-  elif [ "$mailserver_d" == "courier" ]; then
-    mailserver_label="Courier"
-    # I don't know how to get the Courier version but it shouldn't be on
-    # any of our servers at this point anyway so it can wait.
-    mailserver_v="n/a"
-    if [[ $(pgrep -x "courier-imap") ]]; then
-      mailserver_state="$STATE_UP"
-    fi
-  fi
-
-  mailserver_ports=$(get_ports "$mailserver_d")
-  
-  new_service "$mailserver_label" "$mailserver_v" "$mailserver_d" "$mailserver_state" "$mailserver_ports"
-}
-
-function check_ftp() {
-  # FTP | Pure-FTPd or ProFTPD
-  
-  ftp_d=$(/scripts/setupftpserver --current 2>/dev/null | awk '{print $5}')
-
-  if [[ $ftp_d == "pure-ftpd" ]]; then
-    
-    ftp_label="Pure-FTPd"
-    ftp_v=$(
-        pure-ftpd --help 2>/dev/null \
-      | head -1 \
-      | awk '{print $2}' \
-      | cut -d 'v' -f 2)
-    
-  elif [[ $ftp_d == "proftpd" ]]; then
-  
-    ftp_label="ProFTPD"
-    ftp_v=$(proftpd -V | grep -i version | awk '{print $2}')
-    
-  else
-    # Something unexpected is going on.
-    return
-  fi
-  ftp_state="$STATE_DOWN"
-
-  ftp_ports=$(get_ports "$ftp_d")
-
-  if [[ $(pgrep "$ftp_d") ]]; then
-    ftp_state="$STATE_UP"
-  fi
-  
-  new_service "$ftp_label" "$ftp_v" "$ftp_d" "$ftp_state" "$ftp_ports"
 }
 
 function services_main() {
