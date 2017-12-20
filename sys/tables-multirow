@@ -1,15 +1,7 @@
 #!/bin/bash
 
-# Checks:
-#  * cPanel / cpsrvd
-#  * Apache / httpd
-
-# Constants
-
 # Colors
-
 RS="\e[0;00m"     # Reset
-
 G1="\e[1;32m"     # Green and bold
 #Y1="\e[1;33m"    # Yellow and bold - unused
 R1="\e[1;31m"     # Red and bold
@@ -18,28 +10,23 @@ BL="\e[0;30m"     # Black
 W1="\e[1;97m"     # White and bold
 
 # Field headings
-
-FIELDS=("Service" "Version" "Daemon" "Running" "Ports")
+FIELDS=("Service" "Version" "Daemon" "Running" "Ports" "Test")
 
 # Field Arrays
 
 # Labels
-
 labels[0]="${FIELDS[0]}"
 labels_size=${#FIELDS[0]}
 
 # Versions
-
 versions[0]="${FIELDS[1]}"
 versions_size=${#FIELDS[1]}
 
 # Daemons
-
 daemons[0]="${FIELDS[2]}"
 daemons_size=${#FIELDS[2]}
 
 # States
-
 states[0]="${FIELDS[3]}"
 states_size=${#FIELDS[3]}
 
@@ -47,7 +34,6 @@ STATE_UP="UP"
 STATE_DOWN="DOWN"
 
 # Ports
-
 ports[0]="${FIELDS[4]}"
 ports_size=${#FIELDS[4]}
 
