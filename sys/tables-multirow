@@ -1,10 +1,5 @@
 #!/bin/bash
-#
-# Call: 
-# bash <(curl -ks https://codesilo.dimenoc.com/grahaml/utils/raw/master/services_check)
-#
-# Based on https://codex.hostdime.com/scripts/download/QuickServiceCheck by Kevin B.
-#
+
 # Checks:
 #  * cPanel / cpsrvd
 #  * BIND / named
@@ -561,12 +556,12 @@ function services_main() {
   # also allows the order the services are listed in to be easily changed.
 
   check_control_panel
-  check_nameserver
-  check_webserver
-  check_db
-  check_mta
+  #check_nameserver
+  #check_webserver
+  #check_db
+  #check_mta
   check_mailserver
-  check_ftp
+  #check_ftp
   
   # Title
   TITLE="Services Check"
