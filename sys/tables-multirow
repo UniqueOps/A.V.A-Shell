@@ -1,16 +1,7 @@
 #!/bin/bash
 
-# Colors
-RS="\e[0;00m"     # Reset
-G1="\e[1;32m"     # Green and bold
-#Y1="\e[1;33m"    # Yellow and bold - unused
-R1="\e[1;31m"     # Red and bold
-B1="\e[1;34m"     # Blue and bold
-BL="\e[0;30m"     # Black
-W1="\e[1;97m"     # White and bold
-
 # Field headings
-FIELDS=("Service" "Version" "Daemon" "Running" "Ports" "Test")
+FIELDS=("Service" "Version" "Daemon" "Running" "Ports")
 
 # Field Arrays
 
@@ -37,62 +28,6 @@ STATE_DOWN="DOWN"
 ports[0]="${FIELDS[4]}"
 ports_size=${#FIELDS[4]}
 
-# Options
-
-# Option arguments and flags
-
-# Section color - Blue and bold by default
-SC="$B1"
-
-hflag='false'
-
-# Options string
-OPTIONS=$(getopt -o c:h --long color:,help -- "$@")
-eval set -- "$OPTIONS"
-
-# Parse options and arguments
-while true; do
-  case "$1" in
-    -c | --color)
-      SC=$2 
-      shift 
-      ;;
-    -h | --help) hflag='true' ;;
-    --)
-      shift
-      break
-      ;;
-    *)
-      echo "Internal error!"
-      exit 1
-      ;;
-  esac
-  shift
-done
-
-if $hflag; then
-  printf "
-${W1}NAME${RS}
-  servicescheck - Reports information about the server's services.
-
-${W1}SYNOPSIS${RS}
-  bash <(curl -ks URL) [OPTION]
-
-${W1}DESCRIPTION${RS}
-  Reports the version, running state, and listening ports of \
-common services found on HostDime servers.
-
-${W1}OPTIONS${RS}
-  ${W1}-c${RS} COLOR, ${W1}--color${RS}='COLOR'
-    Set the color of table's top border.
-    
-  ${W1}-h${RS}, ${W1}--help${RS}
-    Print a usage message briefly summarizing these command-line options, then exit.
-\n"
-  
-  exit 0
-fi
-  
 # Services
 
 # Functions
@@ -125,58 +60,6 @@ function print_row() {
 }
 
 # Field Accessors
-
-# Getters
-
-# Returns the ports a service is listening on.
-# An important distinction is that it gets the ports the service is actively
-# listening on and necessarily not the ports it is configured to listen on.
-function get_ports() {
-  if [ -z "$1" ]; then
-    return 1
-  fi
-  
-  if (( $(awk '{print $3}' /etc/redhat-release | cut -d'.' -f1) <= 5 ))
-  then
-    get_ports_legacy "$1"
-    return 0
-  fi
-  
-  listening=$(lsof -a -c "$1" -i -sTCP:LISTEN -Pn -u ^nobody \
-  | awk '{print $9}' \
-  | grep -E "[[:digit:]]" \
-  | cut -d':' -f2 \
-  | uniq \
-  | sort -un \
-  | paste -s -d ',')
-  
-  if [ "${#listening}" -le 1 ]; then
-    listening="None"
-  fi
-  
-  echo "$listening"
-}
-
-function get_ports_legacy() {
-  if [ -z "$1" ]; then
-    return 1
-  fi
-  
-  listening=$(lsof -a -c "$1" -i -Pn -u ^nobody \
-  | grep LISTEN \
-  | awk '{print $9}' \
-  | grep -E "[[:digit:]]" \
-  | cut -d':' -f2 \
-  | uniq \
-  | sort -un \
-  | paste -s -d ',')
-  
-  if [ "${#listening}" -le 1 ]; then
-    listening="None"
-  fi
-  
-  echo "$listening"
-}
 
 # Setters
 
@@ -360,19 +243,13 @@ function services_main() {
   # also allows the order the services are listed in to be easily changed.
 
   check_control_panel
-  #check_nameserver
   check_webserver
-  #check_db
-  #check_mta
-  #check_mailserver
-  #check_ftp
   
   # Title
   TITLE="Services Check"
   title_size=${#TITLE}
 
   # Formatting
-
   width=$(( 
       2 \
       + ( 3 * ( ${#FIELDS[@]} - 1 ) ) \
@@ -393,25 +270,15 @@ function services_main() {
     ((title_divider_2++))
   fi
 
-  # Print '```' for notes.
-  echo -e "  ${BL}\`\`\`${RS}"
-
   # Print the table
-
-  printf "$SC%*s$W1" $title_divider | tr ' ' '='; # Print spaces on the left and translate them to '='.
-
-  printf " %s " "$TITLE" # Print the title with a space on either side.
-
-  printf "$SC%*s$RS\n" $title_divider_2 | tr ' ' '=' # Print spaces on the right and translate them to '='.
+  printf "$SC%*s$W1" $title_divider | tr ' ' '=';
+  printf " %s " "$TITLE"
+  printf "$SC%*s$RS\n" $title_divider_2 | tr ' ' '='
 
   # Print Rows
-
   for ((i=0; i<${#labels[*]}; i++)); do
     print_row $i
   done
-  
-  # Print '```' for notes.
-  echo -e "  ${BL}\`\`\`${RS}"
 }
 
 services_main
