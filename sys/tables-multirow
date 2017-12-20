@@ -1,0 +1,618 @@
+#!/bin/bash
+#
+# Call: 
+# bash <(curl -ks https://codesilo.dimenoc.com/grahaml/utils/raw/master/services_check)
+#
+# Based on https://codex.hostdime.com/scripts/download/QuickServiceCheck by Kevin B.
+#
+# Checks:
+#  * cPanel / cpsrvd
+#  * BIND / named
+#  * Apache / httpd
+#  * MySQL (MariaDB) / mysqld
+#  * Exim / exim
+#  * Dovecot / dovecot
+
+# Constants
+
+# Colors
+
+RS="\e[0;00m"     # Reset
+
+G1="\e[1;32m"     # Green and bold
+#Y1="\e[1;33m"    # Yellow and bold - unused
+R1="\e[1;31m"     # Red and bold
+B1="\e[1;34m"     # Blue and bold
+BL="\e[0;30m"     # Black
+W1="\e[1;97m"     # White and bold
+
+# Field headings
+
+FIELDS=("Service" "Version" "Daemon" "Running" "Ports")
+
+# Field Arrays
+
+# Labels
+
+labels[0]="${FIELDS[0]}"
+labels_size=${#FIELDS[0]}
+
+# Versions
+
+versions[0]="${FIELDS[1]}"
+versions_size=${#FIELDS[1]}
+
+# Daemons
+
+daemons[0]="${FIELDS[2]}"
+daemons_size=${#FIELDS[2]}
+
+# States
+
+states[0]="${FIELDS[3]}"
+states_size=${#FIELDS[3]}
+
+STATE_UP="UP"
+STATE_DOWN="DOWN"
+
+# Ports
+
+ports[0]="${FIELDS[4]}"
+ports_size=${#FIELDS[4]}
+
+# Options
+
+# Option arguments and flags
+
+# Section color - Blue and bold by default
+SC="$B1"
+
+hflag='false'
+
+# Options string
+OPTIONS=$(getopt -o c:h --long color:,help -- "$@")
+eval set -- "$OPTIONS"
+
+# Parse options and arguments
+while true; do
+  case "$1" in
+    -c | --color)
+      SC=$2 
+      shift 
+      ;;
+    -h | --help) hflag='true' ;;
+    --)
+      shift
+      break
+      ;;
+    *)
+      echo "Internal error!"
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+if $hflag; then
+  printf "
+${W1}NAME${RS}
+  servicescheck - Reports information about the server's services.
+
+${W1}SYNOPSIS${RS}
+  bash <(curl -ks URL) [OPTION]
+
+${W1}DESCRIPTION${RS}
+  Reports the version, running state, and listening ports of \
+common services found on HostDime servers.
+
+${W1}OPTIONS${RS}
+  ${W1}-c${RS} COLOR, ${W1}--color${RS}='COLOR'
+    Set the color of table's top border.
+    
+  ${W1}-h${RS}, ${W1}--help${RS}
+    Print a usage message briefly summarizing these command-line options, then exit.
+\n"
+  
+  exit 0
+fi
+  
+# Services
+
+# Functions
+
+# Prints a table row.
+function print_row() {
+  # $1 = index
+  
+  # Spacer variables are necessary to properly align fields with color codes.
+  
+  # First, the color codes are stripped out and the remain characters counted.
+  states_temp=$(echo -e "${states[$1]}" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')
+  
+  # The spacer width is then difference between the normal column size and
+  # the length of the field (without color codes).
+  (( states_spacer = states_size - ${#states_temp} ))
+    
+  # The format for fields is %${field_size}s.
+  # The format for a field with color codes is %${field_spacer}s%b.
+  format=" %-${labels_size}s | %${versions_size}s | %${daemons_size}s | %${states_spacer}s%b | %${ports_size}s\n"
+
+  # Any field with color codes must be preceded by an empty string ("") or 
+  # the formatting will break.
+  printf "$format" "${labels[$1]}" "${versions[$1]}" "${daemons[$1]}" "" "${states[$1]}" "${ports[$1]}"
+    
+  # Print the divider between the header, and the remaing rows.    
+  if [ "$1" -eq 0 ]; then
+    printf "%*s\n" "$width" | tr ' ' '=';
+  fi
+}
+
+# Field Accessors
+
+# Getters
+
+# Returns the ports a service is listening on.
+# An important distinction is that it gets the ports the service is actively
+# listening on and necessarily not the ports it is configured to listen on.
+function get_ports() {
+  if [ -z "$1" ]; then
+    return 1
+  fi
+  
+  if (( $(awk '{print $3}' /etc/redhat-release | cut -d'.' -f1) <= 5 ))
+  then
+    get_ports_legacy "$1"
+    return 0
+  fi
+  
+  listening=$(lsof -a -c "$1" -i -sTCP:LISTEN -Pn -u ^nobody \
+  | awk '{print $9}' \
+  | grep -E "[[:digit:]]" \
+  | cut -d':' -f2 \
+  | uniq \
+  | sort -un \
+  | paste -s -d ',')
+  
+  if [ "${#listening}" -le 1 ]; then
+    listening="None"
+  fi
+  
+  echo "$listening"
+}
+
+function get_ports_legacy() {
+  if [ -z "$1" ]; then
+    return 1
+  fi
+  
+  listening=$(lsof -a -c "$1" -i -Pn -u ^nobody \
+  | grep LISTEN \
+  | awk '{print $9}' \
+  | grep -E "[[:digit:]]" \
+  | cut -d':' -f2 \
+  | uniq \
+  | sort -un \
+  | paste -s -d ',')
+  
+  if [ "${#listening}" -le 1 ]; then
+    listening="None"
+  fi
+  
+  echo "$listening"
+}
+
+# Setters
+
+# These functions update the parallel arrays, and manage the size variable
+# for the respective field.
+
+# "Set" here is a bit of a misnomer since they are really adding a new element
+# to the end of a list instead of setting the value of an element.
+# Using the convention "add_field" might be more appropriate here.
+
+function set_labels() {
+  labels=("${labels[@]}" "$1")
+  
+  if [ ${#1} -gt "$labels_size" ]; then
+    labels_size=${#1}
+  fi
+}
+
+function set_versions() {
+  versions=("${versions[@]}" "$1")
+  
+  if [ ${#1} -gt "$versions_size" ]; then
+    versions_size=${#1}
+  fi
+}
+
+function set_daemons () {
+  daemons=("${daemons[@]}" "$1")
+  
+  if [ ${#1} -gt "$daemons_size" ]; then
+    daemons_size=${#1}
+  fi
+}
+
+function set_states() {
+  if [ ${#1} -gt "$states_size" ]; then
+    states_size=${#1}
+  fi
+  
+  if [ "$1" == "$STATE_DOWN" ]; then
+    states=("${states[@]}" "$R1$1$RS")
+  elif [ "$1" == "$STATE_UP" ]; then
+    states=("${states[@]}" "$G1$1$RS")
+  fi
+}
+
+function set_ports (){
+  ports=("${ports[@]}" "$1")
+  
+  if [ ${#1} -gt "$ports_size" ]; then
+    ports_size=${#1}
+  fi
+}
+
+# "Constructor"
+
+function new_service() {
+  # $1 = label
+  # $2 = version
+  # $3 = daemon
+  # $4 = state
+  # $5 = ports
+  
+  set_labels "$1"
+  set_versions "$2"
+  set_daemons "$3"
+  set_states "$4"
+  set_ports "$5"
+}
+
+# Service Checks
+
+# There are functions for categories of related processes.
+
+# Categories with examples:
+#  * Control panel - cPanel, Plesk
+#  * DNS software - BIND, NSD
+#  * Webserver - Apache, NGINX, Litespeed
+#  * Database - MySQL, MariaDB, PostgreSQL
+#  * Mail Transfer Agent - Exim, Postfix
+#  * Mail server - Dovecot, Courier
+#  * FTP server - Pure-FTPd, ProFTPD
+#
+# Note: Not all of the checks for the above services are fully implemented,
+# and some are implemented but not enabled barring further testing.
+
+# There are currently five fields for each process.
+#  1. Service - service_label
+#  The name associated with the service e.g. Apache. These value of these
+#  are defined.
+#
+#  2. Version - service_v
+#  The major, and minor numbers of the service's version number (minimum).
+#
+#  3. Daemon  - service_d
+#  The name of the daemon process e.g. httpd.
+#
+#  4. Running - service_state
+#  The state of process. UP if the process is running, DOWN if it is not. This 
+#  does not mean that the process is functioning properly, only that it exists.
+#  Processes are initially assumed to be down.
+#
+#  5. Ports   - service_ports
+#  The ports the process is currently listening on. Keep in mind that these are 
+#  not necessarily what the process is configured to listen on.
+#
+
+function check_control_panel() {
+  # To-Do
+  # * Add Plesk check
+  #   * cPanel and Plesk should be mutually exclusive.
+  # * Rename variables to be service agnostic
+    
+  # cPanel
+
+  cpanel_label="cPanel"
+  cpanel_v=$(cat /usr/local/cpanel/version 2>/dev/null)
+  cpanel_d="cpsrvd"
+  cpanel_state="$STATE_DOWN"
+  cpanel_ports=$(get_ports $cpanel_d)
+
+  if [[ $(pgrep "$cpanel_d") ]]; then
+    cpanel_state="$STATE_UP"
+  fi
+  
+  new_service "$cpanel_label" "$cpanel_v" "$cpanel_d" "$cpanel_state" "$cpanel_ports"
+}
+
+function check_dns() {
+  # To-Do
+  # * Add NSD check
+  #   * BIND and NSD are NOT mutually exclusive.
+  
+  # BIND / Named
+  
+  bind_label="BIND"
+  bind_v=$(named -v 2>/dev/null | awk '{print $2}' | cut -d '.' -f 1,2,3 | cut -d '-' -f 1)
+  bind_d="named"
+  bind_state="$STATE_DOWN"
+  bind_ports=$(get_ports $bind_d)
+
+  if [[ $(pgrep "$bind_d") ]]; then
+    bind_state="$STATE_UP"
+  fi
+  
+  new_service "$bind_label" "$bind_v" "$bind_d" "$bind_state" "$bind_ports"
+}
+
+function check_nameserver() {
+  
+  ns="$(/usr/local/cpanel/scripts/setupnameserver --current \
+      | awk '{print $4}')"
+  
+  case "$ns" in
+    "bind" )    
+      ns_label="BIND"
+      ns_v=$(named -v 2>/dev/null \
+           | awk '{print $2}' \
+           | cut -d '.' -f 1,2,3 \
+           | cut -d '-' -f 1)
+      ns_d="named"
+      ;;
+    "nsd" )      
+      ns_label="NSD"
+      ns_v="$(nsd -v 2>&1 | awk 'NR==1 {print $3}')"
+      ns_d="nsd"
+      ;;
+    "powerdns" ) 
+      ns_label="PowerDNS"
+      ns_v="$(pdns_control version)"
+      ns_d="pdns_server"
+      ;;
+  esac
+  
+  ns_state="$STATE_DOWN"
+  ns_ports=$(get_ports "$ns_d")
+
+  if [[ $(pgrep "$ns_d") ]]; then
+    ns_state="$STATE_UP"
+  fi
+  
+  new_service "$ns_label" "$ns_v" "$ns_d" "$ns_state" "$ns_ports"
+}
+
+function check_webserver() {
+  # To-Do
+  # * Test NGINX check
+  # * Test Litespeed check
+  #   * Apache, NGINX and Litespeed are NOT mutually exclusive.
+  
+  # Apache / HTTPD
+
+  apache_label="Apache"
+  apache_v=$(httpd -v 2>/dev/null | awk 'FNR==1 {print $3}' | cut -d '/' -f 2)
+  apache_d="httpd"
+  apache_state="$STATE_DOWN"
+  apache_ports=$(get_ports $apache_d)
+
+  if [[ $(pgrep "$apache_d") ]]; then
+    apache_state="$STATE_UP"
+  fi
+
+  new_service "$apache_label" "$apache_v" "$apache_d" "$apache_state" "$apache_ports"
+  
+  # Nginx
+  # This probably works fine but needs more testing.
+  
+  if type nginx >/dev/null 2>&1 || type /usr/local/nginx/sbin/nginx >/dev/null 2>&1; then
+    nginx_label="NGINX"
+  
+    if type nginx >/dev/null 2>&1; then
+      # NginxCP
+      nginx_v=$(nginx -v 2>&1 | cut -d '/' -f 2)
+      nginx_label="NginxCP"
+    elif type /usr/local/nginx/sbin/nginx >/dev/null 2>&1; then
+      # Version check for Cpnginx
+      nginx_v=$(/usr/local/nginx/sbin/nginx -v 2>&1 | cut -d '/' -f 2)
+      nginx_label="Cpnginx"
+    fi
+  
+    nginx_d="nginx"
+    nginx_state="$STATE_DOWN"
+    nginx_ports=$(get_ports $nginx_d)
+  
+    if [[ $(pgrep "$nginx_d") ]]; then
+      nginx_state="$STATE_UP"
+    fi
+    
+    new_service "$nginx_label" "$nginx_v" "$nginx_d" "$nginx_state" "$nginx_ports"
+  fi
+}
+
+function check_db() {
+  # To-Do
+  # * Check possible DBs other than MySQL like PostgreSQL
+
+  # MySQL
+
+  mysql_label="MySQL"
+
+  if ! mysql_v="$(mysql -V 2>/dev/null | awk '{print $5}' | cut -d '.' -f 1,2,3 | cut -d ',' -f1)"
+  then
+    # This is a fallback in case `mysql -V` doesn't work. This can happen in
+    # very rare cases.
+    # Ex: the variable `bind-address` is set in `my.cnf` for versions of MySQL
+    # prior to 5.6.
+    mysql_v="$(
+        mysql --no-defaults --user=root --password="$(grep password /root/.my.cnf \
+      | cut -d '"' -f2)" -e "SHOW VARIABLES LIKE \"%version%\";" 2>/dev/null \
+      | grep version \
+      | grep -v "_" \
+      | awk '{print $2}')"
+  fi
+  mysql_d="mysqld"
+  mysql_state="$STATE_DOWN"
+  mysql_ports=$(get_ports $mysql_d)
+
+  if [[ "$(mysql -V | awk '{print $5}' | tr -d ',' | cut -f 2 -d '-')" = "MariaDB" ]]; then
+    mysql_label="MariaDB"
+  fi
+
+  if [[ $(pgrep "$mysql_d") ]]; then
+        mysql_state="$STATE_UP"
+  fi
+
+  new_service "$mysql_label" "$mysql_v" "$mysql_d" "$mysql_state" "$mysql_ports"
+}
+
+function check_mta() {
+  # To-Do
+  # * Check for other MTAs such as Postfix.
+    
+  # Exim
+
+  exim_label="Exim"
+  exim_v=$(exim -bV 2>/dev/null | head -1 | awk '{print $3}')
+  exim_d="exim"
+  exim_state="$STATE_DOWN"
+
+  exim_ports=$(get_ports $exim_d)
+
+  if [[ $(pgrep "$exim_d") ]]; then
+    exim_state="$STATE_UP"
+  fi
+
+  new_service "$exim_label" "$exim_v" "$exim_d" "$exim_state" "$exim_ports"
+}
+
+function check_mailserver() {
+  # To-Do
+  # * Find a way to get the Courier version.
+
+  # Dovecot or Courier
+
+  mailserver_label=""
+  mailserver_v=""
+  mailserver_d=$(/scripts/setupmailserver --current 2>/dev/null | awk 'FNR==1' | awk '{print $4}')
+  mailserver_state="$STATE_DOWN"
+
+  if [[ "$mailserver_d" == "dovecot" ]]; then
+    mailserver_label="Dovecot"
+    mailserver_v=$(dovecot --version 2>/dev/null | awk '{print $1}')
+    if [[ $(pgrep "$mailserver_d") ]]; then
+      mailserver_state="$STATE_UP"
+    fi
+  elif [ "$mailserver_d" == "courier" ]; then
+    mailserver_label="Courier"
+    # I don't know how to get the Courier version but it shouldn't be on
+    # any of our servers at this point anyway so it can wait.
+    mailserver_v="n/a"
+    if [[ $(pgrep -x "courier-imap") ]]; then
+      mailserver_state="$STATE_UP"
+    fi
+  fi
+
+  mailserver_ports=$(get_ports "$mailserver_d")
+  
+  new_service "$mailserver_label" "$mailserver_v" "$mailserver_d" "$mailserver_state" "$mailserver_ports"
+}
+
+function check_ftp() {
+  # FTP | Pure-FTPd or ProFTPD
+  
+  ftp_d=$(/scripts/setupftpserver --current 2>/dev/null | awk '{print $5}')
+
+  if [[ $ftp_d == "pure-ftpd" ]]; then
+    
+    ftp_label="Pure-FTPd"
+    ftp_v=$(
+        pure-ftpd --help 2>/dev/null \
+      | head -1 \
+      | awk '{print $2}' \
+      | cut -d 'v' -f 2)
+    
+  elif [[ $ftp_d == "proftpd" ]]; then
+  
+    ftp_label="ProFTPD"
+    ftp_v=$(proftpd -V | grep -i version | awk '{print $2}')
+    
+  else
+    # Something unexpected is going on.
+    return
+  fi
+  ftp_state="$STATE_DOWN"
+
+  ftp_ports=$(get_ports "$ftp_d")
+
+  if [[ $(pgrep "$ftp_d") ]]; then
+    ftp_state="$STATE_UP"
+  fi
+  
+  new_service "$ftp_label" "$ftp_v" "$ftp_d" "$ftp_state" "$ftp_ports"
+}
+
+function services_main() {
+  # Call Service Checks
+  #
+  # These are in their own functions for mostly organizational purposes but it
+  # also allows the order the services are listed in to be easily changed.
+
+  check_control_panel
+  check_nameserver
+  check_webserver
+  check_db
+  check_mta
+  check_mailserver
+  check_ftp
+  
+  # Title
+  TITLE="Services Check"
+  title_size=${#TITLE}
+
+  # Formatting
+
+  width=$(( 
+      2 \
+      + ( 3 * ( ${#FIELDS[@]} - 1 ) ) \
+      + labels_size \
+      + versions_size \
+      + daemons_size \
+      + states_size \
+      + ports_size ))
+
+  # Find the number of '=' needed on either side of the title
+  # divide the difference of the width and the title size + 2 (for spaces) by two 
+  title_divider=$(( ( width - ( title_size + 2 ) ) / 2 )) 
+  title_divider_2=$title_divider
+
+  # If the parity of $width and $title_size are not the same then an extra '=' 
+  # is needed to center the title.
+  if [ $(( width % 2 )) -ne $(( title_size % 2 )) ]; then
+    ((title_divider_2++))
+  fi
+
+  # Print '```' for notes.
+  echo -e "  ${BL}\`\`\`${RS}"
+
+  # Print the table
+
+  printf "$SC%*s$W1" $title_divider | tr ' ' '='; # Print spaces on the left and translate them to '='.
+
+  printf " %s " "$TITLE" # Print the title with a space on either side.
+
+  printf "$SC%*s$RS\n" $title_divider_2 | tr ' ' '=' # Print spaces on the right and translate them to '='.
+
+  # Print Rows
+
+  for ((i=0; i<${#labels[*]}; i++)); do
+    print_row $i
+  done
+  
+  # Print '```' for notes.
+  echo -e "  ${BL}\`\`\`${RS}"
+}
+
+services_main
