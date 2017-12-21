@@ -189,51 +189,13 @@ function check_control_panel() {
 }
 
 function check_webserver() {
-  # To-Do
-  # * Test NGINX check
-  # * Test Litespeed check
-  #   * Apache, NGINX and Litespeed are NOT mutually exclusive.
-  
-  # Apache / HTTPD
-
   apache_label="Apache"
-  apache_v=$(httpd -v 2>/dev/null | awk 'FNR==1 {print $3}' | cut -d '/' -f 2)
+  apache_v="1.0"
   apache_d="httpd"
-  apache_state="$STATE_DOWN"
-  apache_ports=$(get_ports $apache_d)
-
-  if [[ $(pgrep "$apache_d") ]]; then
-    apache_state="$STATE_UP"
-  fi
+  apache_state="$STATE_UP"
+  apache_ports="112"
 
   new_service "$apache_label" "$apache_v" "$apache_d" "$apache_state" "$apache_ports"
-  
-  # Nginx
-  # This probably works fine but needs more testing.
-  
-  if type nginx >/dev/null 2>&1 || type /usr/local/nginx/sbin/nginx >/dev/null 2>&1; then
-    nginx_label="NGINX"
-  
-    if type nginx >/dev/null 2>&1; then
-      # NginxCP
-      nginx_v=$(nginx -v 2>&1 | cut -d '/' -f 2)
-      nginx_label="NginxCP"
-    elif type /usr/local/nginx/sbin/nginx >/dev/null 2>&1; then
-      # Version check for Cpnginx
-      nginx_v=$(/usr/local/nginx/sbin/nginx -v 2>&1 | cut -d '/' -f 2)
-      nginx_label="Cpnginx"
-    fi
-  
-    nginx_d="nginx"
-    nginx_state="$STATE_DOWN"
-    nginx_ports=$(get_ports $nginx_d)
-  
-    if [[ $(pgrep "$nginx_d") ]]; then
-      nginx_state="$STATE_UP"
-    fi
-    
-    new_service "$nginx_label" "$nginx_v" "$nginx_d" "$nginx_state" "$nginx_ports"
-  fi
 }
 
 function services_main() {
@@ -259,18 +221,12 @@ function services_main() {
       + states_size \
       + ports_size ))
 
-  # Find the number of '=' needed on either side of the title
-  # divide the difference of the width and the title size + 2 (for spaces) by two 
+  # Print Table
   title_divider=$(( ( width - ( title_size + 2 ) ) / 2 )) 
   title_divider_2=$title_divider
-
-  # If the parity of $width and $title_size are not the same then an extra '=' 
-  # is needed to center the title.
   if [ $(( width % 2 )) -ne $(( title_size % 2 )) ]; then
     ((title_divider_2++))
   fi
-
-  # Print the table
   printf "$SC%*s$W1" $title_divider | tr ' ' '=';
   printf " %s " "$TITLE"
   printf "$SC%*s$RS\n" $title_divider_2 | tr ' ' '='
