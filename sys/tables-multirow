@@ -168,22 +168,11 @@ function new_service() {
 #
 
 function check_control_panel() {
-  # To-Do
-  # * Add Plesk check
-  #   * cPanel and Plesk should be mutually exclusive.
-  # * Rename variables to be service agnostic
-    
-  # cPanel
-
   cpanel_label="cPanel"
   cpanel_v=$(cat /usr/local/cpanel/version 2>/dev/null)
   cpanel_d="cpsrvd"
   cpanel_state="$STATE_DOWN"
-  cpanel_ports=$(get_ports $cpanel_d)
-
-  if [[ $(pgrep "$cpanel_d") ]]; then
-    cpanel_state="$STATE_UP"
-  fi
+  cpanel_ports="225"
   
   new_service "$cpanel_label" "$cpanel_v" "$cpanel_d" "$cpanel_state" "$cpanel_ports"
 }
