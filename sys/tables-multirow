@@ -169,9 +169,9 @@ function new_service() {
 
 function check_control_panel() {
   cpanel_label="cPanel"
-  cpanel_v=$(cat /usr/local/cpanel/version 2>/dev/null)
+  cpanel_v="1.5"
   cpanel_d="cpsrvd"
-  cpanel_state="$STATE_DOWN"
+  cpanel_state="$STATE_UP"
   cpanel_ports="225"
   
   new_service "$cpanel_label" "$cpanel_v" "$cpanel_d" "$cpanel_state" "$cpanel_ports"
