@@ -3,7 +3,7 @@
 # Contributors: Casey McLaughlin
 
 # Field headings
-Table_Column_Headers=("Service" "Version" "Daemon" "Running")
+Table_Column_Headers=("Service" "Version" "Running")
 
 # Field Arrays
 
@@ -15,13 +15,9 @@ labels_size=${#Table_Column_Headers[0]}
 versions[0]="${Table_Column_Headers[1]}"
 versions_size=${#Table_Column_Headers[1]}
 
-# Daemons
-daemons[0]="${Table_Column_Headers[2]}"
-daemons_size=${#Table_Column_Headers[2]}
-
 # States
-states[0]="${Table_Column_Headers[3]}"
-states_size=${#Table_Column_Headers[3]}
+states[0]="${Table_Column_Headers[2]}"
+states_size=${#Table_Column_Headers[2]}
 
 STATE_UP="UP"
 STATE_DOWN="DOWN"
@@ -33,8 +29,8 @@ STATE_DOWN="DOWN"
 function print_row() {                                                                                                  # Create Function To Print Table Rows
   states_temp=$(echo -e "${states[$1]}" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')                                              # Detects Row Width (Padding)
   (( states_spacer = states_size - ${#states_temp} ))                                                                   # Detects Row Width (No Padding)
-  format=" %-${labels_size}s | %${versions_size}s | %${daemons_size}s | %${states_spacer}s%b\n"                         # Declare Row Format
-  printf "$format" "${labels[$1]}" "${versions[$1]}" "${daemons[$1]}" "" "${states[$1]}"                                # Add Prefix ("") To Table_Column_Headers With Colors
+  format=" %-${labels_size}s | %${versions_size}s | %${states_spacer}s%b\n"                                             # Declare Row Format
+  printf "$format" "${labels[$1]}" "${versions[$1]}" "" "${states[$1]}"                                                 # Add Prefix ("") To Table_Column_Headers With Colors
   if [ "$1" -eq 0 ]; then
     printf "%*s\n" "$width" | tr ' ' '=';                                                                               # Print Header Divider
   fi
@@ -67,14 +63,6 @@ function set_versions() {
   fi
 }
 
-function set_daemons () {
-  daemons=("${daemons[@]}" "$1")
-  
-  if [ ${#1} -gt "$daemons_size" ]; then
-    daemons_size=${#1}
-  fi
-}
-
 function set_states() {
   if [ ${#1} -gt "$states_size" ]; then
     states_size=${#1}
@@ -92,13 +80,11 @@ function set_states() {
 function new_service() {
   # $1 = label
   # $2 = version
-  # $3 = daemon
-  # $4 = state
+  # $3 = state
 
   set_labels "$1"
   set_versions "$2"
-  set_daemons "$3"
-  set_states "$4"
+  set_states "$3"
 }
 
 # Service Checks
@@ -106,19 +92,17 @@ function new_service() {
 function check_control_panel() {
   cpanel_label="cPanel"
   cpanel_v="1.5"
-  cpanel_d="cpsrvd"
   cpanel_state="$STATE_UP"
 
-  new_service "$cpanel_label" "$cpanel_v" "$cpanel_d" "$cpanel_state"
+  new_service "$cpanel_label" "$cpanel_v" "$cpanel_state"
 }
 
 function check_webserver() {
   apache_label="Apache"
   apache_v="1.0"
-  apache_d="httpd"
   apache_state="$STATE_UP"
 
-  new_service "$apache_label" "$apache_v" "$apache_d" "$apache_state"
+  new_service "$apache_label" "$apache_v" "$apache_state"
 }
 
 function services_main() {
@@ -137,7 +121,6 @@ function services_main() {
       + ( 3 * ( ${#Table_Column_Headers[@]} - 1 ) ) \
       + labels_size \
       + versions_size \
-      + daemons_size \
       + states_size ))
 
   # Print Table
