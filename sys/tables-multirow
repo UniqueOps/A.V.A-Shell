@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Field headings
-FIELDS=("Service" "Version" "Daemon" "Running" "Ports")
+FIELDS=("Service" "Version" "Daemon" "Running" "Ports")                                                                 # Declare Column Headings
 
 # Field Arrays
 
@@ -32,30 +32,13 @@ ports_size=${#FIELDS[4]}
 
 # Functions
 
-# Prints a table row.
-function print_row() {
-  # $1 = index
-  
-  # Spacer variables are necessary to properly align fields with color codes.
-  
-  # First, the color codes are stripped out and the remain characters counted.
-  states_temp=$(echo -e "${states[$1]}" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')
-  
-  # The spacer width is then difference between the normal column size and
-  # the length of the field (without color codes).
-  (( states_spacer = states_size - ${#states_temp} ))
-    
-  # The format for fields is %${field_size}s.
-  # The format for a field with color codes is %${field_spacer}s%b.
-  format=" %-${labels_size}s | %${versions_size}s | %${daemons_size}s | %${states_spacer}s%b | %${ports_size}s\n"
-
-  # Any field with color codes must be preceded by an empty string ("") or 
-  # the formatting will break.
-  printf "$format" "${labels[$1]}" "${versions[$1]}" "${daemons[$1]}" "" "${states[$1]}" "${ports[$1]}"
-    
-  # Print the divider between the header, and the remaing rows.    
+function print_row() {                                                                                                  # Create Function To Print Table Rows
+  states_temp=$(echo -e "${states[$1]}" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')                                              # Detects Row Width (Padding)
+  (( states_spacer = states_size - ${#states_temp} ))                                                                   # Detects Row Width (No Padding)
+  format=" %-${labels_size}s | %${versions_size}s | %${daemons_size}s | %${states_spacer}s%b | %${ports_size}s\n"       # Declare Row Format
+  printf "$format" "${labels[$1]}" "${versions[$1]}" "${daemons[$1]}" "" "${states[$1]}" "${ports[$1]}"                 # Add Prefix ("") To Fields With Colors
   if [ "$1" -eq 0 ]; then
-    printf "%*s\n" "$width" | tr ' ' '=';
+    printf "%*s\n" "$width" | tr ' ' '=';                                                                               # Print Header Divider
   fi
 }
 
@@ -132,41 +115,6 @@ function new_service() {
 
 # Service Checks
 
-# There are functions for categories of related processes.
-
-# Categories with examples:
-#  * Control panel - cPanel, Plesk
-#  * DNS software - BIND, NSD
-#  * Webserver - Apache, NGINX, Litespeed
-#  * Database - MySQL, MariaDB, PostgreSQL
-#  * Mail Transfer Agent - Exim, Postfix
-#  * Mail server - Dovecot, Courier
-#  * FTP server - Pure-FTPd, ProFTPD
-#
-# Note: Not all of the checks for the above services are fully implemented,
-# and some are implemented but not enabled barring further testing.
-
-# There are currently five fields for each process.
-#  1. Service - service_label
-#  The name associated with the service e.g. Apache. These value of these
-#  are defined.
-#
-#  2. Version - service_v
-#  The major, and minor numbers of the service's version number (minimum).
-#
-#  3. Daemon  - service_d
-#  The name of the daemon process e.g. httpd.
-#
-#  4. Running - service_state
-#  The state of process. UP if the process is running, DOWN if it is not. This 
-#  does not mean that the process is functioning properly, only that it exists.
-#  Processes are initially assumed to be down.
-#
-#  5. Ports   - service_ports
-#  The ports the process is currently listening on. Keep in mind that these are 
-#  not necessarily what the process is configured to listen on.
-#
-
 function check_control_panel() {
   cpanel_label="cPanel"
   cpanel_v="1.5"
@@ -188,11 +136,8 @@ function check_webserver() {
 }
 
 function services_main() {
-  # Call Service Checks
-  #
-  # These are in their own functions for mostly organizational purposes but it
-  # also allows the order the services are listed in to be easily changed.
 
+  # Row Order
   check_control_panel
   check_webserver
   
