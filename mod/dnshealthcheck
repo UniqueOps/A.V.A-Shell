@@ -14,10 +14,10 @@
 eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/var/colors)";
 
 # Let's ask the user for the domain we are testing
-echo -e "\n$H1===============================$H2 Email Troubleshoot Script $H1===============================$RS\n";
+echo -e "\n$Color_Blue===============================$Color_Reset Email Troubleshoot Script $Color_Blue===============================$Color_Reset\n";
 echo -e "What is the domain?"
 read domain;
-echo -e "\n$H1=========================================================================================$RS\n";
+echo -e "\n$Color_Blue=========================================================================================$Color_Reset\n";
 
 # Vairables
 CheckDNS_Global_NS=$(dig ns +short $domain | sort | sed -e :a -e '$!N; s/\n/ | /; ta');                         # Global Name Servers 1
