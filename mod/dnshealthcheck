@@ -3,16 +3,13 @@
 # Contributors: Casey McLaughlin
 
 # Field headings
-Table_Column_Headers=("Running" "Service" "Version")
+Table_Column_Headers=("Status" "Service" "Version")
 
 # Field Arrays
 
 # States
-states[0]="${Table_Column_Headers[0]}"
-states_size=${#Table_Column_Headers[0]}
-
-STATE_UP="UP"
-STATE_DOWN="DOWN"
+status[0]="${Table_Column_Headers[0]}"
+status_size=${#Table_Column_Headers[0]}
 
 # Labels
 labels[0]="${Table_Column_Headers[1]}"
@@ -27,10 +24,10 @@ versions_size=${#Table_Column_Headers[2]}
 # Functions
 
 function print_row() {                                                                                                  # Create Function To Print Table Rows
-  states_temp=$(echo -e "${states[$1]}" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')                                              # Detects Row Width (Padding)
-  (( states_spacer = states_size - ${#states_temp} ))                                                                   # Detects Row Width (No Padding)
-  format=" %${states_spacer}s%b | %-${labels_size}s | %${versions_size}s\n"                                             # Declare Row Format
-  printf "$format" "" "${states[$1]}" "${labels[$1]}" "${versions[$1]}"                                                 # Add Prefix ("") To Table_Column_Headers With Colors
+  status_temp=$(echo -e "${status[$1]}" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')                                              # Detects Row Width (Padding)
+  (( status_spacer = status_size - ${#status_temp} ))                                                                   # Detects Row Width (No Padding)
+  format=" %${status_spacer}s%b | %-${labels_size}s | %${versions_size}s\n"                                             # Declare Row Format
+  printf "$format" "" "${status[$1]}" "${labels[$1]}" "${versions[$1]}"                                                 # Add Prefix ("") To Table_Column_Headers With Colors
   if [ "$1" -eq 0 ]; then
     printf "%*s\n" "$width" | tr ' ' '=';                                                                               # Print Header Divider
   fi
@@ -63,26 +60,26 @@ function set_versions() {
   fi
 }
 
-function set_states() {
-  if [ ${#1} -gt "$states_size" ]; then
-    states_size=${#1}
+function set_status() {
+  if [ ${#1} -gt "$status_size" ]; then
+    status_size=${#1}
   fi
   
-  if [ "$1" == "$STATE_DOWN" ]; then
-    states=("${states[@]}" "$R1$1$RS")
-  elif [ "$1" == "$STATE_UP" ]; then
-    states=("${states[@]}" "$G1$1$RS")
+  if [ "$1" == "DOWN" ]; then
+    states=("${status[@]}" "$R1$1$RS")
+  elif [ "$1" == "UP" ]; then
+    states=("${status[@]}" "$G1$1$RS")
   fi
 }
 
 # "Constructor"
 
 function new_service() {
-  # $1 = state
+  # $1 = status
   # $2 = label
   # $3 = version
 
-  set_states "$1"
+  set_status "$1"
   set_labels "$2"
   set_versions "$3"
 }
@@ -90,19 +87,19 @@ function new_service() {
 # Service Checks
 
 function check_control_panel() {
-  cpanel_state="$STATE_UP"
+  cpanel_status="UP"
   cpanel_label="cPanel"
   cpanel_v="1.5"
 
-  new_service "$cpanel_state" "$cpanel_label" "$cpanel_v"
+  new_service "$cpanel_status" "$cpanel_label" "$cpanel_v"
 }
 
 function check_webserver() {
-  apache_state="$STATE_UP"
+  apache_status="DOWN"
   apache_label="Apache"
   apache_v="1.0"
 
-  new_service "$apache_state" "$apache_label" "$apache_v"
+  new_service "$apache_status" "$apache_label" "$apache_v"
 }
 
 function services_main() {
@@ -119,7 +116,7 @@ function services_main() {
   width=$(( 
       2 \
       + ( 3 * ( ${#Table_Column_Headers[@]} - 1 ) ) \
-      + states_size \
+      + status_size \
       + labels_size \
       + versions_size ))
 
