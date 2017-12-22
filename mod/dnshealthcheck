@@ -10,9 +10,6 @@
 # - ERROR SHOWN WHEN NO CPANEL USER OWNS DOMAIN USED: cat: /var/cpanel/users/: Is a directory
 # - Local nameservers are pulling inncorrectly
 
-# Include Tables
-eval "$(curl -ks https://codesilo.dimenoc.com/caseym/core/raw/master/sys/tables.sh)";
-
 CheckDNS(){
     
     # Vairables
