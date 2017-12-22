@@ -7,7 +7,7 @@ Table_Column_Headers=("Status" "Service" "Version")
 
 # Field Arrays
 
-# States
+# Status
 status[0]="${Table_Column_Headers[0]}"
 status_size=${#Table_Column_Headers[0]}
 
@@ -66,9 +66,9 @@ function set_status() {
   fi
   
   if [ "$1" == "DOWN" ]; then
-    states=("${status[@]}" "$R1$1$RS")
+    status=("${status[@]}" "$R1$1$RS")
   elif [ "$1" == "UP" ]; then
-    states=("${status[@]}" "$G1$1$RS")
+    status=("${status[@]}" "$G1$1$RS")
   fi
 }
 
