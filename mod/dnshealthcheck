@@ -108,5 +108,4 @@ echo -e "What is the domain?"
 read domain;
 echo -e "\n$H1=========================================================================================$RS\n";
 
-
-echo $domain;
+CheckDNS();
