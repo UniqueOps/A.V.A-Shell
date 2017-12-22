@@ -2,138 +2,88 @@
 # Description: Domain DNS Health Checker
 # Contributors: Casey McLaughlin
 
-# Field headings
-Table_Column_Headers=("Status" "Service" "Version")
+# Vairables
+CheckDNS_Global_NS=$(dig ns +short $domain | sort | sed -e :a -e '$!N; s/\n/ | /; ta');                         # Global Name Servers 1
+CheckDNS_Local_NS=$(dig ns +short @localhost $domain | sort | sed -e :a -e '$!N; s/\n/ | /; ta');               # Local Name Servers 1
+CheckDNS_Global_A=$(dig a +short $domain | awk FNR==1);                                                         # Global A Record
+CheckDNS_Local_A=$(dig a +short @localhost $domain | awk FNR==1);                                               # Local A Record
+CheckDNS_Global_MX=$(dig mx +short $domain | awk 'FNR==1{print $2}');                                           # Global MX Record
+CheckDNS_Local_MX=$(dig mx +short @localhost $domain | awk 'FNR==1{print $2}');                                 # Local MX Record
+CheckDNS_Server_DomainOwner=$(/scripts/whoowns $domain);                                                        # cPanel Username
+CheckDNS_Server_DomainIP=$(cat /var/cpanel/users/$CheckDNS_Server_DomainOwner | grep 'IP=' | cut -d '=' -f2);   # Assigned IP
+CheckDNS_Registrar=$(whois -H $domain | awk 'FNR==8{$1=""; print $0}');                                         # Domain's Registrar
 
-# Field Arrays
-
-# Status
-status[0]="${Table_Column_Headers[0]}"
-status_size=${#Table_Column_Headers[0]}
-
-# Labels
-labels[0]="${Table_Column_Headers[1]}"
-labels_size=${#Table_Column_Headers[1]}
-
-# Versions
-versions[0]="${Table_Column_Headers[2]}"
-versions_size=${#Table_Column_Headers[2]}
-
-# Services
-
-# Functions
-
-function print_row() {                                                                                                  # Create Function To Print Table Rows
-  status_temp=$(echo -e "${status[$1]}" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')                                              # Detects Row Width (Padding)
-  (( status_spacer = status_size - ${#status_temp} ))                                                                   # Detects Row Width (No Padding)
-  format=" %${status_spacer}s%b | %-${labels_size}s | %${versions_size}s\n"                                             # Declare Row Format
-  printf "$format" "" "${status[$1]}" "${labels[$1]}" "${versions[$1]}"                                                 # Add Prefix ("") To Table_Column_Headers With Colors
-  if [ "$1" -eq 0 ]; then
-    printf "%*s\n" "$width" | tr ' ' '=';                                                                               # Print Header Divider
+# Begin Parent Checklist
+echo -e "$Color_Blue=====================$Color_Bold$Color_Reset Parent $Color_Blue=====================$Color_Reset\n";
+echo -e "[--] Scan Performed On Server: $Core_Server_Hostname";
+echo -e "[--] Server IP: $Core_Server_IP";
+if [[ $CheckDNS_Registrar != "" ]]; then
+  echo -e "$Color_Green[OK]$Color_Reset Domain is registered.";
+  echo -e "[--] Domain Registrar:$CheckDNS_Registrar";
+  if [[ $CheckDNS_Global_NS != "" ]]; then
+    echo -e "$Color_Green[OK]$Color_Reset Global nameservers detected.";
+    echo -e "[--] Global Records: $CheckDNS_Global_NS";
+    # Begin Name Server Checklist
+    echo -e "\n$Color_Blue===================$Color_Bold$Color_Reset Nameserver $Color_Blue===================$Color_Reset\n";
+    if [[ $CheckDNS_Global_NS == *"cloudflare.com."* ]]; then
+       echo -e "$Color_Red[!!]$Color_Reset Cloudflare services detected!";
+       echo -e "[--] You may find nameserver and A record mismatching due to this!";
+    fi
+    if [[ $CheckDNS_Server_DomainOwner != "" ]]; then
+      echo -e "$Color_Green[OK]$Color_Reset Local nameservers detected.";
+      echo -e "[--] Local Records: $CheckDNS_Local_NS";
+      if [[ $CheckDNS_Server_DomainOwner != "" ]]; then
+        echo -e "$Color_Green[OK]$Color_Reset Domain is connected to a cPanel Account.";
+	    echo -e "[--] Account Owner: $CheckDNS_Server_DomainOwner";
+        if [[ $CheckDNS_Local_NS != $CheckDNS_Global_NS ]]; then
+          echo -e "$Color_Red[!!]$Color_Reset Local/Global nameserver mismatch detected!";
+        else
+          echo -e "$Color_Green[OK]$Color_Reset Local/Global nameservers match.";
+        fi
+        # Begin MX Record Checklist
+        echo -e "\n$Color_Blue=======================$Color_Bold$Color_Reset MX $Color_Blue=======================$Color_Reset\n";
+        if [[ $CheckDNS_Local_MX == $CheckDNS_Global_MX ]]; then
+          echo -e "$Color_Green[OK]$Color_Reset Local/Global MX records match.";
+          if [[ $CheckDNS_Global_MX == *"google.com"* ]]; then
+            echo -e "[--] G-Suite Email Services Detected.";
+          elif [[ $CheckDNS_Global_MX == *"outlook.com"* ]]; then
+            echo -e "[--] Office 365 Email Services Detected.";
+          elif [[ $CheckDNS_Global_MX == *"$domain"* ]]; then
+            echo -e "$Color_Green[OK]$Color_Reset Local Email Services Detected.";
+          else
+            echo -e "$Color_Green[OK]$Color_Reset Remote Email Services Detected.";
+          fi              
+        else
+          echo -e "$Color_Red[!!]$Color_Reset Local/Global MX records mismatch detected!";
+          echo -e "$Color_Red[!!]$Color_Reset Local mail might not reach destination!";
+        fi
+        # Begin HTTP Record Checklist
+        echo -e "\n$Color_Blue======================$Color_Bold$Color_Reset HTTP $Color_Blue======================$Color_Reset\n";
+	    if [[ $CheckDNS_Global_A != $CheckDNS_Server_DomainIP ]]; then
+	      if [[ $CheckDNS_Global_A != $Core_Server_IP ]]; then
+	        echo -e "$Color_Red[!!]$Color_Reset Domain is directing to an external server.";
+	      else
+	        echo -e "$Color_Red[!!]$Color_Reset Domain is not using assigned dedicated IP address.";
+	        echo -e "[--] $CheckDNS_Server_DomainIP";
+	      fi
+	      if [[ $CheckDNS_Global_A != $CheckDNS_Local_A ]]; then
+	        echo -e "$Color_Red[!!]$Color_Reset Global/Local A Record Mismatch!";
+	      else
+	        echo -e "$Color_Green[OK]$Color_Reset Global/Local A Records Match.";
+	      fi
+	    else
+	      echo -e "$Color_Green[OK]$Color_Reset Domain is correctly pointing to local server.";
+	    fi
+      else	
+	    echo -e "[$Color_Red!!$Color_Reset] Not affiliated with any local cPanel Accounts!";
+      fi            
+    else
+      echo -e "$Color_Red[!!]$Color_Reset Local nameservers NOT detected.";
+    fi
+  else
+    echo -e "$Color_Red[!!]$Color_Reset Global nameservers NOT detected.";
   fi
-}
-
-# Field Accessors
-
-# Setters
-
-# These functions update the parallel arrays, and manage the size variable
-# for the respective field.
-
-# "Set" here is a bit of a misnomer since they are really adding a new element
-# to the end of a list instead of setting the value of an element.
-# Using the convention "add_field" might be more appropriate here.
-
-function set_labels() {
-  labels=("${labels[@]}" "$1")
-  
-  if [ ${#1} -gt "$labels_size" ]; then
-    labels_size=${#1}
-  fi
-}
-
-function set_versions() {
-  versions=("${versions[@]}" "$1")
-  
-  if [ ${#1} -gt "$versions_size" ]; then
-    versions_size=${#1}
-  fi
-}
-
-function set_status() {
-  if [ ${#1} -gt "$status_size" ]; then
-    status_size=${#1}
-  fi
-  
-  if [ "$1" == "DOWN" ]; then
-    status=("${status[@]}" "$R1$1$RS")
-  elif [ "$1" == "UP" ]; then
-    status=("${status[@]}" "$G1$1$RS")
-  fi
-}
-
-# "Constructor"
-
-function new_service() {
-  # $1 = status
-  # $2 = label
-  # $3 = version
-
-  set_status "$1"
-  set_labels "$2"
-  set_versions "$3"
-}
-
-# Service Checks
-
-function check_control_panel() {
-  cpanel_status="UP"
-  cpanel_label="cPanel"
-  cpanel_v="1.5"
-
-  new_service "$cpanel_status" "$cpanel_label" "$cpanel_v"
-}
-
-function check_webserver() {
-  apache_status="DOWN"
-  apache_label="Apache"
-  apache_v="1.0"
-
-  new_service "$apache_status" "$apache_label" "$apache_v"
-}
-
-function services_main() {
-
-  # Row Order
-  check_control_panel
-  check_webserver
-  
-  # Title
-  TITLE="Services Check"
-  title_size=${#TITLE}
-
-  # Formatting
-  width=$(( 
-      2 \
-      + ( 3 * ( ${#Table_Column_Headers[@]} - 1 ) ) \
-      + status_size \
-      + labels_size \
-      + versions_size ))
-
-  # Print Table
-  title_divider=$(( ( width - ( title_size + 2 ) ) / 2 )) 
-  title_divider_2=$title_divider
-  if [ $(( width % 2 )) -ne $(( title_size % 2 )) ]; then
-    ((title_divider_2++))
-  fi
-  printf "$SC%*s$W1" $title_divider | tr ' ' '=';
-  printf " %s " "$TITLE"
-  printf "$SC%*s$RS\n" $title_divider_2 | tr ' ' '='
-
-  # Print Rows
-  for ((i=0; i<${#labels[*]}; i++)); do
-    print_row $i
-  done
-}
-
-services_main
+else
+  echo -e "$Color_Red[!!]$Color_Reset Not a registered domain!";
+fi
+echo "";
