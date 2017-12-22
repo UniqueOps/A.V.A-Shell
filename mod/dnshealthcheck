@@ -2,6 +2,8 @@
 # Description: Domain DNS Health Checker
 # Contributors: Casey McLaughlin
 
+domain="uniqueops.com"
+
 # Vairables
 CheckDNS_Global_NS=$(dig ns +short $domain | sort | sed -e :a -e '$!N; s/\n/ | /; ta');                         # Global Name Servers 1
 CheckDNS_Local_NS=$(dig ns +short @localhost $domain | sort | sed -e :a -e '$!N; s/\n/ | /; ta');               # Local Name Servers 1
