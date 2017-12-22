@@ -3,7 +3,7 @@
 # Contributors: Casey McLaughlin
 
 # Field headings
-Table_Column_Headers=("Service" "Version" "Daemon" "Running" "Ports")
+Table_Column_Headers=("Service" "Version" "Daemon" "Running")
 
 # Field Arrays
 
@@ -26,10 +26,6 @@ states_size=${#Table_Column_Headers[3]}
 STATE_UP="UP"
 STATE_DOWN="DOWN"
 
-# Ports
-ports[0]="${Table_Column_Headers[4]}"
-ports_size=${#Table_Column_Headers[4]}
-
 # Services
 
 # Functions
@@ -37,8 +33,8 @@ ports_size=${#Table_Column_Headers[4]}
 function print_row() {                                                                                                  # Create Function To Print Table Rows
   states_temp=$(echo -e "${states[$1]}" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')                                              # Detects Row Width (Padding)
   (( states_spacer = states_size - ${#states_temp} ))                                                                   # Detects Row Width (No Padding)
-  format=" %-${labels_size}s | %${versions_size}s | %${daemons_size}s | %${states_spacer}s%b | %${ports_size}s\n"       # Declare Row Format
-  printf "$format" "${labels[$1]}" "${versions[$1]}" "${daemons[$1]}" "" "${states[$1]}" "${ports[$1]}"                 # Add Prefix ("") To Table_Column_Headers With Colors
+  format=" %-${labels_size}s | %${versions_size}s | %${daemons_size}s | %${states_spacer}s%b\n"                         # Declare Row Format
+  printf "$format" "${labels[$1]}" "${versions[$1]}" "${daemons[$1]}" "" "${states[$1]}"                                # Add Prefix ("") To Table_Column_Headers With Colors
   if [ "$1" -eq 0 ]; then
     printf "%*s\n" "$width" | tr ' ' '=';                                                                               # Print Header Divider
   fi
@@ -91,14 +87,6 @@ function set_states() {
   fi
 }
 
-function set_ports (){
-  ports=("${ports[@]}" "$1")
-  
-  if [ ${#1} -gt "$ports_size" ]; then
-    ports_size=${#1}
-  fi
-}
-
 # "Constructor"
 
 function new_service() {
@@ -106,13 +94,11 @@ function new_service() {
   # $2 = version
   # $3 = daemon
   # $4 = state
-  # $5 = ports
-  
+
   set_labels "$1"
   set_versions "$2"
   set_daemons "$3"
   set_states "$4"
-  set_ports "$5"
 }
 
 # Service Checks
@@ -122,9 +108,8 @@ function check_control_panel() {
   cpanel_v="1.5"
   cpanel_d="cpsrvd"
   cpanel_state="$STATE_UP"
-  cpanel_ports="225"
-  
-  new_service "$cpanel_label" "$cpanel_v" "$cpanel_d" "$cpanel_state" "$cpanel_ports"
+
+  new_service "$cpanel_label" "$cpanel_v" "$cpanel_d" "$cpanel_state"
 }
 
 function check_webserver() {
@@ -132,9 +117,8 @@ function check_webserver() {
   apache_v="1.0"
   apache_d="httpd"
   apache_state="$STATE_UP"
-  apache_ports="112"
 
-  new_service "$apache_label" "$apache_v" "$apache_d" "$apache_state" "$apache_ports"
+  new_service "$apache_label" "$apache_v" "$apache_d" "$apache_state"
 }
 
 function services_main() {
@@ -154,8 +138,7 @@ function services_main() {
       + labels_size \
       + versions_size \
       + daemons_size \
-      + states_size \
-      + ports_size ))
+      + states_size ))
 
   # Print Table
   title_divider=$(( ( width - ( title_size + 2 ) ) / 2 )) 
