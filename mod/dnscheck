@@ -30,10 +30,10 @@ info_size=${#FIELDS[2]}
 function print_row() {                                                                                                  # Create Function To Print Table Rows
   status_temp=$(echo -e "${status[$1]}" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')                                              # Detects Row Width (Padding)
   (( status_spacer = status_size - ${#status_temp} ))                                                                   # Detects Row Width (No Padding)
-  format=" %-${status_size}s%b | %${name_size}s | %${info_size}s\n"       # Declare Row Format
+  format=" %-${status_size}s%b | %${name_size}s | %${info_size}s\\n"       # Declare Row Format
   printf "$format" "${status[$1]}" "" "${name[$1]}" "${info[$1]}"                 # Add Prefix ("") To Fields With Colors
   if [ "$1" -eq 0 ]; then
-    printf "%*s\n" "$width" | tr ' ' '=';                                                                               # Print Header Divider
+    printf "%*s\\n" "$width" | tr ' ' '=';                                                                               # Print Header Divider
   fi
 }
 
@@ -54,9 +54,9 @@ function set_status() {
   fi
   
   if [ "$1" == "$STATUS_DOWN" ]; then
-    status=("${status[@]}" "$Color_Red $1 $Color_Reset")
+    status=("${status[@]}" "$Color_Red$1$Color_Reset")
   elif [ "$1" == "$STATUS_UP" ]; then
-    status=("${status[@]}" "$Color_Green $1 $Color_Reset")
+    status=("${status[@]}" "$Color_Green$1$Color_Reset")
   fi
 }
 
@@ -132,7 +132,7 @@ function services_main() {
   fi
   printf "$SC%*s$W1" $title_divider | tr ' ' '=';
   printf " %s " "$TITLE"
-  printf "$SC%*s$RS\n" $title_divider_2 | tr ' ' '='
+  printf "$SC%*s$RS\\n" $title_divider_2 | tr ' ' '='
 
   # Print Rows
   for ((i=0; i<${#name[*]}; i++)); do
