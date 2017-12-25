@@ -132,7 +132,7 @@ function services_main() {
   printf "$SC%*s$RS\n" $title_divider_2 | tr ' ' '='
 
   # Print Rows
-  for ((i=0; i<${#labels[*]}; i++)); do
+  for ((i=0; i<${#name[*]}; i++)); do
     print_row $i
   done
 }
