@@ -16,9 +16,9 @@ STATE_DOWN="DOWN"
 name[0]="${FIELDS[1]}"
 name_size=${#FIELDS[1]}
 
-# Versions
-versions[0]="${FIELDS[2]}"
-versions_size=${#FIELDS[2]}
+# Information
+info[0]="${FIELDS[2]}"
+info_size=${#FIELDS[2]}
 
 # Services
 
@@ -27,8 +27,8 @@ versions_size=${#FIELDS[2]}
 function print_row() {                                                                                                  # Create Function To Print Table Rows
   states_temp=$(echo -e "${states[$1]}" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')                                              # Detects Row Width (Padding)
   (( states_spacer = states_size - ${#states_temp} ))                                                                   # Detects Row Width (No Padding)
-  format=" %-${states_size}s%b | %${name_size}s | %${versions_size}s\n"       # Declare Row Format
-  printf "$format" "${states[$1]}" "" "${name[$1]}" "${versions[$1]}"                 # Add Prefix ("") To Fields With Colors
+  format=" %-${states_size}s%b | %${name_size}s | %${info_size}s\n"       # Declare Row Format
+  printf "$format" "${states[$1]}" "" "${name[$1]}" "${info[$1]}"                 # Add Prefix ("") To Fields With Colors
   if [ "$1" -eq 0 ]; then
     printf "%*s\n" "$width" | tr ' ' '=';                                                                               # Print Header Divider
   fi
@@ -65,11 +65,11 @@ function set_name() {
   fi
 }
 
-function set_versions() {
-  versions=("${versions[@]}" "$1")
+function set_info() {
+  info=("${info[@]}" "$1")
   
-  if [ ${#1} -gt "$versions_size" ]; then
-    versions_size=${#1}
+  if [ ${#1} -gt "$info_size" ]; then
+    info_size=${#1}
   fi
 }
 
@@ -78,11 +78,11 @@ function set_versions() {
 function new_service() {
   # $1 = state
   # $2 = name
-  # $3 = version
+  # $3 = info
 
   set_states "$1"
   set_name "$2"
-  set_versions "$3"
+  set_info "$3"
 }
 
 # Service Checks
@@ -90,17 +90,17 @@ function new_service() {
 function check_control_panel() {
   cpanel_state="$STATE_UP"
   cpanel_name="cPanel"
-  cpanel_v="1.5"
+  cpanel_info="1.5"
   
-  new_service "$cpanel_state" "$cpanel_name" "$cpanel_v"
+  new_service "$cpanel_state" "$cpanel_name" "$cpanel_info"
 }
 
 function check_webserver() {
   apache_state="$STATE_UP"
   apache_name="Apache"
-  apache_v="1.0"
+  apache_info="1.0"
 
-  new_service "$apache_state" "$apache_name" "$apache_v"
+  new_service "$apache_state" "$apache_name" "$apache_info"
 }
 
 function services_main() {
@@ -119,7 +119,7 @@ function services_main() {
       + ( 3 * ( ${#FIELDS[@]} - 1 ) ) \
       + states_size \
       + name_size \
-      + versions_size ))
+      + info_size ))
 
   # Print Table
   title_divider=$(( ( width - ( title_size + 2 ) ) / 2 )) 
