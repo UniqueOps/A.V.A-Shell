@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Field headings
-FIELDS=("Service" "Version" "Daemon")                                                                 # Declare Column Headings
+FIELDS=("Status" "Name" "Information")                                                                 # Declare Column Headings
 
 # Field Arrays
 
@@ -9,16 +9,16 @@ FIELDS=("Service" "Version" "Daemon")                                           
 states[0]="${FIELDS[0]}"
 states_size=${#FIELDS[0]}
 
-# Labels
-labels[0]="${FIELDS[1]}"
-labels_size=${#FIELDS[1]}
+STATE_UP="UP"
+STATE_DOWN="DOWN"
+
+# Name
+name[0]="${FIELDS[1]}"
+name_size=${#FIELDS[1]}
 
 # Versions
 versions[0]="${FIELDS[2]}"
 versions_size=${#FIELDS[2]}
-
-STATE_UP="UP"
-STATE_DOWN="DOWN"
 
 # Services
 
@@ -27,8 +27,8 @@ STATE_DOWN="DOWN"
 function print_row() {                                                                                                  # Create Function To Print Table Rows
   states_temp=$(echo -e "${states[$1]}" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')                                              # Detects Row Width (Padding)
   (( states_spacer = states_size - ${#states_temp} ))                                                                   # Detects Row Width (No Padding)
-  format=" %-${states_size}s%b | %${labels_size}s | %${versions_size}s\n"       # Declare Row Format
-  printf "$format" "${states[$1]}" "" "${labels[$1]}" "${versions[$1]}"                 # Add Prefix ("") To Fields With Colors
+  format=" %-${states_size}s%b | %${name_size}s | %${versions_size}s\n"       # Declare Row Format
+  printf "$format" "${states[$1]}" "" "${name[$1]}" "${versions[$1]}"                 # Add Prefix ("") To Fields With Colors
   if [ "$1" -eq 0 ]; then
     printf "%*s\n" "$width" | tr ' ' '=';                                                                               # Print Header Divider
   fi
@@ -57,11 +57,11 @@ function set_states() {
   fi
 }
 
-function set_labels() {
-  labels=("${labels[@]}" "$1")
+function set_name() {
+  name=("${name[@]}" "$1")
   
-  if [ ${#1} -gt "$labels_size" ]; then
-    labels_size=${#1}
+  if [ ${#1} -gt "$name_size" ]; then
+    name_size=${#1}
   fi
 }
 
@@ -77,11 +77,11 @@ function set_versions() {
 
 function new_service() {
   # $1 = state
-  # $2 = label
+  # $2 = name
   # $3 = version
 
   set_states "$1"
-  set_labels "$2"
+  set_name "$2"
   set_versions "$3"
 }
 
@@ -89,18 +89,18 @@ function new_service() {
 
 function check_control_panel() {
   cpanel_state="$STATE_UP"
-  cpanel_label="cPanel"
+  cpanel_name="cPanel"
   cpanel_v="1.5"
   
-  new_service "$cpanel_state" "$cpanel_label" "$cpanel_v"
+  new_service "$cpanel_state" "$cpanel_name" "$cpanel_v"
 }
 
 function check_webserver() {
   apache_state="$STATE_UP"
-  apache_label="Apache"
+  apache_name="Apache"
   apache_v="1.0"
 
-  new_service "$apache_state" "$apache_label" "$apache_v"
+  new_service "$apache_state" "$apache_name" "$apache_v"
 }
 
 function services_main() {
@@ -118,7 +118,7 @@ function services_main() {
       2 \
       + ( 3 * ( ${#FIELDS[@]} - 1 ) ) \
       + states_size \
-      + labels_size \
+      + name_size \
       + versions_size ))
 
   # Print Table
