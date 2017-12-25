@@ -1,0 +1,174 @@
+#!/bin/bash
+
+# Field headings
+FIELDS=("Service" "Version" "Daemon" "Running" "Ports")                                                                 # Declare Column Headings
+
+# Field Arrays
+
+# Labels
+labels[0]="${FIELDS[0]}"
+labels_size=${#FIELDS[0]}
+
+# Versions
+versions[0]="${FIELDS[1]}"
+versions_size=${#FIELDS[1]}
+
+# Daemons
+daemons[0]="${FIELDS[2]}"
+daemons_size=${#FIELDS[2]}
+
+# States
+states[0]="${FIELDS[3]}"
+states_size=${#FIELDS[3]}
+
+STATE_UP="UP"
+STATE_DOWN="DOWN"
+
+# Ports
+ports[0]="${FIELDS[4]}"
+ports_size=${#FIELDS[4]}
+
+# Services
+
+# Functions
+
+function print_row() {                                                                                                  # Create Function To Print Table Rows
+  states_temp=$(echo -e "${states[$1]}" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')                                              # Detects Row Width (Padding)
+  (( states_spacer = states_size - ${#states_temp} ))                                                                   # Detects Row Width (No Padding)
+  format=" %-${labels_size}s | %${versions_size}s | %${daemons_size}s | %${states_spacer}s%b | %${ports_size}s\n"       # Declare Row Format
+  printf "$format" "${labels[$1]}" "${versions[$1]}" "${daemons[$1]}" "" "${states[$1]}" "${ports[$1]}"                 # Add Prefix ("") To Fields With Colors
+  if [ "$1" -eq 0 ]; then
+    printf "%*s\n" "$width" | tr ' ' '=';                                                                               # Print Header Divider
+  fi
+}
+
+# Field Accessors
+
+# Setters
+
+# These functions update the parallel arrays, and manage the size variable
+# for the respective field.
+
+# "Set" here is a bit of a misnomer since they are really adding a new element
+# to the end of a list instead of setting the value of an element.
+# Using the convention "add_field" might be more appropriate here.
+
+function set_labels() {
+  labels=("${labels[@]}" "$1")
+  
+  if [ ${#1} -gt "$labels_size" ]; then
+    labels_size=${#1}
+  fi
+}
+
+function set_versions() {
+  versions=("${versions[@]}" "$1")
+  
+  if [ ${#1} -gt "$versions_size" ]; then
+    versions_size=${#1}
+  fi
+}
+
+function set_daemons () {
+  daemons=("${daemons[@]}" "$1")
+  
+  if [ ${#1} -gt "$daemons_size" ]; then
+    daemons_size=${#1}
+  fi
+}
+
+function set_states() {
+  if [ ${#1} -gt "$states_size" ]; then
+    states_size=${#1}
+  fi
+  
+  if [ "$1" == "$STATE_DOWN" ]; then
+    states=("${states[@]}" "$R1$1$RS")
+  elif [ "$1" == "$STATE_UP" ]; then
+    states=("${states[@]}" "$G1$1$RS")
+  fi
+}
+
+function set_ports (){
+  ports=("${ports[@]}" "$1")
+  
+  if [ ${#1} -gt "$ports_size" ]; then
+    ports_size=${#1}
+  fi
+}
+
+# "Constructor"
+
+function new_service() {
+  # $1 = label
+  # $2 = version
+  # $3 = daemon
+  # $4 = state
+  # $5 = ports
+  
+  set_labels "$1"
+  set_versions "$2"
+  set_daemons "$3"
+  set_states "$4"
+  set_ports "$5"
+}
+
+# Service Checks
+
+function check_control_panel() {
+  cpanel_label="cPanel"
+  cpanel_v="1.5"
+  cpanel_d="cpsrvd"
+  cpanel_state="$STATE_UP"
+  cpanel_ports="225"
+  
+  new_service "$cpanel_label" "$cpanel_v" "$cpanel_d" "$cpanel_state" "$cpanel_ports"
+}
+
+function check_webserver() {
+  apache_label="Apache"
+  apache_v="1.0"
+  apache_d="httpd"
+  apache_state="$STATE_UP"
+  apache_ports="112"
+
+  new_service "$apache_label" "$apache_v" "$apache_d" "$apache_state" "$apache_ports"
+}
+
+function services_main() {
+
+  # Row Order
+  check_control_panel
+  check_webserver
+  
+  # Title
+  TITLE="Services Check"
+  title_size=${#TITLE}
+
+  # Formatting
+  width=$(( 
+      2 \
+      + ( 3 * ( ${#FIELDS[@]} - 1 ) ) \
+      + labels_size \
+      + versions_size \
+      + daemons_size \
+      + states_size \
+      + ports_size ))
+
+  # Print Table
+  title_divider=$(( ( width - ( title_size + 2 ) ) / 2 )) 
+  title_divider_2=$title_divider
+  if [ $(( width % 2 )) -ne $(( title_size % 2 )) ]; then
+    ((title_divider_2++))
+  fi
+  printf "$SC%*s$W1" $title_divider | tr ' ' '=';
+  printf " %s " "$TITLE"
+  printf "$SC%*s$RS\n" $title_divider_2 | tr ' ' '='
+
+  # Print Rows
+  for ((i=0; i<${#labels[*]}; i++)); do
+    print_row $i
+  done
+}
+
+services_main
