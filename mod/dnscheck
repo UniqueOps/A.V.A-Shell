@@ -89,16 +89,16 @@ function new_service() {
 
 function check_control_panel() {
   cpanel_status="$STATUS_UP"
-  cpanel_name="cPanel"
-  cpanel_info="1.5"
+  cpanel_name="Nameserver Check"
+  cpanel_info="Information goes here."
   
   new_service "$cpanel_status" "$cpanel_name" "$cpanel_info"
 }
 
 function check_webserver() {
   apache_status="$STATUS_UP"
-  apache_name="Apache"
-  apache_info="1.0"
+  apache_name="A Record Check"
+  apache_info="Information also goes here."
 
   new_service "$apache_status" "$apache_name" "$apache_info"
 }
