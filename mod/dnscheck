@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Include Colors
-eval "$(curl -k -s https://gitlab.com/uniqueops/ava/blob/master/var/colors)"
-
 # Field headings
 FIELDS=("Status" "Name" "Information")                                                                 # Declare Column Headings
 
@@ -54,9 +51,9 @@ function set_status() {
   fi
   
   if [ "$1" == "$STATUS_DOWN" ]; then
-    status=("${status[@]}" "$Color_Red$1$Color_Reset")
+    status=("${status[@]}" "$R1$1$RS")
   elif [ "$1" == "$STATUS_UP" ]; then
-    status=("${status[@]}" "$Color_Green$1$Color_Reset")
+    status=("${status[@]}" "$G1$1$RS")
   fi
 }
 
@@ -130,9 +127,9 @@ function services_main() {
   if [ $(( width % 2 )) -ne $(( title_size % 2 )) ]; then
     ((title_divider_2++))
   fi
-  printf "$Color_Blue%*s$Color_Reset" $title_divider | tr ' ' '=';
-  printf "$Color_White %s $Color_Reset" "$TITLE"
-  printf "$Color_Blue%*s$Color_Reset\n" $title_divider_2 | tr ' ' '='
+  printf "$SC%*s$W1" $title_divider | tr ' ' '=';
+  printf " %s " "$TITLE"
+  printf "$SC%*s$RS\n" $title_divider_2 | tr ' ' '='
 
   # Print Rows
   for ((i=0; i<${#name[*]}; i++)); do
