@@ -28,7 +28,7 @@ function print_row() {                                                          
   states_temp=$(echo -e "${states[$1]}" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')                                              # Detects Row Width (Padding)
   (( states_spacer = states_size - ${#states_temp} ))                                                                   # Detects Row Width (No Padding)
   format=" %-${states_size}s%b | %${labels_size}s | %${versions_size}s\n"       # Declare Row Format
-  printf "$format" "${state[$1]}" "" "${labels[$1]}" "${versions[$1]}"                 # Add Prefix ("") To Fields With Colors
+  printf "$format" "${states[$1]}" "" "${labels[$1]}" "${versions[$1]}"                 # Add Prefix ("") To Fields With Colors
   if [ "$1" -eq 0 ]; then
     printf "%*s\n" "$width" | tr ' ' '=';                                                                               # Print Header Divider
   fi
