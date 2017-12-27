@@ -9,30 +9,38 @@ read domain;
 echo -e "\\n"
 
 # Field headings
-FIELDS=("Name" "Information")
+FIELDS=("Status" "Name" "Information")
 
 # Field Arrays
 
+# Status
+status[0]="${FIELDS[0]}"
+status_size=${#FIELDS[0]}
+
+STATUS_INFO="Info"
+STATUS_PASS="Passed"
+STATUS_FAIL="Failed"
+
 # Name
-name[0]="${FIELDS[0]}"
-name_size=${#FIELDS[0]}
+name[0]="${FIELDS[1]}"
+name_size=${#FIELDS[1]}
 
 # Information
-info[0]="${FIELDS[1]}"
-info_size=${#FIELDS[1]}
+info[0]="${FIELDS[2]}"
+info_size=${#FIELDS[2]}
 
 # Services
 
 # Functions
 
 function print_row() {                                                                                                  # Create Function To Print Table Rows
-  name_temp=$(echo -e "${name[$1]}" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')                                                  # Detects Row Width (Padding)
-  (( name_spacer = name_size - ${#name_temp} ))                                                                         # Detects Row Width (No Padding)
-  format=" %-${name_size}s%b | %-${info_size}s%b\\n"                                                                    # Declare Row Format
-  printf "$format" "${name[$1]}" "" "${info[$1]}"                                                                       # Add Prefix ("") To Fields With Colors
-  #if [ "$1" -eq 0 ]; then
-    #printf "%*s\\n" "$width" | tr ' ' '=';                                                                               # Print Header Divider
-  #fi
+  status_temp=$(echo -e "${status[$1]}" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')                                              # Detects Row Width (Padding)
+  (( status_spacer = status_size - ${#status_temp} ))                                                                   # Detects Row Width (No Padding)
+  format=" %-${status_size}s%b | %${name_size}s | %-${info_size}s%b\\n"                                              # Declare Row Format
+  printf "$format" "${status[$1]}" "" "${name[$1]}" "${info[$1]}"                                                       # Add Prefix ("") To Fields With Colors
+  if [ "$1" -eq 0 ]; then
+    printf "%*s\\n" "$width" | tr ' ' '=';                                                                               # Print Header Divider
+  fi
 }
 
 # Field Accessors
@@ -45,6 +53,20 @@ function print_row() {                                                          
 # "Set" here is a bit of a misnomer since they are really adding a new element
 # to the end of a list instead of setting the value of an element.
 # Using the convention "add_field" might be more appropriate here.
+
+function set_status() {
+  if [ ${#1} -gt "$status_size" ]; then
+    status_size=${#1}
+  fi
+  
+  if [ "$1" == "$STATUS_INFO" ]; then
+    status=("${status[@]}" "$1")
+  elif [ "$1" == "$STATUS_PASS" ]; then
+    status=("${status[@]}" "$1")
+  elif [ "$1" == "$STATUS_FAIL" ]; then
+    status=("${status[@]}" "$1")
+  fi
+}
 
 function set_name() {
   name=("${name[@]}" "$1")
@@ -65,27 +87,31 @@ function set_info() {
 # "Constructor"
 
 function new_service() {
-  # $1 = name
-  # $2 = info
+  # $1 = status
+  # $2 = name
+  # $3 = info
 
-  set_name "$1"
-  set_info "$2"
+  set_status "$1"
+  set_name "$2"
+  set_info "$3"
 }
 
 # Service Checks
 
 function Global_Nameserver_Check() {
+  Global_Nameserver_Check_Status="$STATUS_INFO"
   Global_Nameserver_Check_Name="Nameserver Check"
   Global_Nameserver_Check_Info=$(dig ns +short $domain | sort | sed -e :a -e '$!N; s/\n/ | /; ta');
   
-  new_service "$Global_Nameserver_Check_Name" "$Global_Nameserver_Check_Info"
+  new_service "$Global_Nameserver_Check_Status" "$Global_Nameserver_Check_Name" "$Global_Nameserver_Check_Info"
 }
 
 function check_webserver() {
+  apache_status="$STATUS_INFO"
   apache_name="Global Nameservers"
   apache_info="Information also goes here."
 
-  new_service "$apache_name" "$apache_info"
+  new_service "$apache_status" "$apache_name" "$apache_info"
 }
 
 function services_main() {
@@ -102,6 +128,7 @@ function services_main() {
   width=$(( 
       2 \
       + ( 3 * ( ${#FIELDS[@]} - 1 ) ) \
+      + status_size \
       + name_size \
       + info_size ))
 
@@ -111,9 +138,9 @@ function services_main() {
   if [ $(( width % 2 )) -ne $(( title_size % 2 )) ]; then
     ((title_divider_2++))
   fi
-  #printf "$SC%*s$W1" $title_divider | tr ' ' '=';
+  printf "$SC%*s$W1" $title_divider | tr ' ' '=';
   printf " %s " "$TITLE"
-  #printf "$SC%*s$RS\\n" $title_divider_2 | tr ' ' '='
+  printf "$SC%*s$RS\\n" $title_divider_2 | tr ' ' '='
 
   # Print Rows
   for ((i=0; i<${#name[*]}; i++)); do
