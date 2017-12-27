@@ -56,7 +56,7 @@ function set_status() {
   if [ "$1" == "$STATUS_DOWN" ]; then
     status=("${status[@]}" "$1")
   elif [ "$1" == "$STATUS_UP" ]; then
-    status=("${status[@]}" "$Color_Red$1$Color_Reset")
+    status=("${status[@]}" "$1")
   fi
 }
 
