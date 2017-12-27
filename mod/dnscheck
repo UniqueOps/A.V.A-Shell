@@ -4,7 +4,7 @@
 eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/colors)"
 
 # Field headings
-FIELDS=("Status" "Name" "Information")                                                                 # Declare Column Headings
+FIELDS=("Status" "Name" "Information")
 
 # Field Arrays
 
@@ -12,8 +12,9 @@ FIELDS=("Status" "Name" "Information")                                          
 status[0]="${FIELDS[0]}"
 status_size=${#FIELDS[0]}
 
-STATUS_UP="UP"
-STATUS_DOWN="DOWN"
+STATUS_INFO="[--]"
+STATUS_PASS="[OK]"
+STATUS_FAIL="[!!]"
 
 # Name
 name[0]="${FIELDS[1]}"
@@ -30,8 +31,8 @@ info_size=${#FIELDS[2]}
 function print_row() {                                                                                                  # Create Function To Print Table Rows
   status_temp=$(echo -e "${status[$1]}" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')                                              # Detects Row Width (Padding)
   (( status_spacer = status_size - ${#status_temp} ))                                                                   # Detects Row Width (No Padding)
-  format=" %-${status_size}s%b | %${name_size}s | %${info_size}s\\n"       # Declare Row Format
-  printf "$format" "${status[$1]}" "" "${name[$1]}" "${info[$1]}"                 # Add Prefix ("") To Fields With Colors
+  format=" %-${status_size}s%b | %${name_size}s | %${info_size}s\\n"                                                    # Declare Row Format
+  printf "$format" "${status[$1]}" "" "${name[$1]}" "${info[$1]}"                                                       # Add Prefix ("") To Fields With Colors
   if [ "$1" -eq 0 ]; then
     printf "%*s\\n" "$width" | tr ' ' '=';                                                                               # Print Header Divider
   fi
@@ -53,9 +54,11 @@ function set_status() {
     status_size=${#1}
   fi
   
-  if [ "$1" == "$STATUS_DOWN" ]; then
+  if [ "$1" == "$STATUS_INFO" ]; then
     status=("${status[@]}" "$1")
-  elif [ "$1" == "$STATUS_UP" ]; then
+  elif [ "$1" == "$STATUS_PASS" ]; then
+    status=("${status[@]}" "$1")
+  elif [ "$1" == "$STATUS_FAIL" ]; then
     status=("${status[@]}" "$1")
   fi
 }
@@ -90,17 +93,17 @@ function new_service() {
 
 # Service Checks
 
-function check_control_panel() {
-  cpanel_status="$STATUS_UP"
-  cpanel_name="Nameserver Check"
-  cpanel_info="Information goes here."
+function Global_Nameserver_Check() {
+  Global_Nameserver_Check_Status="$STATUS_INFO"
+  Global_Nameserver_Check_Name="Nameserver Check"
+  Global_Nameserver_Check_Info=$(dig ns +short $domain | sort | sed -e :a -e '$!N; s/\n/ | /; ta');
   
-  new_service "$cpanel_status" "$cpanel_name" "$cpanel_info"
+  new_service "$Global_Nameserver_Check_Status" "$Global_Nameserver_Check_Name" "$Global_Nameserver_Check_Info"
 }
 
 function check_webserver() {
-  apache_status="$STATUS_UP"
-  apache_name="A Record Check"
+  apache_status="$STATUS_INFO"
+  apache_name="Global Nameservers"
   apache_info="Information also goes here."
 
   new_service "$apache_status" "$apache_name" "$apache_info"
@@ -109,7 +112,7 @@ function check_webserver() {
 function services_main() {
 
   # Row Order
-  check_control_panel
+  Global_Nameserver_Check
   check_webserver
   
   # Title
