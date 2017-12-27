@@ -134,9 +134,9 @@ function services_main() {
   if [ $(( width % 2 )) -ne $(( title_size % 2 )) ]; then
     ((title_divider_2++))
   fi
-  printf "$SC%*s$W1" $title_divider | tr ' ' '=';
+  printf "\\n$SC%*s$W1" $title_divider | tr ' ' '=';
   printf " %s " "$TITLE"
-  printf "$SC%*s$RS\\n" $title_divider_2 | tr ' ' '='
+  printf "$SC%*s$RS\\n\\n" $title_divider_2 | tr ' ' '='
 
   # Print Rows
   for ((i=0; i<${#name[*]}; i++)); do
