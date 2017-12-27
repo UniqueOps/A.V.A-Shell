@@ -136,7 +136,7 @@ function services_main() {
   fi
   printf "\\n$SC%*s$W1" $title_divider | tr ' ' '=';
   printf " %s " "$TITLE"
-  printf "$SC%*s$RS\\n\\n" $title_divider_2 | tr ' ' '='
+  printf "$SC%*s$RS\\n" $title_divider_2 | tr ' ' '='
 
   # Print Rows
   for ((i=0; i<${#name[*]}; i++)); do
@@ -144,7 +144,7 @@ function services_main() {
   done
   
   # Print Footer
-  printf "%*s\\n" "$width" "\\n" | tr ' ' '=';
+  printf "%*s\\n" "$width" | tr ' ' '=';
 }
 
 services_main
