@@ -35,7 +35,7 @@ info_size=${#FIELDS[2]}
 function print_row() {                                                                                                  # Create Function To Print Table Rows
   status_temp=$(echo -e "${status[$1]}" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')                                              # Detects Row Width (Padding)
   (( status_spacer = status_size - ${#status_temp} ))                                                                   # Detects Row Width (No Padding)
-  format=" %-${status_size}s%b | %${name_size}s | %${info_size}s\\n"                                                    # Declare Row Format
+  format=" %-${status_size}s%b | %${name_size}s | %${info_size}\\n"                                                    # Declare Row Format
   printf "$format" "${status[$1]}" "" "${name[$1]}" "${info[$1]}"                                                       # Add Prefix ("") To Fields With Colors
   if [ "$1" -eq 0 ]; then
     printf "%*s\\n" "$width" | tr ' ' '=';                                                                               # Print Header Divider
