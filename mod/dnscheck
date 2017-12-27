@@ -6,28 +6,27 @@ eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/colors)"
 # Question: What is the domain?
 echo -e "\\nWhat is the domain?"
 read domain;
-echo -e "\n"
 
 # Field headings
-FIELDS=("Status" "Name" "Information")
+#FIELDS=("Status" "Name" "Information")
 
 # Field Arrays
 
 # Status
-status[0]="${FIELDS[0]}"
-status_size=${#FIELDS[0]}
+#status[0]="${FIELDS[0]}"
+#status_size=${#FIELDS[0]}
 
 STATUS_INFO="Info"
 STATUS_PASS="Passed"
 STATUS_FAIL="Failed"
 
 # Name
-name[0]="${FIELDS[1]}"
-name_size=${#FIELDS[1]}
+#name[0]="${FIELDS[1]}"
+#name_size=${#FIELDS[1]}
 
 # Information
-info[0]="${FIELDS[2]}"
-info_size=${#FIELDS[2]}
+#info[0]="${FIELDS[2]}"
+#info_size=${#FIELDS[2]}
 
 # Services
 
@@ -38,9 +37,9 @@ function print_row() {                                                          
   (( status_spacer = status_size - ${#status_temp} ))                                                                   # Detects Row Width (No Padding)
   format=" %-${status_size}s%b | %${name_size}s | %-${info_size}s%b\\n"                                              # Declare Row Format
   printf "$format" "${status[$1]}" "" "${name[$1]}" "${info[$1]}"                                                       # Add Prefix ("") To Fields With Colors
-  if [ "$1" -eq 0 ]; then
-    printf "%*s\\n" "$width" | tr ' ' '=';                                                                               # Print Header Divider
-  fi
+  #if [ "$1" -eq 0 ]; then
+  #  printf "%*s\\n" "$width" | tr ' ' '=';                                                                               # Print Header Divider
+  #fi
 }
 
 # Field Accessors
