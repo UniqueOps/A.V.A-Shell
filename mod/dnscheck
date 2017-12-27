@@ -8,7 +8,7 @@ echo -e "What is the domain?"
 read domain;
 
 # Field headings
-FIELDS=("" "Name" "Information")
+FIELDS=("Status" "Name" "Information")
 
 # Field Arrays
 
@@ -16,9 +16,9 @@ FIELDS=("" "Name" "Information")
 status[0]="${FIELDS[0]}"
 status_size=${#FIELDS[0]}
 
-STATUS_INFO="[--]"
-STATUS_PASS="[OK]"
-STATUS_FAIL="[!!]"
+STATUS_INFO="Info"
+STATUS_PASS="Passed"
+STATUS_FAIL="Failed"
 
 # Name
 name[0]="${FIELDS[1]}"
