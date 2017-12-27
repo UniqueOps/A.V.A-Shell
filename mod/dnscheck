@@ -13,12 +13,12 @@ FIELDS=("Name" "Information")
 # Field Arrays
 
 # Name
-name[0]="${FIELDS[1]}"
-name_size=${#FIELDS[1]}
+name[0]="${FIELDS[0]}"
+name_size=${#FIELDS[0]}
 
 # Information
-info[0]="${FIELDS[2]}"
-info_size=${#FIELDS[2]}
+info[0]="${FIELDS[1]}"
+info_size=${#FIELDS[1]}
 
 # Services
 
