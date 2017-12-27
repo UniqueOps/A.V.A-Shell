@@ -144,7 +144,7 @@ function services_main() {
   done
   
   # Print Footer
-  printf "%*s\\n" "$width" | tr ' ' '=';
+  printf "%*s\\n" "$width" "\\n" | tr ' ' '=';
 }
 
 services_main
