@@ -8,7 +8,7 @@ echo -e "What is the domain?"
 read domain;
 
 # Field headings
-FIELDS=("Status" "Name" "Information")
+FIELDS=("" "Name" "Information")
 
 # Field Arrays
 
