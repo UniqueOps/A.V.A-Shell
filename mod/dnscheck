@@ -30,7 +30,7 @@ function print_row() {                                                          
   format=" %-${name_size}s%b | %-${info_size}s%b\\n"                                                                    # Declare Row Format
   printf "$format" "${name[$1]}" "" "${info[$1]}"                                                                       # Add Prefix ("") To Fields With Colors
   if [ "$1" -eq 0 ]; then
-    printf "%*s\\n" "$width" | tr ' ' '=';                                                                               # Print Header Divider
+    #printf "%*s\\n" "$width" | tr ' ' '=';                                                                               # Print Header Divider
   fi
 }
 
