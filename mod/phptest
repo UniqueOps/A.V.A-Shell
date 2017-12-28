@@ -1,5 +1,3 @@
-<?php
+#!/bin/php -q
 
 echo "Hello World";
-
-?>
