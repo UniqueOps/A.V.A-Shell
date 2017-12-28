@@ -48,7 +48,7 @@ function set_status() {
   elif [ "$1" == "$STATUS_WARNING" ]; then
     status=("${status[@]}" "$Color_Yellow$1$Color_Reset")
   elif [ "$1" == "$STATUS_PASS" ]; then
-    status=("${status[@]}" "\\e[32m$1\\e[0m")
+    status=("${status[@]}" "$Color_Green$1$Color_Reset")
   elif [ "$1" == "$STATUS_FAIL" ]; then
     status=("${status[@]}" "$Color_Red$1$Color_Reset")
   fi
@@ -64,7 +64,7 @@ function set_info() {
 
 # "Constructor"
 
-function new_service() {
+function new_row() {
   # $1 = status
   # $2 = info
 
@@ -78,14 +78,14 @@ function Global_Nameserver_Check() {
   Global_Nameserver_Check_Status="$STATUS_FAIL"
   Global_Nameserver_Check_Info=$(dig ns +short "$domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');
   
-  new_service "$Global_Nameserver_Check_Status" "$Global_Nameserver_Check_Info"
+  new_row "$Global_Nameserver_Check_Status" "$Global_Nameserver_Check_Info"
 }
 
 function check_webserver() {
   apache_status="$STATUS_PASS"
   apache_info="Information also goes here."
 
-  new_service "$apache_status" "$apache_info"
+  new_row "$apache_status" "$apache_info"
 }
 
 function services_main() {
