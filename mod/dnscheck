@@ -18,96 +18,62 @@ function print_row() {                                                          
   printf "$format" "" "${status[$1]}" "${info[$1]}"                                                                     # Add Prefix ("") To Fields With Colors
 }
 
-# Field Accessors
-
-# Setters
-
-# These functions update the parallel arrays, and manage the size variable
-# for the respective field.
-
-# "Set" here is a bit of a misnomer since they are really adding a new element
-# to the end of a list instead of setting the value of an element.
-# Using the convention "add_field" might be more appropriate here.
-
-function set_status() {
-  if [ ${#1} -gt "$status_size" ]; then
-    status_size=${#1}
+function set_status() {                                                                                                 # Create Function To Set Status
+  if [ ${#1} -gt "$status_size" ]; then                                                                                 
+    status_size=${#1}                                                                                                   # Set The Status Fields
   fi
-  
   if [ "$1" == "$STATUS_INFO" ]; then
-    status=("${status[@]}" "$Color_White$1$Color_Reset")
+    status=("${status[@]}" "$Color_White$1$Color_Reset")                                                                # Set Color If Status = Info
   elif [ "$1" == "$STATUS_WARNING" ]; then
-    status=("${status[@]}" "$Color_Yellow$1$Color_Reset")
+    status=("${status[@]}" "$Color_Yellow$1$Color_Reset")                                                               # Set Color If Status = Warning
   elif [ "$1" == "$STATUS_PASS" ]; then
-    status=("${status[@]}" "$Color_Green$1$Color_Reset")
+    status=("${status[@]}" "$Color_Green$1$Color_Reset")                                                                # Set Color If Status = Pass
   elif [ "$1" == "$STATUS_FAIL" ]; then
-    status=("${status[@]}" "$Color_Red$1$Color_Reset")
+    status=("${status[@]}" "$Color_Red$1$Color_Reset")                                                                  # Set Color If Status = Fail
   fi
 }
 
-function set_info() {
-  info=("${info[@]}" "$1")
-  
+function set_info() {                                                                                                   # Create Function To Set Info
+  info=("${info[@]}" "$1")                                                                                              # Declare Info Fields Into Variable
   if [ ${#1} -gt "$info_size" ]; then
-    info_size=${#1}
+    info_size=${#1}                                                                                                     # Declare Info Field Sizes
   fi
 }
 
-# "Constructor"
-
-function new_row() {
-  # $1 = status
-  # $2 = info
-
-  set_status "$1"
-  set_info "$2"
+function new_row() {                                                                                                    # Generate Rows
+  set_status "$1"                                                                                                       # Declare First Field Within Row
+  set_info "$2"                                                                                                         # Declare Second Field Within Row
 }
 
-# Service Checks
-
-function Global_Nameserver_Check() {
-  Global_Nameserver_Check_Status="$STATUS_FAIL"
-  Global_Nameserver_Check_Info=$(dig ns +short "$domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');
-  
-  new_row "$Global_Nameserver_Check_Status" "$Global_Nameserver_Check_Info"
+function Global_Nameserver_Check() {                                                                                    # Generate Nameserver Check Row
+  Global_Nameserver_Check_Status="$STATUS_FAIL"                                                                         # Set Status For Nameserver Check
+  Global_Nameserver_Check_Info=$(dig ns +short "$domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');                   # Grab Nameservers For Domain
+  new_row "$Global_Nameserver_Check_Status" "$Global_Nameserver_Check_Info"                                             # Generating Nameserver Check Row
 }
 
-function check_webserver() {
-  apache_status="$STATUS_PASS"
-  apache_info="Information also goes here."
-
-  new_row "$apache_status" "$apache_info"
+function demo_content() {                                                                                               # Generate Demo Content Row
+  demo_content_status="$STATUS_PASS"                                                                                    # Set Status For Demo Content
+  demo_content_info="Information also goes here."                                                                       # Place Demo Information Within Row
+  new_row "$demo_content_status" "$demo_content_info"                                                                   # Generating Demo Content Row
 }
 
 function services_main() {
-
-  # Row Order
-  Global_Nameserver_Check
-  check_webserver
-  
-  # Title
-  TITLE="DNS Check"
-  title_size=${#TITLE}
-
-  # Formatting
-  width=$(( 
-      2 \
-      + status_size \
-      + info_size ))
-
-  # Print Table
-  title_divider=$(( ( width - ( title_size + 2 ) ) / 2 )) 
-  printf "\\n$Color_Blue%*s$Color_White" $title_divider | tr ' ' '=';
-  printf " %s " "$TITLE"
-  printf "$Color_Blue%*s$Color_Reset\\n" $title_divider | tr ' ' '='
-
-  # Print Rows
-  for ((i=0; i<${#status[*]}; i++)); do
-    print_row $i
+  Global_Nameserver_Check                                                                                               # Set Row 1
+  demo_content                                                                                                          # Set Row 2
+  TITLE="DNS Check"                                                                                                     # Declare Table Title
+  title_size=${#TITLE}                                                                                                  # Generate Table Title Size
+  width=$((                                                                                                             # Totalling Table Width
+      2 \                                                                                                               # Declare Number of Table Columns
+      + status_size \                                                                                                   # Adding Status Column Width
+      + info_size ))                                                                                                    # Adding Info Column Width
+  title_divider=$(( ( width - ( title_size + 2 ) ) / 2 ))                                                               # Calculate Table Spacing
+  printf "\\n$Color_Blue%*s$Color_White" $title_divider | tr ' ' '=';                                                   # Print First Half Of Table Title
+  printf " %s " "$TITLE"                                                                                                # Print Table Title
+  printf "$Color_Blue%*s$Color_Reset\\n" $title_divider | tr ' ' '='                                                    # Print Second Half Of Table Title
+  for ((i=0; i<${#status[*]}; i++)); do                                                                                 # Generate Loop To Print Rows
+    print_row $i                                                                                                        # Print Row
   done
-  
-  # Print Footer
-  printf "$Color_Blue%*s$Color_Reset\\n" "$width" | tr ' ' '=';
+  printf "$Color_Blue%*s$Color_Reset\\n" "$width" | tr ' ' '=';                                                         # Print Table Footer
 }
 
-services_main
+services_main                                                                                                           # Generate Table
