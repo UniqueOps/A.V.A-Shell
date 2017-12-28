@@ -23,7 +23,6 @@ STATUS_FAIL="[!!]"
 # Functions
 
 function print_row() {                                                                                                  # Create Function To Print Table Rows
-  status_temp=$(echo -e "${status[$1]}" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')                                              # Detects Row Width (Padding)
   format=" %-${status_size}s%b %-${info_size}s%b\\n"                                                                    # Declare Row Format
   printf "$format" "${status[$1]}" "" "${info[$1]}"                                                                     # Add Prefix ("") To Fields With Colors
 }
@@ -107,7 +106,7 @@ function services_main() {
 
   # Print Table
   title_divider=$(( ( width - ( title_size + 2 ) ) / 2 )) 
-  printf "\\n$Color_Blue%*s$Color_Reset" $title_divider | tr ' ' '=';
+  printf "\\n'$Color_Blue'%*s'$Color_Reset'" $title_divider | tr ' ' '=';
   printf " %s " "$TITLE"
   printf "$Color_Blue%*s$Color_Reset\\n" $title_divider | tr ' ' '='
 
