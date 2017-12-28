@@ -11,11 +11,10 @@ info_size=${#FIELDS[1]}                                                         
 STATUS_INFO="[--]"                                                                                                      # Declare Info Status
 STATUS_WARNING="[??]"                                                                                                   # Declare Warning Status
 STATUS_PASS="[OK]"                                                                                                      # Declare Passing Status
-STATUS_FAIL="[!!]"                                                                                                      # Declare Failing Status
+STATUS_FAIL="[!!!!!!!!!]"                                                                                                      # Declare Failing Status
 
 function print_row() {                                                                                                  # Create Function To Print Table Rows
-  #format="%-${status_size}s%b %-${info_size}s%b\\n"                                                                     # Declare Row Format
-  format="${status_size} ${info_size}\\n"                                                                     # Declare Row Format
+  format="%-${status_size}s%b %-${info_size}s%b\\n"                                                                     # Declare Row Format
   printf "$format" "" "${status[$1]}" "${info[$1]}"                                                                     # Add Prefix ("") To Fields With Colors
 }
 
