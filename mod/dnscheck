@@ -14,7 +14,7 @@ STATUS_PASS="[OK]"                                                              
 STATUS_FAIL="[!!]"                                                                                                      # Declare Failing Status
 
 function print_row() {                                                                                                  # Create Function To Print Table Rows
-  format="%-${status_size:-4}s%b %-${info_size}s%b\\n"                                                                     # Declare Row Format
+  format="%-${status_size}s%b %-${info_size}s%b\\n"                                                                     # Declare Row Format
   printf "$format" "" "${status[$1]}" "${info[$1]}"                                                                     # Add Prefix ("") To Fields With Colors
 }
 
