@@ -22,12 +22,6 @@ function print_row() {
   format="%-${status_size}s%b %-${info_size}s%b\\n"
   printf "$format" "" "${status[$1]:20}" "${info[$1]}"
 }
-
-
-function set_status() {                                                                                 #
-  if [ ${#1} -gt "$status_size" ]; then
-    status_size=${#1}
-  fi
   
   if [ "$1" == "$STATUS_INFO" ]; then
     status=("${status[@]}" "$Color_White$1$Color_Reset")
