@@ -1,24 +1,30 @@
 #!/bin/bash
 
-eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/var/colors)"                                             # Add Color
+eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/var/colors)"                               # Add Color
 
-echo -e "\\nWhat is the domain?"                                                                                        # Ask For The Domain
-read -r domain;                                                                                                         # Put Domain Into Variable
+echo -e "\\nWhat is the domain?"                                                                        # Ask For The Domain
+read -r domain;                                                                                         # Put Domain Into Variable
 
-status_size=${#FIELDS[0]}                                                                                               # Declare Status Column Size
-info_size=${#FIELDS[1]}                                                                                                 # Declare Info Column Size
+status_size=${#FIELDS[0]}                                                                               # Declare Status Column Size
+info_size=${#FIELDS[1]}                                                                                 # Declare Info Column Size
 
-STATUS_INFO="[--]"                                                                                                      # Declare Info Status
-STATUS_WARNING="[??]"                                                                                                   # Declare Warning Status
-STATUS_PASS="[OK]"                                                                                                      # Declare Passing Status
-STATUS_FAIL="[!!]"                                                                                                      # Declare Failing Status
+STATUS_INFO="[--]"                                                                                      # Declare Info Status
+STATUS_WARNING="[??]"                                                                                   # Declare Warning Status
+STATUS_PASS="[OK]"                                                                                      # Declare Passing Status
+STATUS_FAIL="[!!]"                                                                                      # Declare Failing Status
 
-function print_row() {                                                                                                  # Create Function To Print Table Rows
-  format="%-${status_size}s%b %-${info_size}s%b\\n"                                                                     # Declare Row Format
-  printf "$format" "" "${status[$1]}" "${info[$1]}"                                                                     # Add Prefix ("") To Fields With Colors
+function print_row() {                                                                                  # Create Function To Print Table Rows
+  format="%-${status_size}s%b %-${info_size}s%b\\n"                                                     # Declare Row Format
+  printf "$format" "" "${status[$1]}" "${info[$1]}"                                                     # Add Prefix ("") To Fields With Colors
 }
 
-function set_status() {
+function print_row() {
+  format="%-${status_size}s%b %-${info_size}s%b\\n"
+  printf "$format" "" "${status[$1]:20}" "${info[$1]}"
+}
+
+
+function set_status() {                                                                                 #
   if [ ${#1} -gt "$status_size" ]; then
     status_size=${#1}
   fi
@@ -30,7 +36,7 @@ function set_status() {
   elif [ "$1" == "$STATUS_PASS" ]; then
     status=("${status[@]}" "$Color_Green$1$Color_Reset")
   elif [ "$1" == "$STATUS_FAIL" ]; then
-    status=("${status[@]}" "$Color_Red$1$Color_Reset")
+    status=("${status[@]}" "$Color_Red$1$Color_Reset")                                                  #
   fi
 }
 
@@ -56,7 +62,7 @@ function new_row() {
 
 function Global_Nameserver_Check() {
   Global_Nameserver_Check_Status="$STATUS_FAIL"
-  Global_Nameserver_Check_Info=$(dig ns +short "$domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');
+  Global_Nameserver_Check_Info=$(dig ns +short "$domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');   #
   
   new_row "$Global_Nameserver_Check_Status" "$Global_Nameserver_Check_Info"
 }
