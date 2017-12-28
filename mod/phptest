@@ -1,3 +1,0 @@
-#!/bin/php -q
-
-echo -e "Hello World\\n";
