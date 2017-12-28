@@ -46,13 +46,13 @@ function set_status() {
   fi
   
   if [ "$1" == "$STATUS_INFO" ]; then
-    status=("${status[@]}" "$1")
+    status=("${status[@]}" "$Color_White$1$Color_Reset")
   elif [ "$1" == "$STATUS_WARNING" ]; then
-    status=("${status[@]}" "$1"
+    status=("${status[@]}" "$Color_Yellow$1$Color_Reset"
   elif [ "$1" == "$STATUS_PASS" ]; then
-    status=("${status[@]}" "$1")
+    status=("${status[@]}" "$Color_Green$1$Color_Reset")
   elif [ "$1" == "$STATUS_FAIL" ]; then
-    status=("${status[@]}" "$1")
+    status=("${status[@]}" "$Color_Red$1$Color_Reset")
   fi
 }
 
@@ -77,14 +77,14 @@ function new_service() {
 # Service Checks
 
 function Global_Nameserver_Check() {
-  Global_Nameserver_Check_Status="$STATUS_INFO"
+  Global_Nameserver_Check_Status="$STATUS_FAIL"
   Global_Nameserver_Check_Info=$(dig ns +short $domain | sort | sed -e :a -e '$!N; s/\n/ | /; ta');
   
   new_service "$Global_Nameserver_Check_Status" "$Global_Nameserver_Check_Info"
 }
 
 function check_webserver() {
-  apache_status="$STATUS_INFO"
+  apache_status="$STATUS_PASS"
   apache_info="Information also goes here."
 
   new_service "$apache_status" "$apache_info"
@@ -108,9 +108,9 @@ function services_main() {
 
   # Print Table
   title_divider=$(( ( width - ( title_size + 2 ) ) / 2 )) 
-  printf "\\n$SC%*s$W1" $title_divider | tr ' ' '=';
+  printf "\\n$Color_Blue%*s$Color_Reset" $title_divider | tr ' ' '=';
   printf " %s " "$TITLE"
-  printf "$SC%*s$W1\\n" $title_divider | tr ' ' '='
+  printf "$Color_Blue%*s$Color_Reset\\n" $title_divider | tr ' ' '='
 
   # Print Rows
   for ((i=0; i<${#status[*]}; i++)); do
