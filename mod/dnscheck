@@ -112,9 +112,9 @@ function services_main() {
       + info_size ))
 
   # Print Table
-  title_divider=$(( ( width - ( title_size + 2 ) ) / 2 )) 
+  title_divider=$(( ( width - ( title_size + 1 ) ) / 2 )) 
   title_divider_2=$title_divider
-  if [ $(( width % 2 )) -ne $(( title_size % 2 )) ]; then
+  if [ $(( width % 2 )) -ne $(( title_size % 1 )) ]; then
     ((title_divider_2++))
   fi
   printf "\\n$SC%*s$W1" $title_divider | tr ' ' '=';
