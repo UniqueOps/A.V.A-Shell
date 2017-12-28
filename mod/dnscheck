@@ -1,30 +1,21 @@
 #!/bin/bash
 
-# Add Color
-eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/colors)"
+eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/colors)"                                             # Add Color
 
-# Question: What is the domain?
-echo -e "\\nWhat is the domain?"
-read -r domain;
+echo -e "\\nWhat is the domain?"                                                                                        # Ask For The Domain
+read -r domain;                                                                                                         # Put Domain Into Variable
 
-# Column Sizes
-status_size=${#FIELDS[0]}
-info_size=${#FIELDS[1]}
+status_size=${#FIELDS[0]}                                                                                               # Declare Status Column Size
+info_size=${#FIELDS[1]}                                                                                                 # Declare Info Column Size
 
-STATUS_INFO="[--]"
-STATUS_WARNING="[??]"
-STATUS_PASS="[OK]"
-STATUS_FAIL="[!!]"
-
-# Information
-
-# Services
-
-# Functions
+STATUS_INFO="[--]"                                                                                                      # Declare Info Status
+STATUS_WARNING="[??]"                                                                                                   # Declare Warning Status
+STATUS_PASS="[OK]"                                                                                                      # Declare Passing Status
+STATUS_FAIL="[!!]"                                                                                                      # Declare Failing Status
 
 function print_row() {                                                                                                  # Create Function To Print Table Rows
   format=" %-${status_size}s%b %-${info_size}s%b\\n"                                                                    # Declare Row Format
-  printf "$format" "${status[$1]}" "" "${info[$1]}"                                                                     # Add Prefix ("") To Fields With Colors
+  printf "$format" "" "${status[$1]}" "" "${info[$1]}"                                                                  # Add Prefix ("") To Fields With Colors
 }
 
 # Field Accessors
