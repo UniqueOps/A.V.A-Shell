@@ -107,7 +107,6 @@ function services_main() {
   # Formatting
   width=$(( 
       2 \
-      + ( 3 * ( ${#FIELDS[@]} - 1 ) ) \
       + status_size \
       + info_size ))
 
@@ -115,7 +114,7 @@ function services_main() {
   title_divider=$(( ( width - ( title_size + 2 ) ) / 2 )) 
   printf "\\n$SC%*s$W1" $title_divider | tr ' ' '=';
   printf " %s " "$TITLE"
-  printf "$SC%*s$RS\\n" $title_divider | tr ' ' '='
+  printf "$SC%*s$W1\\n" $title_divider | tr ' ' '='
 
   # Print Rows
   for ((i=0; i<${#status[*]}; i++)); do
