@@ -106,7 +106,7 @@ function services_main() {
 
   # Print Table
   title_divider=$(( ( width - ( title_size + 2 ) ) / 2 )) 
-  printf "\\n'$Color_Blue'%*s'$Color_Reset'" $title_divider | tr ' ' '=';
+  printf "\\n$Color_Blue%*s$Color_White" $title_divider | tr ' ' '=';
   printf " %s " "$TITLE"
   printf "$Color_Blue%*s$Color_Reset\\n" $title_divider | tr ' ' '='
 
