@@ -9,17 +9,15 @@ read domain;
 
 # Field Arrays
 
-# Status
-status[0]="${FIELDS[0]}"
+# Column Sizes
 status_size=${#FIELDS[0]}
+info_size=${#FIELDS[1]}
 
 STATUS_INFO="[--]"
 STATUS_PASS="[OK]"
 STATUS_FAIL="[!!]"
 
 # Information
-info[0]="${FIELDS[1]}"
-info_size=${#FIELDS[1]}
 
 # Services
 
