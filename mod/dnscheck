@@ -112,7 +112,7 @@ function services_main() {
 
   # Print Rows
   for ((i=0; i<${#status[*]}; i++)); do
-    print_row $i
+    print_row "$i"
   done
   
   # Print Footer
