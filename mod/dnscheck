@@ -7,9 +7,6 @@ eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/colors)"
 echo -e "\\nWhat is the domain?"
 read domain;
 
-# Field headings
-FIELDS=("Status" "Information")
-
 # Field Arrays
 
 # Status
