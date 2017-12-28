@@ -48,7 +48,7 @@ function set_status() {
   elif [ "$1" == "$STATUS_WARNING" ]; then
     status=("${status[@]}" "$Color_Yellow$1$Color_Reset")
   elif [ "$1" == "$STATUS_PASS" ]; then
-    status=("${status[@]}" "$Color_Green$1$Color_Reset")
+    status=("${status[@]}" "\\\e[32m$1$Color_Reset")
   elif [ "$1" == "$STATUS_FAIL" ]; then
     status=("${status[@]}" "$Color_Red$1$Color_Reset")
   fi
