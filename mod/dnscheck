@@ -5,7 +5,7 @@ eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/colors)"
 
 # Question: What is the domain?
 echo -e "\\nWhat is the domain?"
-read domain;
+read -r domain;
 
 # Column Sizes
 status_size=${#FIELDS[0]}
@@ -24,7 +24,6 @@ STATUS_FAIL="[!!]"
 
 function print_row() {                                                                                                  # Create Function To Print Table Rows
   status_temp=$(echo -e "${status[$1]}" | sed 's/\x1B\[[0-9;]*[JKmsu]//g')                                              # Detects Row Width (Padding)
-  (( status_spacer = status_size - ${#status_temp} ))                                                                   # Detects Row Width (No Padding)
   format=" %-${status_size}s%b %-${info_size}s%b\\n"                                                                    # Declare Row Format
   printf "$format" "${status[$1]}" "" "${info[$1]}"                                                                     # Add Prefix ("") To Fields With Colors
 }
@@ -48,7 +47,7 @@ function set_status() {
   if [ "$1" == "$STATUS_INFO" ]; then
     status=("${status[@]}" "$Color_White$1$Color_Reset")
   elif [ "$1" == "$STATUS_WARNING" ]; then
-    status=("${status[@]}" "$Color_Yellow$1$Color_Reset"
+    status=("${status[@]}" "$Color_Yellow$1$Color_Reset")
   elif [ "$1" == "$STATUS_PASS" ]; then
     status=("${status[@]}" "$Color_Green$1$Color_Reset")
   elif [ "$1" == "$STATUS_FAIL" ]; then
@@ -78,7 +77,7 @@ function new_service() {
 
 function Global_Nameserver_Check() {
   Global_Nameserver_Check_Status="$STATUS_FAIL"
-  Global_Nameserver_Check_Info=$(dig ns +short $domain | sort | sed -e :a -e '$!N; s/\n/ | /; ta');
+  Global_Nameserver_Check_Info=$(dig ns +short "$domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');
   
   new_service "$Global_Nameserver_Check_Status" "$Global_Nameserver_Check_Info"
 }
