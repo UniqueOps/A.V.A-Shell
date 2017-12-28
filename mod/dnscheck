@@ -7,13 +7,12 @@ eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/colors)"
 echo -e "\\nWhat is the domain?"
 read domain;
 
-# Field Arrays
-
 # Column Sizes
 status_size=${#FIELDS[0]}
 info_size=${#FIELDS[1]}
 
 STATUS_INFO="[--]"
+STATUS_WARNING="[??]"
 STATUS_PASS="[OK]"
 STATUS_FAIL="[!!]"
 
@@ -48,6 +47,8 @@ function set_status() {
   
   if [ "$1" == "$STATUS_INFO" ]; then
     status=("${status[@]}" "$1")
+  elif [ "$1" == "$STATUS_WARNING" ]; then
+    status=("${status[@]}" "$1"
   elif [ "$1" == "$STATUS_PASS" ]; then
     status=("${status[@]}" "$1")
   elif [ "$1" == "$STATUS_FAIL" ]; then
