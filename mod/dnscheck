@@ -7,10 +7,7 @@ eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/colors)"
 echo -e "\\nWhat is the domain?"
 read domain;
 
-# Field Arrays
-
 # Status
-status[0]="${FIELDS[0]}"
 status_size=${#FIELDS[0]}
 
 STATUS_INFO="[--]"
@@ -18,7 +15,6 @@ STATUS_PASS="[OK]"
 STATUS_FAIL="[!!]"
 
 # Information
-info[0]="${FIELDS[1]}"
 info_size=${#FIELDS[1]}
 
 # Services
