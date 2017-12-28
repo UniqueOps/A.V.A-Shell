@@ -1,6 +1,6 @@
 #!/bin/bash
 
-eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/colors)"                                             # Add Color
+eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/var/colors)"                                             # Add Color
 
 echo -e "\\nWhat is the domain?"                                                                                        # Ask For The Domain
 read -r domain;                                                                                                         # Put Domain Into Variable
@@ -17,17 +17,6 @@ function print_row() {                                                          
   format="%-${status_size}s%b %-${info_size}s%b\\n"                                                                     # Declare Row Format
   printf "$format" "" "${status[$1]}" "${info[$1]}"                                                                     # Add Prefix ("") To Fields With Colors
 }
-
-# Field Accessors
-
-# Setters
-
-# These functions update the parallel arrays, and manage the size variable
-# for the respective field.
-
-# "Set" here is a bit of a misnomer since they are really adding a new element
-# to the end of a list instead of setting the value of an element.
-# Using the convention "add_field" might be more appropriate here.
 
 function set_status() {
   if [ ${#1} -gt "$status_size" ]; then
