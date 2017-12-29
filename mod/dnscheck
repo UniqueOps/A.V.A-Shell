@@ -62,7 +62,7 @@ function services_main() {
   demo_content                                                                                          # Set Row 2
   TITLE="DNS Check"                                                                                     # Declare Table Title
   title_size=${#TITLE}                                                                                  # Generate Table Title Size
-  width=$((                                                                                             # Totalling Table Width
+  width=$((                                                                                             
       2 \                                                                                               # Declare Number of Table Columns
       + status_size \                                                                                   # Adding Status Column Width
       + info_size ))                                                                                    # Adding Info Column Width
