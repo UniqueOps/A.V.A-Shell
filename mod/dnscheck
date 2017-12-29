@@ -4,6 +4,14 @@ eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/colors)"     
 
 echo -e "\\nWhat is the domain?"                                                                        # Ask For The Domain
 read -r domain;                                                                                         # Put Domain Into Variable
+domain=${domain#*//};                                                                                   # Remove http:// or https://
+domain=${domain#*www.};                                                                                 # Remove www.
+domain=${domain%/};                                                                                     # Remove trailing /
+if [[ $domain == *"/"* ]]; then
+echo -e "Please leave directories out of your entry."
+exit 0
+fi
+echo $domain
 
 status_size=${#FIELDS[0]}                                                                               # Declare Status Column Size
 info_size=${#FIELDS[1]}                                                                                 # Declare Info Column Size
@@ -62,7 +70,7 @@ function services_main() {
   demo_content                                                                                          # Set Row 2
   TITLE="DNS Check"                                                                                     # Declare Table Title
   title_size=${#TITLE}                                                                                  # Generate Table Title Size
-  width=$(( 
+  width=$((                                                                                              
       2 \
       + status_size \
       + info_size ))
