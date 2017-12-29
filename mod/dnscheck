@@ -9,7 +9,7 @@ domain=${domain#*//};                                                           
 domain=${domain#*www.};                                                                                 # Remove WWW.
 domain=${domain%/};                                                                                     # Remove Trailing /
 domain=${domain} | cut -f1 -d"/";                                                                       # Remove Any Directories Added
-domain=${domain} | tr -cd "[:print:]\n"                                                              # Remove Special Characters
+domain=${domain} | sed 's/[^[:alnum:]]\+//g'                                                              # Remove Special Characters
 echo -e ""
 echo "Corrected to $domain"
 
