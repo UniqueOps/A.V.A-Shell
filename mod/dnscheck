@@ -14,7 +14,7 @@ echo -e "Please leave directories out of your entry."                           
 exit 0                                                                                                  # Exit Script Due To Error
 fi
 echo -e ""
-echo $domain
+echo "Corrected to $domain"
 
 status_size=${#FIELDS[0]}                                                                               # Declare Status Column Size
 info_size=${#FIELDS[1]}                                                                                 # Declare Info Column Size
