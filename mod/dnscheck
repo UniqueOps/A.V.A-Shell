@@ -8,11 +8,8 @@ domain=${domain//[[:blank:]]/}                                                  
 domain=${domain#*//};                                                                                   # Remove HTTP:// or HTTPS://
 domain=${domain#*www.};                                                                                 # Remove WWW.
 domain=${domain%/};                                                                                     # Remove Trailing /
-domain=${domain} | cut -f1 -d"/";
-if [[ $domain == *"/"* ]]; then                                                                         
-echo -e "Please leave directories out of your entry."                                                   # Kindle Ask To Leave Directories Out
-exit 0                                                                                                  # Exit Script Due To Error
-fi
+domain=${domain} | cut -f1 -d"/";                                                                       # Remove Any Directories Added
+domain=${domain} | sed 's/[^a-zA-Z0-9]//g'                                                              # Remove Special Characters
 echo -e ""
 echo "Corrected to $domain"
 
