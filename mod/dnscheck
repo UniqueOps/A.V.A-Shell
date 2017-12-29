@@ -8,10 +8,12 @@ domain=${domain//[[:blank:]]/}                                                  
 domain=${domain#*//};                                                                                   # Remove HTTP:// or HTTPS://
 domain=${domain#*www.};                                                                                 # Remove WWW.
 domain=${domain%/};                                                                                     # Remove Trailing /
+domain=${domain} | cut -f1 -d"/";
 if [[ $domain == *"/"* ]]; then                                                                         
 echo -e "Please leave directories out of your entry."                                                   # Kindle Ask To Leave Directories Out
 exit 0                                                                                                  # Exit Script Due To Error
 fi
+echo -e ""
 echo $domain
 
 status_size=${#FIELDS[0]}                                                                               # Declare Status Column Size
