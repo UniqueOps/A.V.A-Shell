@@ -62,10 +62,10 @@ function services_main() {
   demo_content                                                                                          # Set Row 2
   TITLE="DNS Check"                                                                                     # Declare Table Title
   title_size=${#TITLE}                                                                                  # Generate Table Title Size
-  width=$((                                                                                             
-      2 \                                                                                               # Declare Number of Table Columns
-      + status_size \                                                                                   # Adding Status Column Width
-      + info_size ))                                                                                    # Adding Info Column Width
+  width=$(( 
+      2 \
+      + status_size \
+      + info_size ))
   title_divider=$(( ( width - ( title_size + 2 ) ) / 2 ))                                               # Calculate Table Spacing
   printf "\\n$Color_Blue%*s$Color_White" $title_divider | tr ' ' '=';                                   # Print First Half Of Table Title
   printf " %s " "$TITLE"                                                                                # Print Table Title
