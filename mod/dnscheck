@@ -4,17 +4,18 @@ eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"     
 
 echo -e "\\nWhat is the domain?"                                                                        # Ask For The Domain
 read -r domain;                                                                                         # Put Domain Into Variable
+
+if [ $domain == "" ]; then                                                                                 
+  echo "Invalid Domain Entry"
+  exit 1
+fi
+
 domain=${domain//[[:blank:]]/}                                                                          # Remove Spaces & Tabs
 domain=${domain#*//};                                                                                   # Remove HTTP:// or HTTPS://
 domain=${domain#*www.};                                                                                 # Remove WWW.
 domain=${domain%/};                                                                                     # Remove Trailing /
 domain=${domain} | cut -f1 -d"/";                                                                       # Remove Any Directories Added
 #echo "Corrected to $domain"                                                                            # Echo Domain For Testing Purposes
-
-if [ $domain == "" ]; then                                                                                 
-  echo "Invalid Domain Entry"
-  exit 1
-fi
 
 status_size=${#FIELDS[0]}                                                                               # Declare Status Column Size
 info_size=${#FIELDS[1]}                                                                                 # Declare Info Column Size
