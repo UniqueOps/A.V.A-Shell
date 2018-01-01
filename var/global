@@ -15,9 +15,9 @@ function Global_Nameserver_Check() {                                            
   Global_Nameserver_Check_Status="$STATUS_FAIL"                                                         # Set Status For Nameserver Check
   Global_Nameserver_Check_Info=$(dig ns +short "$domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');   # Grab Nameservers For Domain
   if [ -n "$Global_Nameserver_Check_Info" ]; then
-    Global_Nameserver_Check_Status="$STATUS_PASS"
-    new_row "$Global_Nameserver_Check_Status" "$Global_Nameserver_Check_Info"
-else
+    new_row "$STATUS_INFO" "Global Nameservers: $Global_Nameserver_Check_Info"
+    new_row "$STATUS_PASS" "Parent nameserver's returned listed nameservers."
+  else
     Global_Nameserver_Check_Info="Parent nameserver's dont have your domain's nameservers listed."
     new_row "$Global_Nameserver_Check_Status" "$Global_Nameserver_Check_Info"
   fi
