@@ -9,9 +9,7 @@ domain=${domain#*//};                                                           
 domain=${domain#*www.};                                                                                 # Remove WWW.
 domain=${domain%/};                                                                                     # Remove Trailing /
 domain=${domain} | cut -f1 -d"/";                                                                       # Remove Any Directories Added
-domain=${domain} | sed 's/[^0-9a-zA-Z]//g'                                                              # Remove Special Characters
-echo -e ""
-echo "Corrected to $domain"
+#echo "Corrected to $domain"                                                                            # Echo Domain For Testing Purposes
 
 status_size=${#FIELDS[0]}                                                                               # Declare Status Column Size
 info_size=${#FIELDS[1]}                                                                                 # Declare Info Column Size
@@ -51,12 +49,6 @@ function set_info() {                                                           
 function new_row() {                                                                                    # Generate Rows
   set_status "$1"                                                                                       # Declare First Field Within Row
   set_info "$2"                                                                                         # Declare Second Field Within Row
-}
-
-function Global_Nameserver_Check() {                                                                    # Generate Nameserver Check Row
-  Global_Nameserver_Check_Status="$STATUS_FAIL"                                                         # Set Status For Nameserver Check
-  Global_Nameserver_Check_Info=$(dig ns +short "$domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');   # Grab Nameservers For Domain
-  new_row "$Global_Nameserver_Check_Status" "$Global_Nameserver_Check_Info"                             # Generating Nameserver Check Row
 }
 
 function demo_content() {                                                                               # Generate Demo Content Row
