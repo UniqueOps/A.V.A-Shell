@@ -11,6 +11,11 @@ domain=${domain%/};                                                             
 domain=${domain} | cut -f1 -d"/";                                                                       # Remove Any Directories Added
 #echo "Corrected to $domain"                                                                            # Echo Domain For Testing Purposes
 
+if [ $domain == "" ]; then                                                                                 
+  echo "Invalid Domain Entry"
+  exit 1
+fi
+
 status_size=${#FIELDS[0]}                                                                               # Declare Status Column Size
 info_size=${#FIELDS[1]}                                                                                 # Declare Info Column Size
 
