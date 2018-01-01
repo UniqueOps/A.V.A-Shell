@@ -14,7 +14,7 @@ domain=${domain//[[:blank:]]/}                                                  
 domain=${domain#*//};                                                                                   # Remove HTTP:// or HTTPS://
 domain=${domain#*www.};                                                                                 # Remove WWW.
 domain=${domain%/};                                                                                     # Remove Trailing /
-domain=${domain | cut -f1 -d"/"};                                                                       # Remove Any Directories Added
+domain=${domain} | cut -f1 -d"/";                                                                       # Remove Any Directories Added
 
 echo "Corrected to $domain"                                                                            # Echo Domain For Testing Purposes
 
