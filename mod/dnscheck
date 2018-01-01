@@ -6,7 +6,7 @@ echo -e "\\nWhat is the domain?"                                                
 read -r domain;                                                                                         # Put Domain Into Variable
 
 if [ -z "$domain" ]; then                                                                                 
-  echo "Invalid Domain Entry\\n"
+  echo -e "Invalid Domain Entry\\n"
   exit 1
 fi
 
