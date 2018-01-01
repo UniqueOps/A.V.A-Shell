@@ -9,14 +9,13 @@ if [ -z "$domain" ]; then
   echo -e "Please input a valid domain name.\\n"
   exit 1
 fi
-
 domain=${domain//[[:blank:]]/}                                                                          # Remove Spaces & Tabs
 domain=${domain#*//};                                                                                   # Remove HTTP:// or HTTPS://
 domain=${domain#*www.};                                                                                 # Remove WWW.
 domain=${domain%/};                                                                                     # Remove Trailing /
-domain=${domain} | cut -f1 -d"/";                                                                       # Remove Any Directories Added
+#domain=${domain} | cut -f1 -d"/";                                                                      # Remove Any Directories Added
 
-echo "Corrected to $domain"                                                                            # Echo Domain For Testing Purposes
+echo "Corrected to $domain"                                                                             # Echo Domain For Testing Purposes
 
 status_size=${#FIELDS[0]}                                                                               # Declare Status Column Size
 info_size=${#FIELDS[1]}                                                                                 # Declare Info Column Size
