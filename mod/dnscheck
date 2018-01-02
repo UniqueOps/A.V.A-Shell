@@ -6,11 +6,13 @@ echo -e "\\nWhat is the domain?"                                                
 read -r domain;                                                                                         # Put Domain Into Variable
 
 if [ -z "$domain" ]; then
-  title_divider="65"
-  printf "$Color_Blue%*s$Color_White\\n" $title_divider | tr ' ' '=';                                   # Print First Half Of Table Title
-  printf "[$Color_Red!!$Color_Reset] Please input a valid domain name.\\n"                                                         # Print Table Title
-  printf "$Color_Blue%*s$Color_Reset\\n\\n" $title_divider | tr ' ' '='
-  exit 1
+  title_divider="65"                                                                                    # Table Fixed Width
+  printf "\\n$Color_Blue%*s$Color_White" $title_divider | tr ' ' '=';                                   # Print First Half Of Table Title
+  printf " %s " "Script Error"                                                                          # Print Table Title
+  printf "$Color_Blue%*s$Color_Reset\\n" $title_divider | tr ' ' '='                                    # Print Second Half Of Table Title
+  printf "$Color_Red[!!]$Color_Reset Please input a valid domain name.\\n"                              # Print Error
+  printf "$Color_Blue%*s$Color_Reset\\n\\n" $title_divider | tr ' ' '='                                 # Print Table Footer
+  exit 1                                                                                                # End Script
 fi
 domain=${domain//[[:blank:]]/}                                                                          # Remove Spaces & Tabs
 domain=${domain#*//};                                                                                   # Remove HTTP:// or HTTPS://
