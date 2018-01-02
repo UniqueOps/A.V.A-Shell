@@ -8,8 +8,8 @@ read -r domain;                                                                 
 if [ -z "$domain" ]; then
   title_divider="65"
   printf "$Color_Blue%*s$Color_White\\n" $title_divider | tr ' ' '=';                                   # Print First Half Of Table Title
-  printf "Please input a valid domain name.\\n"                                                         # Print Table Title
-  printf "$Color_Blue%*s$Color_Reset\\n" $title_divider | tr ' ' '='
+  printf "[$Color_Red!!$Color_Reset] Please input a valid domain name.\\n"                                                         # Print Table Title
+  printf "$Color_Blue%*s$Color_Reset\\n\\n" $title_divider | tr ' ' '='
   exit 1
 fi
 domain=${domain//[[:blank:]]/}                                                                          # Remove Spaces & Tabs
