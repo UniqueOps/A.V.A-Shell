@@ -6,6 +6,7 @@ echo -e "\\nWhat is the domain?"                                                
 read -r domain;                                                                                         # Put Domain Into Variable
 
 if [ -z "$domain" ]; then                                                                                 
+  printf ""
   echo -e "Please input a valid domain name.\\n"
   exit 1
 fi
@@ -55,6 +56,18 @@ function set_info() {                                                           
 function new_row() {                                                                                    # Generate Rows
   set_status "$1"                                                                                       # Declare First Field Within Row
   set_info "$2"                                                                                         # Declare Second Field Within Row
+}
+
+function Global_Nameserver_Check() {                                                                    # Generate Nameserver Check Row
+  Global_Nameserver_Check_Status="$STATUS_FAIL"                                                         # Set Status For Nameserver Check
+  Global_Nameserver_Check_Info=$(dig ns +short "$domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');   # Grab Nameservers For Domain
+  if [ -n "$Global_Nameserver_Check_Info" ]; then
+    new_row "$STATUS_INFO" "Global Nameservers: $Global_Nameserver_Check_Info"
+    new_row "$STATUS_PASS" "Parent nameserver's returned listed nameservers."
+  else
+    Global_Nameserver_Check_Info="Parent nameserver's dont have your domain's nameservers listed."
+    new_row "$Global_Nameserver_Check_Status" "$Global_Nameserver_Check_Info"
+  fi
 }
 
 function demo_content() {                                                                               # Generate Demo Content Row
