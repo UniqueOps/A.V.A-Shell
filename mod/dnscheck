@@ -7,7 +7,7 @@ read -r domain;                                                                 
 
 if [ -z "$domain" ]; then
   title_divider="12"                                                                                    # Table Fixed Width
-  footer_divider=$(title_divider * 2)
+  footer_divider=$((title_divider*2))
   printf "\\n$Color_Blue%*s$Color_White" $title_divider | tr ' ' '=';                                   # Print First Half Of Table Title
   printf " %s " "Script Error"                                                                          # Print Table Title
   printf "$Color_Blue%*s$Color_Reset\\n" $title_divider | tr ' ' '='                                    # Print Second Half Of Table Title
