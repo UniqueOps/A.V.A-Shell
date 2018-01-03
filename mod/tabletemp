@@ -1,0 +1,160 @@
+#!/bin/bash
+
+################################################################################
+# cpanel_info
+# v1.0.0
+# 
+# Contributors:
+# * Graham L. - Level 2 Support Technician - graham.l@hostdime.com
+# 
+# Description:
+# 
+# Globals:
+# * CPANEL_INFO_FILENAME
+# * CPANEL_INFO_VERSION
+# 
+# Functions:
+# 
+# Dependencies:
+# * core.shl
+################################################################################
+
+################################################################################
+################################### Includes ###################################
+################################################################################
+
+if _core_test >/dev/null 2>&1; [ $? != 3 ]
+then
+  source /proc/self/fd/0 <<<"$(< <(curl -ks https://codesilo.dimenoc.com/grahaml/triton/raw/master/core/include_core_lib))"
+fi
+include colorize.shl
+include cpanel.shl
+include format.shl
+
+################################################################################
+################################### Globals ####################################
+################################################################################
+
+CPANEL_INFO_FILENAME="cpanel_info"
+CPANEL_INFO_VERSION="1.0.0"
+
+################################################################################
+################################## Functions ###################################
+################################################################################
+
+#*******************************************************************************
+# function_name()
+# v1.0.0
+# 
+# Contributors:
+# * Graham L. - Level 2 Support Technician - graham.l@hostdime.com
+# 
+# Description:
+# 
+# Returns:
+# 
+# Options:
+# None.
+# 
+# Arguments:
+# None.
+# 
+# Dependencies:
+# None.
+#*******************************************************************************
+
+#*******************************************************************************
+# cpanel_main()
+# v1.0.0
+# 
+# Contributors:
+# * Graham L. - Level 2 Support Technician - graham.l@hostdime.com
+# 
+# Description:
+# 
+# Returns:
+# 
+# Options:
+# None.
+# 
+# Arguments:
+# None.
+# 
+# Dependencies:
+# None.
+#*******************************************************************************
+
+function cpanel_main()
+{
+  # Profiling
+  #PS4='+ $(date "+%T.%4N")\011 '
+  #exec 3>&2 2>/tmp/servercheck_cpanel.log
+  #set -x
+
+  local version
+
+  local accounts
+  local acctcolor=""
+  local med_accts=500
+  local high_accts=1000
+  local vhigh_accts=2000
+
+  local domains
+  local domcolor=""
+  local med_doms=500
+  local high_doms=1000
+  local vhigh_doms=2000
+
+  local resellers
+  local python_v
+  local perl_v
+
+  local yellow=$(colorize -c yellow)
+  local red=$(colorize -c red)
+  local white_redbg=$(colorize -c white -g red -b)
+
+  version=$(cp_version)
+  accounts=$(cp_listaccts | wc -l)
+  domains=$(wc -l /etc/userdomains | awk '{print $1}')
+  resellers=$(cp_listresellers | wc -l)
+  python_v=$(python -V 2>&1 | awk '{print $2}')
+  perl_v=$(
+    perl -V |\
+    awk -v str="Summary" '$1 ~ str {printf("%s.%s.%s",$6,$8,$10)}' |\
+    tr -d ')'
+  )
+
+  if (( accounts >= vhigh_accts ))
+  then
+    acctcolor=$white_redbg
+  elif (( accounts >= high_accts ))
+  then
+    acctcolor=$red
+  elif (( accounts >= med_accts ))
+  then
+    acctcolor=$yellow
+  fi
+
+  if (( domains >= vhigh_doms ))
+  then
+    domcolor=$white_redbg
+  elif (( domains >= high_doms ))
+  then
+    domcolor=$red
+  elif (( domains >= med_doms ))
+  then
+    domcolor=$yellow
+
+  fi
+
+  init_table -m "$_MIN_TBL_WIDTH" "cPanel Info"
+  add_row "Version" "Accounts" "Domains" "Resellers" "Python" "Perl"
+  add_row -C 2 -T "$acctcolor" -C 3 -T "$domcolor" "$version" "$accounts" "$domains" "$resellers" "$python_v" "$perl_v"
+  print_table
+
+  # Profiling Stop
+  #set +x
+  #exec 2>&3 3>&-
+
+  return
+}
