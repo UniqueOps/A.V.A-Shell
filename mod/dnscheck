@@ -11,7 +11,7 @@ if [ -z "$domain" ]; then
   printf " %s " "Script Error"                                                                          # Print Table Title
   printf "$Color_Blue%*s$Color_Reset\\n" $title_divider | tr ' ' '='                                    # Print Second Half Of Table Title
   printf "$Color_Red[!!]$Color_Reset Please input a valid domain name.\\n"                              # Print Error
-  printf "$Color_Blue%*s$Color_Reset\\n\\n" ${title_divider*2} | tr ' ' '='                                 # Print Table Footer
+  printf "$Color_Blue%*s$Color_Reset\\n\\n" ${title_divider * 2} | tr ' ' '='                                 # Print Table Footer
   exit 1                                                                                                # End Script
 fi
 domain=${domain//[[:blank:]]/}                                                                          # Remove Spaces & Tabs
