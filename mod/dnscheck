@@ -2,66 +2,33 @@
 
 eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"                             # Add Global Functions
 
+STATUS_INFO="$Color_White[--]$Color_Reset"                                                              # Declare Info Status
+STATUS_WARNING="$Color_Yellow[??]$Color_Reset"                                                          # Declare Warning Status
+STATUS_PASS="$Color_Green[OK]$Color_Reset"                                                              # Declare Passing Status
+STATUS_FAIL="$Color_Red[!!]$Color_Reset"                                                                # Declare Failing Status
+
 echo -e "\\nWhat is the domain?"                                                                        # Ask For The Domain
-#read -r domain;                                                                                         # Put Domain Into Variable
-domain="uniqueops.com"
+#read -r domain;                                                                                        # Put Domain Into Variable
+domain=""
 
 if [ -z "$domain" ]; then
-  title_divider="12"                                                                                    # Table Fixed Width
-  footer_divider="38"
-  printf "\\n$Color_Blue%*s$Color_White" $title_divider | tr ' ' '=';                                   # Print First Half Of Table Title
-  printf " %s " "Script Error"                                                                          # Print Table Title
-  printf "$Color_Blue%*s$Color_Reset\\n" $title_divider | tr ' ' '='                                    # Print Second Half Of Table Title
-  printf "$Color_Red[!!]$Color_Reset Please input a valid domain name.\\n"                              # Print Error
-  printf "$Color_Blue%*s$Color_Reset\\n\\n" $footer_divider | tr ' ' '='                                # Print Table Footer
+  init_table "Error Detected"
+  add_row "$STATUS_FAIL" "Please input a valid domain name."
+  print_table
   exit 1                                                                                                # End Script
 fi
+
 domain=${domain//[[:blank:]]/}                                                                          # Remove Spaces & Tabs
 domain=${domain#*//};                                                                                   # Remove HTTP:// or HTTPS://
 domain=${domain#*www.};                                                                                 # Remove WWW.
 domain=${domain%/};                                                                                     # Remove Trailing /
 #domain=${domain} | cut -f1 -d"/";                                                                      # Remove Any Directories Added
 
-echo "Corrected to $domain"                                                                             # Echo Domain For Testing Purposes
-
-status_size=${#FIELDS[0]}                                                                               # Declare Status Column Size
-info_size=${#FIELDS[1]}                                                                                 # Declare Info Column Size
-
-STATUS_INFO="[--]"                                                                                      # Declare Info Status
-STATUS_WARNING="[??]"                                                                                   # Declare Warning Status
-STATUS_PASS="[OK]"                                                                                      # Declare Passing Status
-STATUS_FAIL="[!!]"                                                                                      # Declare Failing Status
+echo "Corrected to $domain"                                                                             # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 
 function print_row() {                                                                                  # Create Function To Print Table Rows
   format="%-${status_size}s%b %-${info_size}s%b\\n"                                                     # Declare Row Format
   printf "$format" "" "${status[$1]}" "${info[$1]}"                                                     # Add Prefix ("") To Fields With Colors
-}
-
-function set_status() {                                                                                 # Create Function To Set Status
-  if [ ${#1} -gt "$status_size" ]; then                                                                                 
-    status_size=${#1}                                                                                   # Set The Status Fields
-  fi
-  if [ "$1" == "$STATUS_INFO" ]; then
-    status=("${status[@]}" "$Color_White$1$Color_Reset")                                                # Set Color If Status = Info
-  elif [ "$1" == "$STATUS_WARNING" ]; then
-    status=("${status[@]}" "$Color_Yellow$1$Color_Reset")                                               # Set Color If Status = Warning
-  elif [ "$1" == "$STATUS_PASS" ]; then
-    status=("${status[@]}" "$Color_Green$1$Color_Reset")                                                # Set Color If Status = Pass
-  elif [ "$1" == "$STATUS_FAIL" ]; then
-    status=("${status[@]}" "$Color_Red$1$Color_Reset")                                                  # Set Color If Status = Fail
-  fi
-}
-
-function set_info() {                                                                                   # Create Function To Set Info
-  info=("${info[@]}" "$1")                                                                              # Declare Info Fields Into Variable
-  if [ ${#1} -gt "$info_size" ]; then
-    info_size=${#1}                                                                                     # Declare Info Field Sizes
-  fi
-}
-
-function new_row() {                                                                                    # Generate Rows
-  set_status "$1"                                                                                       # Declare First Field Within Row
-  set_info "$2"                                                                                         # Declare Second Field Within Row
 }
 
 function Global_Nameserver_Check() {                                                                    # Generate Nameserver Check Row
@@ -74,31 +41,4 @@ function Global_Nameserver_Check() {                                            
     Global_Nameserver_Check_Info="Parent nameserver's dont have your domain's nameservers listed."
     new_row "$Global_Nameserver_Check_Status" "$Global_Nameserver_Check_Info"
   fi
-}
-
-function demo_content() {                                                                               # Generate Demo Content Row
-  demo_content_status="$STATUS_PASS"                                                                    # Set Status For Demo Content
-  demo_content_info="Information also goes here."                                                       # Place Demo Information Within Row
-  new_row "$demo_content_status" "$demo_content_info"                                                   # Generating Demo Content Row
-}
-
-function services_main() {
-  Global_Nameserver_Check                                                                               # Set Row 1
-  demo_content                                                                                          # Set Row 2
-  TITLE="DNS Check"                                                                                     # Declare Table Title
-  title_size=${#TITLE}                                                                                  # Generate Table Title Size
-  width=$((                                                                                              
-      2 \
-      + status_size \
-      + info_size ))
-  title_divider=$(( ( width - ( title_size + 2 ) ) / 2 ))                                               # Calculate Table Spacing
-  printf "\\n$Color_Blue%*s$Color_White" $title_divider | tr ' ' '=';                                   # Print First Half Of Table Title
-  printf " %s " "$TITLE"                                                                                # Print Table Title
-  printf "$Color_Blue%*s$Color_Reset\\n" $title_divider | tr ' ' '='                                    # Print Second Half Of Table Title
-  for ((i=0; i<${#status[*]}; i++)); do                                                                 # Generate Loop To Print Rows
-    print_row $i                                                                                        # Print Row
-  done
-  printf "$Color_Blue%*s$Color_Reset\\n" "$width" | tr ' ' '=';                                         # Print Table Footer
-}
-
-services_main                                                                                           # Generate Table
+}                                                                           # Generate Table
