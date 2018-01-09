@@ -2,10 +2,10 @@
 
 eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"                             # Add Global Functions
 
-STATUS_INFO="$Color_White[--]$Color_Reset"                                                              # Declare Info Status
-STATUS_WARNING="$Color_Yellow[??]$Color_Reset"                                                          # Declare Warning Status
-STATUS_PASS="$Color_Green[OK]$Color_Reset"                                                              # Declare Passing Status
-STATUS_FAIL="$Color_Red[!!]$Color_Reset"                                                                # Declare Failing Status
+STATUS_INFO="[--]"                                                                                      # Declare Info Status
+STATUS_WARNING="[??]"                                                                                   # Declare Warning Status
+STATUS_PASS="[OK]"                                                                                      # Declare Passing Status
+STATUS_FAIL="[!!]"                                                                                      # Declare Failing Status
 
 echo -e "\\nWhat is the domain?"                                                                        # Ask For The Domain
 #read -r domain;                                                                                        # Put Domain Into Variable
