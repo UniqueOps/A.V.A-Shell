@@ -2,6 +2,8 @@
 # Description: Global Variables
 # Contributors: Casey McLaughlin
 
+source /proc/self/fd/0 <<<"$(< <(curl -ks https://codesilo.dimenoc.com/grahaml/triton/raw/master/core/include_core_lib))"
+include format.shl
 eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/colors)"                             # Add Color
 
 # Basic Server Information
