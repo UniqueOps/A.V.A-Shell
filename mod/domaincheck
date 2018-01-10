@@ -9,10 +9,10 @@ echo -e "\\n\\n\\nStarted as: $domain\\n"                                       
 
 #sed 's/[^a-zA-Z0-9.:/]//g' | tr '[:upper:]' '[:lower:]')
 
-domain=$(tr '[:upper:]' '[:lower:]' "$domain")
+domain=$(domain | tr '[:upper:]' '[:lower:]')
 echo -e "Lowercase: $domain\\n"
 
-domain=$(sed 's/[^a-zA-Z0-9.:/]//g' "$domain")
+domain=$(domain | sed 's/[^a-zA-Z0-9.:/]//g')
 echo -e "Special Characters Removed: $domain\\n"
 domain=${domain//[[:blank:]]/}                                                                                          # Remove Spaces & Tabs
 echo -e "Spaces Removed: $domain\\n"                                                                                    # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
