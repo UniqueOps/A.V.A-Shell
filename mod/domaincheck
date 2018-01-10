@@ -3,7 +3,7 @@
 
 #echo -e "\\nWhat is the domain?"                                               # Ask For The Domain
 #read -r domain;                                                                # Put Domain Into Variable
-domain="ht tps:// www . uniqueops.com /test/ testing.php/"
+domain="ht tps:// www . uniqueops.com ~!@#$%^&*()_+|}{":?><`-=][';/.,/test/ testing.php/"
 
 echo -e "\\n\\n\\nStarted as: $domain\\n"                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 domain=${domain//[[:blank:]]/}                                                  # Remove Spaces & Tabs
