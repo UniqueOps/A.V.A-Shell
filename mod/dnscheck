@@ -42,5 +42,5 @@ function Global_Nameserver_Check() {                                            
   fi
 }
 
-echo "";
+echo "\\n";
 Global_Nameserver_Check
