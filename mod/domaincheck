@@ -5,7 +5,7 @@
 #read -r domain;                                                                                                        # Put Domain Into Variable
 domain="ht tps:// www . UNIQUEops123!@#$%()^&*~-=_+[]{}\|;,<>?'.com /test/ testing.php/"                                # All Special Characters Used Minus ` and "
 
-echo -e "\\n\\n\\nStarted as: $domain\\n"                                                                               # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
+echo -e "\\n\\n\\nStarted as: $domain\\n"                                                                               # Echo Domain For Testing Purposes
 
 #sed 's/[^a-zA-Z0-9.:/]//g' | tr '[:upper:]' '[:lower:]')
 
@@ -14,19 +14,12 @@ echo -e "Lowercase: $domain\\n"
 
 domain=$(echo "$domain" | sed 's/[^a-zA-Z0-9.:/]//g')
 echo -e "Special Characters Removed: $domain\\n"
-domain=${domain//[[:blank:]]/}                                                                                          # Remove Spaces & Tabs
-echo -e "Spaces Removed: $domain\\n"                                                                                    # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 domain=${domain#*//};                                                                                                   # Remove HTTP:// or HTTPS://
-echo -e "http:// Removed: $domain\\n"                                                                                   # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
+echo -e "http:// Removed: $domain\\n"                                                                                   # Echo Domain For Testing Purposes
 domain=${domain#*www.};                                                                                                 # Remove WWW.
-echo -e "WWW Removed: $domain\\n"                                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
+echo -e "WWW Removed: $domain\\n"                                                                                       # Echo Domain For Testing Purposes
 domain=${domain%/};                                                                                                     # Remove Trailing /
-echo -e "Trailing / Removed: $domain\\n"                                                                                # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
+echo -e "Trailing / Removed: $domain\\n"                                                                                # Echo Domain For Testing Purposes
 
 
-echo -e "\\n\\nFinal version is $domain\\n"                                                                                   # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
-
-
-#cut -f1 -d":"
-
-# tr '[:upper:]' '[:lower:]'
+echo -e "\\n\\nFinal version is $domain\\n"                                                                             # Echo Domain For Testing Purposes
