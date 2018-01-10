@@ -3,7 +3,7 @@
 
 #echo -e "\\nWhat is the domain?"                                                                                       # Ask For The Domain
 #read -r domain;                                                                                                        # Put Domain Into Variable
-domain="ht tps:// www . uniqueops.com !@#$%^&* ~ -=_+ []{}\| ;: ,./<>? ' /test/ testing.php/"                           # All Special Characters Used Minus ` and "
+domain="ht tps:// www . UNIQUEops.com !@#$%^&* ~ -=_+ []{}\| ;: ,./<>? ' /test/ testing.php/"                           # All Special Characters Used Minus ` and "
 
 echo -e "\\n\\n\\nStarted as: $domain\\n"                                                                               # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 domain=${domain//[[:blank:]]/}                                                                                          # Remove Spaces & Tabs
@@ -15,6 +15,6 @@ echo -e "WWW Removed: $domain\\n"                                               
 domain=${domain%/};                                                                                                     # Remove Trailing /
 echo -e "Trailing / Removed: $domain\\n"                                                                                # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 #domain=${sed $'s/[^[:print:]\\t]//g' domain};                                                                          # Remove Any Directories Added
-echo -e "$domain" | sed 's/[^0-9]*//g'
+echo -e "$domain" | tr -dc '[:alnum:]\n\r' | tr '[:upper:]' '[:lower:]'
 
 echo -e "\\n\\nFinal version is $domain\\n"                                                                                   # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
