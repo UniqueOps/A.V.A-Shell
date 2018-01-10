@@ -10,4 +10,4 @@ domain=${domain#*//};                                                           
 domain=${domain#*www.};                                                             # Remove WWW.
 domain=$(echo "$domain" | cut -f1 -d"/")                                            # Remove Everything After TLD
 
-echo -e "\\nFinal version is $domain\\n"                                               # Echo Finalized Version
+echo -e "\\nFinal version is $domain\\n"                                            # Echo Finalized Version
