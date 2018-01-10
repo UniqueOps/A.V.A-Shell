@@ -2,14 +2,14 @@
 
 eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"                             # Add Global Functions
 
-STATUS_INFO="[--]"                                                                                      # Declare Info Status
-STATUS_WARNING="[??]"                                                                                   # Declare Warning Status
-STATUS_PASS="[OK]"                                                                                      # Declare Passing Status
-STATUS_FAIL="[!!]"                                                                                      # Declare Failing Status
+STATUS_INFO="$Color_White[--]$Color_Reset"                                                              # Declare Info Status
+STATUS_WARNING="$Color_Yellow[??]$Color_Reset"                                                          # Declare Warning Status
+STATUS_PASS="$Color_Green[OK]$Color_Reset"                                                              # Declare Passing Status
+STATUS_FAIL="$Color_Red[!!]$Color_Reset"                                                                # Declare Failing Status
 
 echo -e "\\nWhat is the domain?"                                                                        # Ask For The Domain
 #read -r domain;                                                                                        # Put Domain Into Variable
-domain=""
+domain="uniqueops.com"
 
 if [ -z "$domain" ]; then
   init_table "Error Detected"
@@ -26,19 +26,18 @@ domain=${domain%/};                                                             
 
 echo "Corrected to $domain"                                                                             # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 
-function print_row() {                                                                                  # Create Function To Print Table Rows
-  format="%-${status_size}s%b %-${info_size}s%b\\n"                                                     # Declare Row Format
-  printf "$format" "" "${status[$1]}" "${info[$1]}"                                                     # Add Prefix ("") To Fields With Colors
-}
-
 function Global_Nameserver_Check() {                                                                    # Generate Nameserver Check Row
-  Global_Nameserver_Check_Status="$STATUS_FAIL"                                                         # Set Status For Nameserver Check
   Global_Nameserver_Check_Info=$(dig ns +short "$domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');   # Grab Nameservers For Domain
   if [ -n "$Global_Nameserver_Check_Info" ]; then
-    new_row "$STATUS_INFO" "Global Nameservers: $Global_Nameserver_Check_Info"
-    new_row "$STATUS_PASS" "Parent nameserver's returned listed nameservers."
+    Global_Nameserver_Check_Status="$STATUS_PASS"                                                       # Set Status For Nameserver Check
+    #new_row "$STATUS_INFO" "Global Nameservers: $Global_Nameserver_Check_Info"
+    printf "$STATUS_INFO Global Nameservers: $Global_Nameserver_Check_Info"
+    #new_row "$STATUS_PASS" "Parent nameserver's returned listed nameservers."
+    printf "$STATUS_PASS Parent nameserver's returned listed nameservers."
   else
+    Global_Nameserver_Check_Status="$STATUS_FAIL"                                                       # Set Status For Nameserver Check
     Global_Nameserver_Check_Info="Parent nameserver's dont have your domain's nameservers listed."
-    new_row "$Global_Nameserver_Check_Status" "$Global_Nameserver_Check_Info"
+    #new_row "$STATUS_FAIL" "$Global_Nameserver_Check_Info"
+    printf "$STATUS_FAIL $Global_Nameserver_Check_Info"
   fi
-}                                                                           # Generate Table
+}
