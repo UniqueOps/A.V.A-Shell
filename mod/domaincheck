@@ -6,6 +6,9 @@
 domain="ht tps:// www . UNIQUEops123.com /test/ testing.php/ !@#$%()^&* ~ -=_+ []{}\| ;: ,./<>? '"                           # All Special Characters Used Minus ` and "
 
 echo -e "\\n\\n\\nStarted as: $domain\\n"                                                                               # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
+
+domain="$domain" | sed 's/[^a-zA-Z0-9.:/]//g' | tr '[:upper:]' '[:lower:]'
+
 domain=${domain//[[:blank:]]/}                                                                                          # Remove Spaces & Tabs
 echo -e "Spaces Removed: $domain\\n"                                                                                    # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 domain=${domain#*//};                                                                                                   # Remove HTTP:// or HTTPS://
@@ -15,7 +18,6 @@ echo -e "WWW Removed: $domain\\n"                                               
 domain=${domain%/};                                                                                                     # Remove Trailing /
 echo -e "Trailing / Removed: $domain\\n"                                                                                # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 
-echo -e "$domain" | sed 's/[^a-zA-Z0-9.:/]//g' | tr '[:upper:]' '[:lower:]'
 
 echo -e "\\n\\nFinal version is $domain\\n"                                                                                   # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 
