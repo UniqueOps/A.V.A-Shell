@@ -31,14 +31,14 @@ function Global_Nameserver_Check() {                                            
   if [ -n "$Global_Nameserver_Check_Info" ]; then
     Global_Nameserver_Check_Status="$STATUS_PASS"                                                       # Set Status For Nameserver Check
     #new_row "$STATUS_INFO" "Global Nameservers: $Global_Nameserver_Check_Info"
-    printf "$STATUS_INFO Global Nameservers: $Global_Nameserver_Check_Info"
+    printf "$STATUS_INFO Global Nameservers: $Global_Nameserver_Check_Info\\n"
     #new_row "$STATUS_PASS" "Parent nameserver's returned listed nameservers."
-    printf "$STATUS_PASS Parent nameserver's returned listed nameservers."
+    printf "$STATUS_PASS Parent nameserver's returned listed nameservers.\\n"
   else
     Global_Nameserver_Check_Status="$STATUS_FAIL"                                                       # Set Status For Nameserver Check
     Global_Nameserver_Check_Info="Parent nameserver's dont have your domain's nameservers listed."
     #new_row "$STATUS_FAIL" "$Global_Nameserver_Check_Info"
-    printf "$STATUS_FAIL $Global_Nameserver_Check_Info"
+    printf "$STATUS_FAIL $Global_Nameserver_Check_Info\\n"
   fi
 }
 
