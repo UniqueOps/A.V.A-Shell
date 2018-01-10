@@ -2,7 +2,7 @@
 
 echo -e "\\nWhat is the domain?"                                                    # Ask For The Domain
 read -r domain;                                                                     # Put Domain Into Variable
-#ht tps:// www . UNIQUEops123!@#$%()^&*~-=_+[]{}\|;,<>?'.com /test/ testing.php/"   # All Special Characters Used Minus ` and "
+#ht tps:// www . UNIQUEops123!@#$%()^&*~-=_+[]{}\|;,<>?'.com /test/ testing.php/"   # Test Input Code
 
 domain=$(echo "$domain" | tr '[:upper:]' '[:lower:]')                               # Convert All Characters to Lowercase
 domain=$(echo "$domain" | sed 's/[^a-zA-Z0-9.:/]//g')                               # Remove Special Characters
