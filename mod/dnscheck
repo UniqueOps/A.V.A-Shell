@@ -24,7 +24,7 @@ domain=${domain#*www.};                                                         
 domain=${domain%/};                                                                                     # Remove Trailing /
 #domain=${domain} | cut -f1 -d"/";                                                                      # Remove Any Directories Added
 
-echo -e "Corrected to $domain\\n\\n"                                                                             # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
+echo -e "Corrected to $domain\\n"                                                                             # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 
 function Global_Nameserver_Check() {                                                                    # Generate Nameserver Check Row
   Global_Nameserver_Check_Info=$(dig ns +short "$domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');   # Grab Nameservers For Domain
@@ -43,4 +43,4 @@ function Global_Nameserver_Check() {                                            
 }
 
 Global_Nameserver_Check
-echo -e "\\n"
+echo -e ""
