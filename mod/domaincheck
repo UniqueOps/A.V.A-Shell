@@ -5,7 +5,7 @@
 #read -r domain;                                                                                        # Put Domain Into Variable
 domain="ht tps:// uniqueops.com /test/ testing.php/"
 
-echo -e "Started as: $domain\\n"                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
+echo -e "\\n\\n\\nStarted as: $domain\\n"                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 domain=${domain//[[:blank:]]/}                                                                          # Remove Spaces & Tabs
 echo -e "Changed to $domain\\n"                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 domain=${domain#*//};                                                                                   # Remove HTTP:// or HTTPS://
