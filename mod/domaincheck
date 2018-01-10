@@ -1,20 +1,17 @@
 #!/bin/bash
 
-echo -e "\\nWhat is the domain?"                                                                        # Ask For The Domain
-#read -r domain;                                                                                        # Put Domain Into Variable
-domain="uniqueops.com"
 
-if [ -z "$domain" ]; then
-  init_table "Error Detected"
-  add_row "$STATUS_FAIL" "Please input a valid domain name."
-  print_table
-  exit 1                                                                                                # End Script
-fi
+#echo -e "\\nWhat is the domain?"                                                                        # Ask For The Domain
+#read -r domain;                                                                                        # Put Domain Into Variable
+domain="ht tps:// uniqueops.com /test/ testing.php/"
 
 domain=${domain//[[:blank:]]/}                                                                          # Remove Spaces & Tabs
+echo -e "Corrected to $domain\\n"                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 domain=${domain#*//};                                                                                   # Remove HTTP:// or HTTPS://
+echo -e "Corrected to $domain\\n"                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 domain=${domain#*www.};                                                                                 # Remove WWW.
+echo -e "Corrected to $domain\\n"                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 domain=${domain%/};                                                                                     # Remove Trailing /
+echo -e "Corrected to $domain\\n"                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 #domain=${domain} | cut -f1 -d"/";                                                                      # Remove Any Directories Added
-
 echo -e "Corrected to $domain\\n"                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
