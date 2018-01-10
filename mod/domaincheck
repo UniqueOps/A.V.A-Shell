@@ -14,5 +14,5 @@ domain=${domain#*www.};                                                         
 echo -e "WWW Removed: $domain\\n"                                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 domain=${domain%/};                                                                                                     # Remove Trailing /
 echo -e "Trailing / Removed: $domain\\n"                                                                                # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
-#domain=${domain} | cut -f1 -d"/";                                                                                      # Remove Any Directories Added
+domain=${domain} | tr -dc '[:alnum:]\n\r' | tr '[:upper:]' '[:lower:]';                                                 # Remove Any Directories Added
 echo -e "Final version is $domain\\n"                                                                                   # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
