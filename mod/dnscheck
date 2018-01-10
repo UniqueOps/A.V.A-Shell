@@ -41,3 +41,5 @@ function Global_Nameserver_Check() {                                            
     printf "$STATUS_FAIL $Global_Nameserver_Check_Info"
   fi
 }
+
+Global_Nameserver_Check
