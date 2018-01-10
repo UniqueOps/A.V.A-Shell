@@ -8,7 +8,7 @@ domain="ht tps:// www . UNIQUEops123.com /test/ testing.php/ !@#$%()^&* ~ -=_+ [
 echo -e "\\n\\n\\nStarted as: $domain\\n"                                                                               # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 
 domain="$domain" | sed 's/[^a-zA-Z0-9.:/]//g' | tr '[:upper:]' '[:lower:]'
-
+echo -e "Special Characters Removed: $domain\\n"
 domain=${domain//[[:blank:]]/}                                                                                          # Remove Spaces & Tabs
 echo -e "Spaces Removed: $domain\\n"                                                                                    # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 domain=${domain#*//};                                                                                                   # Remove HTTP:// or HTTPS://
