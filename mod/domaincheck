@@ -18,8 +18,7 @@ domain=${domain#*//};                                                           
 echo -e "http:// Removed: $domain\\n"                                                                                   # Echo Domain For Testing Purposes
 domain=${domain#*www.};                                                                                                 # Remove WWW.
 echo -e "WWW Removed: $domain\\n"                                                                                       # Echo Domain For Testing Purposes
-domain=${domain%/};                                                                                                     # Remove Trailing /
+domain=$(echo "$domain" | cut -f1 -d"/")
 echo -e "Trailing / Removed: $domain\\n"                                                                                # Echo Domain For Testing Purposes
-
 
 echo -e "\\n\\nFinal version is $domain\\n"                                                                             # Echo Domain For Testing Purposes
