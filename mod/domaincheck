@@ -5,13 +5,14 @@
 #read -r domain;                                                                                        # Put Domain Into Variable
 domain="ht tps:// uniqueops.com /test/ testing.php/"
 
+echo -e "Started as: $domain\\n"                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 domain=${domain//[[:blank:]]/}                                                                          # Remove Spaces & Tabs
-echo -e "Corrected to $domain\\n"                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
+echo -e "Changed to $domain\\n"                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 domain=${domain#*//};                                                                                   # Remove HTTP:// or HTTPS://
-echo -e "Corrected to $domain\\n"                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
+echo -e "Changed to $domain\\n"                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 domain=${domain#*www.};                                                                                 # Remove WWW.
-echo -e "Corrected to $domain\\n"                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
+echo -e "Changed to $domain\\n"                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 domain=${domain%/};                                                                                     # Remove Trailing /
-echo -e "Corrected to $domain\\n"                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
+echo -e "Changed to $domain\\n"                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
 #domain=${domain} | cut -f1 -d"/";                                                                      # Remove Any Directories Added
-echo -e "Corrected to $domain\\n"                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
+echo -e "Final version is $domain\\n"                                                                       # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
