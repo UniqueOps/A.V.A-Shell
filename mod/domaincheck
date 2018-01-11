@@ -2,27 +2,29 @@
 
 function Global_DomainCheck() { 
 
-echo -e "\\nWhat is the domain?"                                                    # Ask For The Domain
-read -r domain;                                                                     # Entry to Variable
+echo -e "\\nWhat is the domain?"                                                                # Ask For The Domain
+read -r Global_DomainCheck_Domain;                                                              # Entry to Variable
 
-domain=$(echo "$domain" | tr '[:upper:]' '[:lower:]')                               # Entry to Lowercase
-domain=$(echo "$domain" | sed 's/[^a-zA-Z0-9.:/]//g')                               # Remove Special Characters
-domain=${domain#*//};                                                               # Remove Protocol Prefix
-domain=${domain#*www.};                                                             # Remove WWW. Prefix
-domain=$(echo "$domain" | cut -f1 -d"/")                                            # Remove Domain Suffix
+Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | tr '[:upper:]' '[:lower:]')     # Entry to Lowercase
+Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | sed 's/[^a-zA-Z0-9.:/]//g')     # Remove Special Characters
+Global_DomainCheck_Domain=${Global_DomainCheck_Domain#*//};                                     # Remove Protocol Prefix
+Global_DomainCheck_Domain=${Global_DomainCheck_Domain#*www.};                                   # Remove WWW. Prefix
+Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | cut -f1 -d"/")                  # Remove Domain Suffix
 
-if [ -z "$domain" ]; then                                                           # Empty Domain Check
-  Global_DomainCheck_Status="Invalid Domain"                                        # Return Invalid Domain Trigger
+if [ -z "$Global_DomainCheck_Domain" ]; then                                                    # Empty Domain Check
+  Global_DomainCheck_Status="Invalid Domain"                                                    # Return Invalid Domain Trigger
 else
-  Global_DomainCheck_Whois=$(whois $domain | grep 'No match for')                   # Generate Domain Registered Check
-  if [ "$Global_DomainCheck_Whois" = "" ]; then                                     # Check If Domain Is Registered
-    Global_DomainCheck_Status="Registered"                                          # Return Registered Trigger
+  Global_DomainCheck_Whois=$(whois $Global_DomainCheck_Domain | grep 'No match for')            # Generate Domain Registered Check
+  if [ "$Global_DomainCheck_Whois" = "" ]; then                                                 # Check If Domain Is Registered
+    Global_DomainCheck_Status="Registered"                                                      # Return Registered Trigger
+    Global_DomainCheck_TLD=$($Global_DomainCheck_Domain | cut -d. -f1)
   else
-    Global_DomainCheck_Status="Not Registered"                                      # Return Not Registered Trigger
+    Global_DomainCheck_Status="Not Registered"                                                  # Return Not Registered Trigger
   fi
 fi
 
 }
 
-Global_DomainCheck                                                                  # Call Function (Testing Purposes Only)
-echo -e "$Global_DomainCheck_Status"                                                # Echo Final Trigger (Testing Purposes Only)
+Global_DomainCheck                                                                              # Call Function (Testing Purposes Only)
+echo -e "$Global_DomainCheck_Status"                                                            # Echo Final Trigger (Testing Purposes Only)
+echo -e "$Global_DomainCheck_TLD"
