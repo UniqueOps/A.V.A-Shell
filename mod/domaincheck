@@ -18,3 +18,5 @@ elif [ -z "whois $domain | grep 'No match for'" ]; then
 fi
 
 }
+
+Global_DomainCheck
