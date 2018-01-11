@@ -1,13 +1,20 @@
 #!/bin/bash
 
+function Global_DomainCheck() { 
+
 echo -e "\\nWhat is the domain?"                                                    # Ask For The Domain
 read -r domain;                                                                     # Put Domain Into Variable
-#ht tps:// www . UNIQUEops123!@#$%()^&*~-=_+[]{}\|;,<>?'.com /test/ testing.php/"   # Test Input Code
 
 domain=$(echo "$domain" | tr '[:upper:]' '[:lower:]')                               # Convert All Characters to Lowercase
 domain=$(echo "$domain" | sed 's/[^a-zA-Z0-9.:/]//g')                               # Remove Special Characters
-domain=${domain#*//};                                                               # Remove Handler
-domain=${domain#*www.};                                                             # Remove WWW.
+domain=${domain#*//};                                                               # Remove Protocol Prefix
+domain=${domain#*www.};                                                             # Remove WWW. Prefix
 domain=$(echo "$domain" | cut -f1 -d"/")                                            # Remove Everything After TLD
 
-echo -e "\\nFinal version is $domain\\n"                                            # Echo Finalized Version
+if [ -z "$domain" ]; then
+  $Global_DomainCheck_Status="Not Valid"
+elif [ -z "whois uniqueops.com | grep 'No match for'" ]; then
+ echo -e "Test Worked!"
+fi
+
+}
