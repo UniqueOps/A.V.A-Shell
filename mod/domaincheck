@@ -19,7 +19,7 @@ else
   if [ "$Global_DomainCheck_Whois" = "" ]; then                                                             # Check If Domain Is Registered
     Global_DomainCheck_Status="Registered"                                                                  # Return Registered Trigger
     Global_DomainCheck_TLD=$(echo "$Global_DomainCheck_Domain" | awk -F'.' '{print $2}' | sed -e 's/^/./')  # TLD to Variable
-    echo -e "\\n Domain: $Global_DomainCheck_Status"                                                        # Echo Domain
+    echo -e "\\nDomain: $Global_DomainCheck_Status"                                                        # Echo Domain
     echo -e "TLD: $Global_DomainCheck_TLD"                                                                  # Echo TLD
   else
     Global_DomainCheck_Status="Not Registered"                                                              # Return Not Registered Trigger
