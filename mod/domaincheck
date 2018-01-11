@@ -3,26 +3,26 @@
 function Global_DomainCheck() { 
 
 echo -e "\\nWhat is the domain?"                                                    # Ask For The Domain
-read -r domain;                                                                     # Put Domain Into Variable
+read -r domain;                                                                     # Entry to Variable
 
-domain=$(echo "$domain" | tr '[:upper:]' '[:lower:]')                               # Convert All Characters to Lowercase
+domain=$(echo "$domain" | tr '[:upper:]' '[:lower:]')                               # Entry to Lowercase
 domain=$(echo "$domain" | sed 's/[^a-zA-Z0-9.:/]//g')                               # Remove Special Characters
 domain=${domain#*//};                                                               # Remove Protocol Prefix
 domain=${domain#*www.};                                                             # Remove WWW. Prefix
-domain=$(echo "$domain" | cut -f1 -d"/")                                            # Remove Everything After TLD
+domain=$(echo "$domain" | cut -f1 -d"/")                                            # Remove Domain Suffix
 
-if [ -z "$domain" ]; then
-  Global_DomainCheck_Status="Invalid Domain"
+if [ -z "$domain" ]; then                                                           # Empty Domain Check
+  Global_DomainCheck_Status="Invalid Domain"                                        # Return Invalid Domain Trigger
 else
-  Global_DomainCheck_Whois=$(whois $domain | grep 'No match for')
-  if [ "$Global_DomainCheck_Whois" = "" ]; then
-    Global_DomainCheck_Status="Registered"
+  Global_DomainCheck_Whois=$(whois $domain | grep 'No match for')                   # Generate Domain Registered Check
+  if [ "$Global_DomainCheck_Whois" = "" ]; then                                     # Check If Domain Is Registered
+    Global_DomainCheck_Status="Registered"                                          # Return Registered Trigger
   else
-    Global_DomainCheck_Status="Not Registered"
+    Global_DomainCheck_Status="Not Registered"                                      # Return Not Registered Trigger
   fi
 fi
 
 }
 
-Global_DomainCheck
-echo -e "$Global_DomainCheck_Status"
+Global_DomainCheck                                                                  # Call Function (Testing Purposes Only)
+echo -e "$Global_DomainCheck_Status"                                                # Echo Final Trigger (Testing Purposes Only)
