@@ -17,7 +17,7 @@ else
   Global_DomainCheck_Whois=$(whois $Global_DomainCheck_Domain | grep 'No match for')            # Generate Domain Registered Check
   if [ "$Global_DomainCheck_Whois" = "" ]; then                                                 # Check If Domain Is Registered
     Global_DomainCheck_Status="Registered"                                                      # Return Registered Trigger
-    Global_DomainCheck_TLD=$(echo "$Global_DomainCheck_Domain" | awk -F':' '{print $2}')
+    Global_DomainCheck_TLD=$(echo "$Global_DomainCheck_Domain" | awk -F'.' '{print $2}')
   else
     Global_DomainCheck_Status="Not Registered"                                                  # Return Not Registered Trigger
   fi
