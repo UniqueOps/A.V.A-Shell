@@ -6,7 +6,7 @@ echo -e "\\nWhat is the domain?"                                                
 read -r Global_DomainCheck_Domain;                                                                          # Entry to Variable
 
 Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | tr '[:upper:]' '[:lower:]')                 # Entry to Lowercase
-Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | sed 's/[^a-zA-Z0-9.:/]//g')                 # Remove Special Characters
+Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | sed 's/[^a-z0-9.:/]//g')                    # Remove Special Characters
 Global_DomainCheck_Domain=${Global_DomainCheck_Domain#*//};                                                 # Remove Protocol Prefix
 Global_DomainCheck_Domain=${Global_DomainCheck_Domain#*www.};                                               # Remove WWW. Prefix
 Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | cut -f1 -d"/")                              # Remove Domain Suffix
