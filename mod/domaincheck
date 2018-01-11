@@ -12,7 +12,7 @@ domain=${domain#*www.};                                                         
 domain=$(echo "$domain" | cut -f1 -d"/")                                            # Remove Everything After TLD
 
 if [ -z "$domain" ]; then
-  $Global_DomainCheck_Status="Not Valid"
+  Global_DomainCheck_Status="Not Valid"
 elif [ -z "whois $domain | grep 'No match for'" ]; then
  echo -e "Test Worked!"
 fi
@@ -20,3 +20,4 @@ fi
 }
 
 Global_DomainCheck
+echo -e "$Global_DomainCheck_Status"
