@@ -10,10 +10,11 @@ domain=$(echo "$domain" | sed 's/[^a-zA-Z0-9.:/]//g')                           
 domain=${domain#*//};                                                               # Remove Protocol Prefix
 domain=${domain#*www.};                                                             # Remove WWW. Prefix
 domain=$(echo "$domain" | cut -f1 -d"/")                                            # Remove Everything After TLD
+Global_DomainCheck_Whois=$(whois $domain | grep 'No match for')
 
 if [ -z "$domain" ]; then
   Global_DomainCheck_Status="Invalid Domain"
-elif [ "whois $domain | grep 'No match for'" = "" ]; then
+elif [ "$Global_DomainCheck_Whois" = "" ]; then
   Global_DomainCheck_Status="Registered"
 else
   Global_DomainCheck_Status="Not Registered"
