@@ -6,7 +6,7 @@ echo -e "\\nWhat is the domain?"                                                
 read -r Global_DomainCheck_Domain;                                                                          # Entry to Variable
 
 Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | tr '[:upper:]' '[:lower:]')                 # Entry to Lowercase
-Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | sed 's/[^a-z0-9.:-/]//g')                    # Remove Special Characters
+Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | sed 's/[^a-z0-9.:-/]//g')                   # Remove Special Characters
 Global_DomainCheck_Domain=${Global_DomainCheck_Domain#*//};                                                 # Remove Protocol Prefix
 Global_DomainCheck_Domain=${Global_DomainCheck_Domain#*www.};                                               # Remove WWW. Prefix
 Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | cut -f1 -d"/")                              # Remove Domain Suffix
@@ -15,12 +15,12 @@ if [ -z "$Global_DomainCheck_Domain" ]; then                                    
   Global_DomainCheck_Status="No Domain Detected"                                                            # Return Invalid Domain Trigger
   echo -e "$Global_DomainCheck_Status"
 else
-  Global_DomainCheck_Whois=$(whois "$Global_DomainCheck_Domain" | grep 'No match for')                   # Generate Domain Registered Check
+  Global_DomainCheck_Whois=$(whois "$Global_DomainCheck_Domain" | grep 'No match for')                      # Generate Domain Registered Check
   if [ "$Global_DomainCheck_Whois" = "" ]; then                                                             # Check If Domain Is Registered
     Global_DomainCheck_Status="Registered"                                                                  # Return Registered Trigger
-    #Global_DomainCheck_TLD=$(echo "$Global_DomainCheck_Domain" | awk -F'.' '{print $2}' | sed -e 's/^/./')  # TLD to Variable
+    #Global_DomainCheck_TLD=$(echo "$Global_DomainCheck_Domain" | awk -F'.' '{print $2}' | sed -e 's/^/./') # TLD to Variable
     echo -e "\\nDomain: $Global_DomainCheck_Status"                                                         # Echo Domain
-    #echo -e "TLD: $Global_DomainCheck_TLD"                                                                  # Echo TLD
+    #echo -e "TLD: $Global_DomainCheck_TLD"                                                                 # Echo TLD
   else
     Global_DomainCheck_Status="Invalid Entry"                                                               # Return Not Registered Trigger
     echo -e "\\nDomain: $Global_DomainCheck_Status"                                                         # Echo Domain
