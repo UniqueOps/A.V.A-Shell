@@ -9,9 +9,6 @@ Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | tr '[:upper:]' '
 Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | sed 's/[^a-z0-9.:/]//g')                    # Remove Special Characters
 Global_DomainCheck_Domain=${Global_DomainCheck_Domain#*//};                                                 # Remove Protocol Prefix
 Global_DomainCheck_Domain=${Global_DomainCheck_Domain#*www.};                                               # Remove WWW. Prefix
-Global_DomainCheck_Domain=${Global_DomainCheck_Domain#*ww.};                                               # Remove WWW. Prefix
-Global_DomainCheck_Domain=${Global_DomainCheck_Domain#*w.};                                               # Remove WWW. Prefix
-Global_DomainCheck_Domain=${Global_DomainCheck_Domain#*.};                                               # Remove WWW. Prefix
 Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | cut -f1 -d"/")                              # Remove Domain Suffix
 
 if [ -z "$Global_DomainCheck_Domain" ]; then                                                                # Empty Domain Check
