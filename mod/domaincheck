@@ -23,4 +23,4 @@ fi
 
 Global_DomainCheck
 echo -e "$Global_DomainCheck_Status"
-echo "whois $domain | grep 'No match for'"
+echo -e whois $domain | grep 'No match for'
