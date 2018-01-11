@@ -13,7 +13,7 @@ domain=$(echo "$domain" | cut -f1 -d"/")                                        
 
 if [ -z "$domain" ]; then
   $Global_DomainCheck_Status="Not Valid"
-elif [ -z "whois uniqueops.com | grep 'No match for'" ]; then
+elif [ -z "whois $domain | grep 'No match for'" ]; then
  echo -e "Test Worked!"
 fi
 
