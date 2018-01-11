@@ -23,7 +23,7 @@ else
     echo -e "TLD: $Global_DomainCheck_TLD"                                                                  # Echo TLD
   else
     Global_DomainCheck_Status="Not Registered"                                                              # Return Not Registered Trigger
-    echo -e "\\n Domain: $Global_DomainCheck_Status"                                                        # Echo Domain
+    echo -e "\\nDomain: $Global_DomainCheck_Status"                                                        # Echo Domain
   fi
 fi
 
