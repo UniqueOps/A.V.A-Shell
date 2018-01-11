@@ -13,7 +13,7 @@ domain=$(echo "$domain" | cut -f1 -d"/")                                        
 
 if [ -z "$domain" ]; then
   Global_DomainCheck_Status="Invalid Domain"
-elif [ -z "whois $domain | grep 'No match for'" ]; then
+elif [ -n "whois $domain | grep 'No match for'" ]; then
   Global_DomainCheck_Status="Not Registered"
 else
   Global_DomainCheck_Status="Registered"
