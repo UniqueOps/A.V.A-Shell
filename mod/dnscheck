@@ -9,7 +9,7 @@ STATUS_FAIL="$Color_Red[!!]$Color_Reset"                                        
 
 echo -e "\\nWhat is the domain?"                                                                        # Ask For The Domain
 #read -r domain;                                                                                        # Put Domain Into Variable
-domain="uniqueops.com"
+domain=""
 
 if [ -z "$domain" ]; then
   init_table "Error Detected"
