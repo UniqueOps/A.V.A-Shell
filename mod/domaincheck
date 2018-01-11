@@ -14,10 +14,10 @@ Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | cut -f1 -d"/")  
 if [ -z "$Global_DomainCheck_Domain" ]; then                                                    # Empty Domain Check
   Global_DomainCheck_Status="Invalid Domain"                                                    # Return Invalid Domain Trigger
 else
-  Global_DomainCheck_Whois=$(whois $Global_DomainCheck_Domain | grep 'No match for')            # Generate Domain Registered Check
+  Global_DomainCheck_Whois=$(whois "$Global_DomainCheck_Domain" | grep 'No match for')            # Generate Domain Registered Check
   if [ "$Global_DomainCheck_Whois" = "" ]; then                                                 # Check If Domain Is Registered
     Global_DomainCheck_Status="Registered"                                                      # Return Registered Trigger
-    Global_DomainCheck_TLD=$(echo $Global_DomainCheck_Domain" | awk -F'.' '{print /.$2}')
+    Global_DomainCheck_TLD=$(echo "$Global_DomainCheck_Domain" | awk -F'.' '{print $2}' | sed -e 's/^/./')
   else
     Global_DomainCheck_Status="Not Registered"                                                  # Return Not Registered Trigger
   fi
