@@ -15,7 +15,7 @@ if [ -z "$Global_DomainCheck_Domain" ]; then                                    
   Global_DomainCheck_Status="No Domain Detected"                                                            # Return Invalid Domain Trigger
   echo -e "$Global_DomainCheck_Status"
 else
-  Global_DomainCheck_Whois=$(whois "$Global_DomainCheck_Domain" | grep 'No match for')                      # Generate Domain Registered Check
+  Global_DomainCheck_Whois=$(whois -H "$Global_DomainCheck_Domain" | grep 'No match for')                   # Generate Domain Registered Check
   if [ "$Global_DomainCheck_Whois" = "" ]; then                                                             # Check If Domain Is Registered
     Global_DomainCheck_Status="Registered"                                                                  # Return Registered Trigger
     Global_DomainCheck_TLD=$(echo "$Global_DomainCheck_Domain" | awk -F'.' '{print $2}' | sed -e 's/^/./')  # TLD to Variable
