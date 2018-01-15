@@ -12,7 +12,7 @@ echo -e "\\nWhat is the domain?"                                                
 domain=""
 
 if [ -z "$domain" ]; then
-  init_table "Error Detected"
+  init_table -h2 "Error Detected"
   add_row "$STATUS_FAIL" "Please input a valid domain name."
   print_table
   exit 1                                                                                                # End Script
