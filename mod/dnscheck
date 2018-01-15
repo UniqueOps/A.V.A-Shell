@@ -13,7 +13,7 @@ domain=""
 
 if [ -z "$domain" ]; then
   init_table -h2 "Error Detected"
-  add_row -T --col1-BLUE "$STATUS_FAIL" "Please input a valid domain name."
+  add_row -T --col-text-color $Color_Blue "$STATUS_FAIL" "Please input a valid domain name."
   print_table
   exit 1                                                                                                # End Script
 fi
