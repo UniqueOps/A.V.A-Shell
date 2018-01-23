@@ -9,7 +9,7 @@ add_row "What is the domain?"                                                   
 print_table
 #echo -e "\\nWhat is the domain?"                                                                            # Ask For The Domain
 read -r Global_DomainCheck_Domain;                                                                          # Entry to Variable
-mkpad -w40
+#mkpad -w40
 
 Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | tr '[:upper:]' '[:lower:]')                 # Entry to Lowercase
 Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | sed 's/[^a-z0-9.:-/]//g')                   # Remove Special Characters
