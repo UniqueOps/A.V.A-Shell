@@ -1,9 +1,14 @@
 #!/bin/bash
 
+eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"                                 # Add Global Functions
+
 function Global_DomainCheck() { 
 
-echo -e "\\nWhat is the domain?"                                                                            # Ask For The Domain
+init_table -h2 "Domain Check"
+add_row "What is the domain?"                                                                               # Ask For The Domain
+#echo -e "\\nWhat is the domain?"                                                                            # Ask For The Domain
 read -r Global_DomainCheck_Domain;                                                                          # Entry to Variable
+print_table
 
 Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | tr '[:upper:]' '[:lower:]')                 # Entry to Lowercase
 Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | sed 's/[^a-z0-9.:-/]//g')                   # Remove Special Characters
