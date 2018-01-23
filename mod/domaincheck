@@ -33,4 +33,4 @@ fi
 
 }
 
-Global_DomainCheck                                                                                          # Call Function (Testing Purposes Only)
+#Global_DomainCheck                                                                                          # Call Function (Testing Purposes Only)
