@@ -1,6 +1,6 @@
 #!/bin/bash
 
-eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"                                 # Add Global Functions
+#eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"                                 # Add Global Functions
 
 function Global_DomainCheck() { 
 
