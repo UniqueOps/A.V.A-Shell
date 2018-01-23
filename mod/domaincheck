@@ -4,7 +4,7 @@ eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"     
 
 function Global_DomainCheck() { 
 
-init_table -h2 -m15 "Domain Check"
+init_table -h2 -m150 "Domain Check"
 add_row "What is the domain?"                                                                               # Ask For The Domain
 print_table
 #echo -e "\\nWhat is the domain?"                                                                            # Ask For The Domain
