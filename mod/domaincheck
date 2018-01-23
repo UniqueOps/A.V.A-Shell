@@ -4,15 +4,14 @@ eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"     
 
 function Global_DomainCheck() { 
 
-init_table -h2 -m40 "Domain Check"
+init_table -h2 -m40 "Domain Check"                                                                          # Table Header
 add_row "What is the domain?"                                                                               # Ask For The Domain
-print_table
-#echo -e "\\nWhat is the domain?"                                                                            # Ask For The Domain
+print_table                                                                                                 # Display Table
 read -r Global_DomainCheck_Domain;                                                                          # Entry to Variable
-#mkpad -w40
+#mkpad -w40                                                                                                 # Table Footer
 
 Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | tr '[:upper:]' '[:lower:]')                 # Entry to Lowercase
-Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | sed 's/[^a-z0-9.:-\/]//g')                   # Remove Special Characters
+Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | sed 's/[^a-z0-9.:-\/]//g')                  # Remove Special Characters
 Global_DomainCheck_Domain=${Global_DomainCheck_Domain#*//};                                                 # Remove Protocol Prefix
 Global_DomainCheck_Domain=${Global_DomainCheck_Domain#*www.};                                               # Remove WWW. Prefix
 Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | cut -f1 -d"/")                              # Remove Domain Suffix
