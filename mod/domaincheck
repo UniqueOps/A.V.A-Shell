@@ -7,7 +7,7 @@ function Global_DomainCheck() {
 init_table -h2 "Domain Check"
 add_row "What is the domain?"                                                                               # Ask For The Domain
 #echo -e "\\nWhat is the domain?"                                                                            # Ask For The Domain
-read -r Global_DomainCheck_Domain;                                                                          # Entry to Variable
+#read -r Global_DomainCheck_Domain;                                                                          # Entry to Variable
 print_table
 
 Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | tr '[:upper:]' '[:lower:]')                 # Entry to Lowercase
