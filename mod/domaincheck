@@ -17,13 +17,13 @@ Global_DomainCheck_Domain=${Global_DomainCheck_Domain#*www.};                   
 Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | cut -f1 -d"/")                              # Remove Domain Suffix
 
 if [ -z "$Global_DomainCheck_Domain" ]; then                                                                # Empty Domain Check
-  Global_DomainCheck_Status="No Domain Detected"                                                            # Return Invalid Domain Trigger
+  Global_DomainCheck_Status="Invalid"                                                                       # Return Invalid Domain Trigger
 else
   Global_DomainCheck_Whois=$(whois "$Global_DomainCheck_Domain" | grep 'No match for')                      # Generate Domain Registered Check
   if [ "$Global_DomainCheck_Whois" = "" ]; then                                                             # Check If Domain Is Registered
     Global_DomainCheck_Status="Registered"                                                                  # Return Registered Trigger
   else
-    Global_DomainCheck_Status="Invalid Entry"                                                               # Return Not Registered Trigger
+    Global_DomainCheck_Status="Unregistered"                                                                # Return Not Registered Trigger
   fi
 fi
 
