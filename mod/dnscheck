@@ -5,7 +5,7 @@ eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/mod/domaincheck)"
 
 function Global_Nameserver_Check() {                                                                                            # Generate Nameserver Check Row
   Global_DomainCheck                                                                                                            # Global Domain Check Script
-  init_table -h2 -m40 "DNS Check - Parent"
+  init_table -m40 "DNS Check - Parent"
   add_row "[--]" "Scan Performed On Server: $Core_Server_Hostname"
   add_row "[--]" "Server IP: $Core_Server_IP"
   if [[ "$Global_DomainCheck_Status" == "No Domain Detected" ]]; then
