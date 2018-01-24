@@ -9,9 +9,9 @@ function Global_Nameserver_Check() {                                            
   add_row "[--]" "Scan Performed On Server: $Core_Server_Hostname"
   add_row "[--]" "Server IP: $Core_Server_IP"
   if [[ "$Global_DomainCheck_Status" == "No Domain Detected" ]]; then
-    add_row "[!!]" "$Global_DomainCheck_Status"
+    add_row -C 1 -T "$Color_Red" "[!!]" "$Global_DomainCheck_Status"
   elif [[ "$Global_DomainCheck_Status" == "Invalid Entry" ]]; then
-    add_row "[!!]" "$Global_DomainCheck_Status or Domain is Avaliable"
+    add_row -C 1 -T "$Color_Red" "[!!]" "$Global_DomainCheck_Status or Domain is Avaliable"
   elif [[ "$Global_DomainCheck_Status" == "Registered" ]]; then
     CheckDNS_Global_NS=$(dig ns +short $Global_DomainCheck_Domain | sort | sed -e :a -e '$!N; s/\n/ | /; ta');                  # Global Name Servers 1
     #CheckDNS_Local_NS=$(dig ns +short @localhost $Global_DomainCheck_Domain | sort | sed -e :a -e '$!N; s/\n/ | /; ta');       # Local Name Servers 1
@@ -25,14 +25,14 @@ function Global_Nameserver_Check() {                                            
     add_row -C 1 -T "$Color_Green" "[OK]" "Domain is Registered"
     add_row "[--]" "Domain Registrar:$CheckDNS_Registrar"
     if [[ $CheckDNS_Global_NS != "" ]]; then
-      add_row "[OK]" "Global nameservers detected"
+      add_row -C 1 -T "$Color_Green" "[OK]" "Global nameservers detected"
       add_row "[--]" "Global Records: $CheckDNS_Global_NS"
       Global_Nameserver_Check_Info=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');
       if [ -n "$Global_Nameserver_Check_Info" ]; then
-        add_row "[OK]" "Parent nameserver's returned listed nameservers."
+        add_row -C 1 -T "$Color_Green" "[OK]" "Parent nameserver's returned listed nameservers."
         add_row "[--]" "Global Nameservers: $Global_Nameserver_Check_Info"
       else
-        add_row "[!!]" "Parent nameserver's dont have your domain's nameservers listed."
+        add_row -C 1 -T "$Color_Red" "[!!]" "Parent nameserver's dont have your domain's nameservers listed."
       fi
     fi
     print_table
