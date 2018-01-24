@@ -47,11 +47,11 @@
 ################################### Includes ###################################
 ################################################################################
 
-#if _core_test >/dev/null 2>&1; [ $? != 3 ]
-#then
-#  source /proc/self/fd/0 <<<"$(< <(curl -ks https://codesilo.dimenoc.com/grahaml/triton/raw/master/core/include_core_lib))"
-#fi
-#include colorize.shl
+if _core_test >/dev/null 2>&1; [ $? != 3 ]
+then
+  source /proc/self/fd/0 <<<"$(< <(curl -ks https://codesilo.dimenoc.com/grahaml/triton/raw/master/core/include_core_lib))"
+fi
+include colorize.shl
 
 ################################################################################
 ################################### Globals ####################################
@@ -60,12 +60,12 @@
 FORMAT_FN="format.shl"
 FORMAT_VER="1.0.1"
 
-_DEFAULT_COLOR=$Color_Blue
+_DEFAULT_COLOR=$(colorize --color blue --bold)
 _DEFAULT_GLYPH='='
 _DEFAULT_PARTITION='|'
 _DEFAULT_TEXTCOLOR=""
 _DEFAULT_WIDTH=80
-_RESET=$Color_Reset
+_RESET=$(colorize)
 
 _TBL_TITLE=""       # Name of the table
 _TBL_COLOR=""       # Color of glyphs, and partitions in table
