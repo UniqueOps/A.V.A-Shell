@@ -12,6 +12,15 @@ function Global_Nameserver_Check() {                                            
   elif [[ "$Global_DomainCheck_Status" == "Invalid Entry" ]]; then
     add_row "[!!]" "$Global_DomainCheck_Status or Domain is Avaliable"
   elif [[ "$Global_DomainCheck_Status" == "Registered" ]]; then
+    CheckDNS_Global_NS=$(dig ns +short $domain | sort | sed -e :a -e '$!N; s/\n/ | /; ta');                                     # Global Name Servers 1
+    CheckDNS_Local_NS=$(dig ns +short @localhost $domain | sort | sed -e :a -e '$!N; s/\n/ | /; ta');                           # Local Name Servers 1
+    CheckDNS_Global_A=$(dig a +short $domain | awk FNR==1);                                                                     # Global A Record
+    CheckDNS_Local_A=$(dig a +short @localhost $domain | awk FNR==1);                                                           # Local A Record
+    CheckDNS_Global_MX=$(dig mx +short $domain | awk 'FNR==1{print $2}');                                                       # Global MX Record
+    CheckDNS_Local_MX=$(dig mx +short @localhost $domain | awk 'FNR==1{print $2}');                                             # Local MX Record
+    CheckDNS_Server_DomainOwner=$(/scripts/whoowns $domain);                                                                    # cPanel Username
+    CheckDNS_Server_DomainIP=$(cat /var/cpanel/users/$CheckDNS_Server_DomainOwner | grep 'IP=' | cut -d '=' -f2);               # Assigned IP
+    CheckDNS_Registrar=$(whois -H $domain | awk 'FNR==8{$1=""; print $0}');                                                     # Domain's Registrar
     add_row "[OK]" "Domain is Registered"
     add_row "[--]" "Domain Registrar:$CheckDNS_Registrar"
     if [[ $CheckDNS_Global_NS != "" ]]; then
