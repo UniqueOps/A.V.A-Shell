@@ -60,12 +60,12 @@
 FORMAT_FN="format.shl"
 FORMAT_VER="1.0.1"
 
-_DEFAULT_COLOR=$($Color_Blue)
+_DEFAULT_COLOR=$Color_Blue
 _DEFAULT_GLYPH='='
 _DEFAULT_PARTITION='|'
 _DEFAULT_TEXTCOLOR=""
 _DEFAULT_WIDTH=80
-_RESET=$($Color_Reset)
+_RESET=$Color_Reset
 
 _TBL_TITLE=""       # Name of the table
 _TBL_COLOR=""       # Color of glyphs, and partitions in table
