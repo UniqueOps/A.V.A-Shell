@@ -36,8 +36,8 @@ function Global_Nameserver_Check() {                                            
         add_row -C 1 -T "$Color_Red" "[!!]" "Parent nameserver's dont have your domain's nameservers listed."
       fi
     fi
-    print_table
   fi
+  print_table
 }
 
 Global_Nameserver_Check
