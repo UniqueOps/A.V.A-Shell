@@ -1,6 +1,7 @@
 #!/bin/bash
 
 eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"                                                     # Add Global Functions
+eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/mod/domaincheck)"
 
 function Global_Nameserver_Check() {                                                                                            # Generate Nameserver Check Row
   Global_DomainCheck                                                                                                            # Global Domain Check Script
