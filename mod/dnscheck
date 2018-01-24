@@ -9,10 +9,10 @@ function Global_Nameserver_Check() {                                            
   init_table -h0 -m40 "DNS Check - Parent"
   add_row "[--]" "Scan Performed On Server: $Core_Server_Hostname"
   add_row "[--]" "Server IP: $Core_Server_IP"
-  if [[ "$Global_DomainCheck_Status" == "No Domain Detected" ]]; then
-    add_row -C 1 -T "$Color_Red" "[!!]" "$Global_DomainCheck_Status"
-  elif [[ "$Global_DomainCheck_Status" == "Invalid Entry" ]]; then
-    add_row -C 1 -T "$Color_Red" "[!!]" "$Global_DomainCheck_Status or Domain is Avaliable"
+  if [[ "$Global_DomainCheck_Status" == "Invalid" ]]; then
+    add_row -C 1 -T "$Color_Red" "[!!]" "Domain Entry Is Invalid"
+  elif [[ "$Global_DomainCheck_Status" == "Unregistered" ]]; then
+    add_row -C 1 -T "$Color_Red" "[!!]" "Domain is unregistered!"
   elif [[ "$Global_DomainCheck_Status" == "Registered" ]]; then
     CheckDNS_Global_NS=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');                  # Global Name Servers 1
     #CheckDNS_Local_NS=$(dig ns +short @localhost "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');       # Local Name Servers 1
