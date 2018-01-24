@@ -38,7 +38,7 @@ function Global_Nameserver_Check() {                                            
     fi
   fi
   print_table
-  echo "//n";
+  echo "";
 }
 
 Global_Nameserver_Check
