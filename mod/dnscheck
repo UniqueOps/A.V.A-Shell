@@ -1,46 +1,32 @@
 #!/bin/bash
 
-eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"                             # Add Global Functions
+eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"                                                     # Add Global Functions
 
-STATUS_INFO="$Color_White[--]$Color_Reset"                                                              # Declare Info Status
-STATUS_WARNING="$Color_Yellow[??]$Color_Reset"                                                          # Declare Warning Status
-STATUS_PASS="$Color_Green[OK]$Color_Reset"                                                              # Declare Passing Status
-STATUS_FAIL="$Color_Red[!!]$Color_Reset"                                                                # Declare Failing Status
-
-echo -e "\\nWhat is the domain?"                                                                        # Ask For The Domain
-#read -r domain;                                                                                        # Put Domain Into Variable
-domain=""
-
-if [ -z "$domain" ]; then
-  init_table -h2 "Error Detected"
-  add_row -T --col-text-color $Color_Blue "$STATUS_FAIL" "Please input a valid domain name."
-  print_table
-  exit 1                                                                                                # End Script
-fi
-
-domain=${domain//[[:blank:]]/}                                                                          # Remove Spaces & Tabs
-domain=${domain#*//};                                                                                   # Remove HTTP:// or HTTPS://
-domain=${domain#*www.};                                                                                 # Remove WWW.
-domain=${domain%/};                                                                                     # Remove Trailing /
-#domain=${domain} | cut -f1 -d"/";                                                                      # Remove Any Directories Added
-
-echo -e "Corrected to $domain\\n"                                                                             # Echo Domain For Testing Purposes                                                                                      # Declare Failing Status
-
-function Global_Nameserver_Check() {                                                                    # Generate Nameserver Check Row
-  Global_Nameserver_Check_Info=$(dig ns +short "$domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');   # Grab Nameservers For Domain
-  if [ -n "$Global_Nameserver_Check_Info" ]; then
-    Global_Nameserver_Check_Status="$STATUS_PASS"                                                       # Set Status For Nameserver Check
-    #new_row "$STATUS_INFO" "Global Nameservers: $Global_Nameserver_Check_Info"
-    printf "$STATUS_INFO Global Nameservers: $Global_Nameserver_Check_Info\\n"
-    #new_row "$STATUS_PASS" "Parent nameserver's returned listed nameservers."
-    printf "$STATUS_PASS Parent nameserver's returned listed nameservers.\\n"
-  else
-    Global_Nameserver_Check_Status="$STATUS_FAIL"                                                       # Set Status For Nameserver Check
-    Global_Nameserver_Check_Info="Parent nameserver's dont have your domain's nameservers listed."
-    #new_row "$STATUS_FAIL" "$Global_Nameserver_Check_Info"
-    printf "$STATUS_FAIL $Global_Nameserver_Check_Info\\n"
+function Global_Nameserver_Check() {                                                                                            # Generate Nameserver Check Row
+  Global_DomainCheck                                                                                                            # Global Domain Check Script
+  init_table -h2 -m40 "DNS Check - Parent"
+  add_row "[--]" "Scan Performed On Server: $Core_Server_Hostname"
+  add_row "[--]" "Server IP: $Core_Server_IP"
+  if [[ "$Global_DomainCheck_Status" == "No Domain Detected" ]]; then
+    add_row "[!!]" "$Global_DomainCheck_Status"
+  elif [[ "$Global_DomainCheck_Status" == "Invalid Entry" ]]; then
+    add_row "[!!]" "$Global_DomainCheck_Status or Domain is Avaliable"
+  elif [[ "$Global_DomainCheck_Status" == "Registered" ]]; then
+    add_row "[OK]" "Domain is Registered"
+    add_row "[--]" "Domain Registrar:$CheckDNS_Registrar"
+    if [[ $CheckDNS_Global_NS != "" ]]; then
+      add_row "[OK]" "Global nameservers detected"
+      add_row "[--]" "Global Records: $CheckDNS_Global_NS"
+      Global_Nameserver_Check_Info=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');
+      if [ -n "$Global_Nameserver_Check_Info" ]; then
+        add_row "[OK]" "Parent nameserver's returned listed nameservers."
+        add_row "[--]" "Global Nameservers: $Global_Nameserver_Check_Info"
+      else
+        add_row "[!!]" "Parent nameserver's dont have your domain's nameservers listed."
+      fi
+    fi
+    print_table
   fi
 }
 
 Global_Nameserver_Check
-echo -e ""
