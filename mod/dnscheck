@@ -37,6 +37,7 @@ function DNSCheck_Parent() {                                                    
       fi
     fi
   fi
+  mkpad()
   print_table
   echo "";
 }
