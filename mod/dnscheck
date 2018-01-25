@@ -37,6 +37,8 @@ function DNSCheck_Parent() {                                                    
       fi
     fi
   fi
+divider=$(mkpad -w $WIDTH)
+printf "%b%s%b\n" "$COLOR" "$divider" "$reset"
   print_table
   echo "";
 }
