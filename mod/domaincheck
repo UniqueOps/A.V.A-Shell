@@ -3,7 +3,7 @@
 #eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"                                # Add Global Functions (Testing Purposes Only)
 
 function Global_DomainCheck() { 
-printf 'Domain: '
+printf "\\nDomain: "
 read -r Global_DomainCheck_Domain                                                                                                # Table Footer
 
 Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | tr '[:upper:]' '[:lower:]')                 # Entry to Lowercase
