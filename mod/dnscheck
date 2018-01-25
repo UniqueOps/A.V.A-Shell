@@ -41,14 +41,14 @@ function DNSCheck_Parent() {                                                    
   echo "";
 }
 
-Nameserver_Check
+DNSCheck_Parent
 
 
-add_row "[--]" "ns1.uniqueops.com"
+#add_row "[--]" "ns1.uniqueops.com"
 
-add_row "[OK]" "Global Nameservers Found"
-add_row "[OK]" "Global Nameservers Have IPs"
-add_row "[OK]" "Global Nameservers have A records"
+#add_row "[OK]" "Global Nameservers Found"
+#add_row "[OK]" "Global Nameservers Have IPs"
+#add_row "[OK]" "Global Nameservers have A records"
 
 
 
