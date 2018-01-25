@@ -30,7 +30,7 @@ function DNSCheck_Parent() {                                                    
   elif [[ "$Global_DomainCheck_Status" == "Registered" ]]; then
     add_row -C 1 -T "$Color_Green" "[OK]" "Domain Registered"
     if [[ $DNSCheck_NS != "" ]]; then
-      if [ -n "$Global_Nameserver_Check_Info" ]; then
+      if [ -n "$DNSCheck_Nameservers" ]; then
         add_row -C 1 -T "$Color_Green" "[OK]" "Global Nameservers Listed"
       else
         add_row -C 1 -T "$Color_Red" "[!!]" "Global Nameservers Missing"
