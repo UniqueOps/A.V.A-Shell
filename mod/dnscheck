@@ -37,9 +37,11 @@ function DNSCheck_Parent() {                                                    
       fi
     fi
   fi
-divider=$(mkpad -w $WIDTH)
-printf "%b%s%b\n" "$COLOR" "$divider" "$reset"
   print_table
+  init_table -h0 -m40 "DNS Check - NS"
+  add_row -C 1 -T "$Color_Green" "[OK]" "This worked!"
+  print_table
+
   echo "";
 }
 
