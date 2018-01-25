@@ -24,8 +24,8 @@ function DNSCheck_Parent() {                                                    
   elif [[ "$Global_DomainCheck_Status" == "Registered" ]]; then
     DNSCheck_NS=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');                  # Global Name Servers 1
     DNSCheck_Registrar=$(whois -H "$Global_DomainCheck_Domain" | awk 'FNR==8{$1=""; print $0}');                                  # Domain's Registrar
-    add_row -C 1 -T "$Color_Green" "[OK]" "Domain is Registered"
     add_row "[--]" "Domain Registrar:$DNSCheck_Registrar"
+    add_row -C 1 -T "$Color_Green" "[OK]" "Domain is Registered"
     if [[ $DNSCheck_NS != "" ]]; then
       Global_Nameserver_Check_Info=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');
       if [ -n "$Global_Nameserver_Check_Info" ]; then
