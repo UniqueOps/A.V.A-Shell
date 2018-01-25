@@ -1,9 +1,17 @@
 #!/bin/bash
 
+    #CheckDNS_Local_NS=$(dig ns +short @localhost "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');       # Local Name Servers 1
+    #CheckDNS_Global_A=$(dig a +short "$Global_DomainCheck_Domain" | awk FNR==1);                                                 # Global A Record
+    #CheckDNS_Local_A=$(dig a +short @localhost "$Global_DomainCheck_Domain" | awk FNR==1);                                       # Local A Record
+    #CheckDNS_Global_MX=$(dig mx +short "$Global_DomainCheck_Domain" | awk 'FNR==1{print $2}');                                   # Global MX Record
+    #CheckDNS_Local_MX=$(dig mx +short @localhost "$Global_DomainCheck_Domain" | awk 'FNR==1{print $2}');                         # Local MX Record
+    #CheckDNS_Server_DomainOwner=$(/scripts/whoowns "$Global_DomainCheck_Domain");                                                # cPanel Username
+    #CheckDNS_Server_DomainIP=$(cat /var/cpanel/users/"$CheckDNS_Server_DomainOwner" | grep 'IP=' | cut -d '=' -f2);              # Assigned IP
+
 eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"                                                     # Add Global Functions
 eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/mod/domaincheck)"
 
-function Global_Nameserver_Check() {                                                                                            # Generate Nameserver Check Row
+function DNSCheck_Parent() {                                                                                            # Generate Nameserver Check Row
   Global_DomainCheck                                                                                                            # Global Domain Check Script
   echo "";
   init_table -h0 -m40 "DNS Check - Parent"
@@ -14,20 +22,11 @@ function Global_Nameserver_Check() {                                            
   elif [[ "$Global_DomainCheck_Status" == "Unregistered" ]]; then
     add_row -C 1 -T "$Color_Red" "[!!]" "Domain is NOT Registered"
   elif [[ "$Global_DomainCheck_Status" == "Registered" ]]; then
-    CheckDNS_Global_NS=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');                  # Global Name Servers 1
-    #CheckDNS_Local_NS=$(dig ns +short @localhost "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');       # Local Name Servers 1
-    #CheckDNS_Global_A=$(dig a +short "$Global_DomainCheck_Domain" | awk FNR==1);                                                 # Global A Record
-    #CheckDNS_Local_A=$(dig a +short @localhost "$Global_DomainCheck_Domain" | awk FNR==1);                                       # Local A Record
-    #CheckDNS_Global_MX=$(dig mx +short "$Global_DomainCheck_Domain" | awk 'FNR==1{print $2}');                                   # Global MX Record
-    #CheckDNS_Local_MX=$(dig mx +short @localhost "$Global_DomainCheck_Domain" | awk 'FNR==1{print $2}');                         # Local MX Record
-    #CheckDNS_Server_DomainOwner=$(/scripts/whoowns "$Global_DomainCheck_Domain");                                                # cPanel Username
-    #CheckDNS_Server_DomainIP=$(cat /var/cpanel/users/"$CheckDNS_Server_DomainOwner" | grep 'IP=' | cut -d '=' -f2);              # Assigned IP
-    CheckDNS_Registrar=$(whois -H "$Global_DomainCheck_Domain" | awk 'FNR==8{$1=""; print $0}');                                  # Domain's Registrar
+    DNSCheck_NS=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');                  # Global Name Servers 1
+    DNSCheck_Registrar=$(whois -H "$Global_DomainCheck_Domain" | awk 'FNR==8{$1=""; print $0}');                                  # Domain's Registrar
     add_row -C 1 -T "$Color_Green" "[OK]" "Domain is Registered"
     add_row "[--]" "Domain Registrar:$CheckDNS_Registrar"
-    if [[ $CheckDNS_Global_NS != "" ]]; then
-      add_row -C 1 -T "$Color_Green" "[OK]" "Global nameservers detected"
-      add_row "[--]" "Global Records: $CheckDNS_Global_NS"
+    if [[ $DNSCheck_NS != "" ]]; then
       Global_Nameserver_Check_Info=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');
       if [ -n "$Global_Nameserver_Check_Info" ]; then
         add_row -C 1 -T "$Color_Green" "[OK]" "Parent nameserver's returned listed nameservers."
@@ -35,10 +34,27 @@ function Global_Nameserver_Check() {                                            
       else
         add_row -C 1 -T "$Color_Red" "[!!]" "Parent nameserver's dont have your domain's nameservers listed."
       fi
+      add_row -C 1 -T "$Color_Green" "[OK]" "Global nameservers detected"
     fi
   fi
   print_table
   echo "";
 }
 
-Global_Nameserver_Check
+Nameserver_Check
+
+
+add_row "[--]" "ns1.uniqueops.com"
+
+add_row "[OK]" "Global Nameservers Found"
+add_row "[OK]" "Global Nameservers Have IPs"
+add_row "[OK]" "Global Nameservers have A records"
+
+
+
+
+
+
+
+
+
