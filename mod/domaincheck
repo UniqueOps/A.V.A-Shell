@@ -11,7 +11,7 @@ Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | sed 's/[^a-z0-9.
 Global_DomainCheck_Domain=${Global_DomainCheck_Domain#*//};                                                 # Remove Protocol Prefix
 Global_DomainCheck_Domain=${Global_DomainCheck_Domain#*www.};                                               # Remove WWW. Prefix
 Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | cut -f1 -d"/")                              # Remove Domain Suffix
-Global_DomainCheck_Domain_TLD=$(echo "$Global_DomainCheck_Domain" | awk -F "." '{print $NF}')               # TLD to Variable
+Global_DomainCheck_Domain_TLD=$(echo "$Global_DomainCheck_Domain" | awk -F "." 'toupper{print $NF}')        # TLD to Variable
 if [ -z "$Global_DomainCheck_Domain" ]; then                                                                # Empty Domain Check
   Global_DomainCheck_Status="Invalid"                                                                       # Return Invalid Domain Trigger
 else
