@@ -28,7 +28,7 @@ function DNSCheck_Parent() {                                                    
   add_row "[--]" "Domain Checked: $Global_DomainCheck_Domain"
   add_row "[--]" "Domain Registrar:$DNSCheck_Registrar"
   print_table
-
+  echo ""
   init_table -h0 -m40 "DNS Check - Parent"
   add_row "[--]" "Global Nameservers: $DNSCheck_NS"
   if [[ -n "$DNSCheck_Global_Server" ]]; then
