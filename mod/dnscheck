@@ -21,7 +21,7 @@ function DNSCheck_Parent() {                                                    
   DNSCheck_NS_Count=$($DNSCheck_N | wc -l);  # Global Name Servers 1
   DNSCheck_NS_Glue=$(dig @c.gtld-servers.net +noall +additional "$Global_DomainCheck_Domain" | awk -F "A" '{print $NF}' | awk '{$1=$1}{ print}');
   DNSCheck_NS_Glue_Compare=$(dig @c.gtld-servers.net +noall +additional uniqueops.com | awk -F " " '{print $1}' | awk '{$1=$1}{ print}' | sort);
-  DNSCheck_NS_Glue_Count=$("$DNSCheck_NS_Glue" | wc -l);
+  DNSCheck_NS_Glue_Count=$($DNSCheck_NS_Glue | wc -l);
   init_table -h0 -m40 "DNS Check - Parent"
   add_row "[--]" "Domain Checked: $Global_DomainCheck_Domain"
   add_row "[--]" "Domain Registrar:$DNSCheck_Registrar"
