@@ -59,7 +59,7 @@ function DNSCheck_Parent() {                                                    
         fi
         add_row -C 1 -T "$Color_Green" "[OK]" "Global Nameservers (Glue Records) Returned"
       else
-        add_row -C 1 -T "$Color_Red" "[!!]" "Global Nameservers (Glue Records) Missing"
+        add_row -C 1 -T "$Color_Yellow" "[??]" "Global Nameservers (Glue Records) Not All Returned"
       fi
     else
       add_row -C 1 -T "$Color_Red" "[!!]" "Global Nameservers Not Registered"
