@@ -27,7 +27,7 @@ function DNSCheck_Parent() {                                                    
   if [[ -n "$DNSCheck_Global_Server" ]]; then
     add_row -C 1 -T "$Color_Green" "[OK]" "TLD Parent Check"
   else
-    add_row -C 1 -T "$Color_Red" "[!!]" "Parent nameservers dont have information about your TLD"
+    add_row -C 1 -T "$Color_Red" "[!!]" "Parent Nameservers Missing TLD Information"
   fi
   if [[ "$Global_DomainCheck_Status" == "Invalid" ]]; then
     add_row -C 1 -T "$Color_Red" "[!!]" "Domain is Invalid"
