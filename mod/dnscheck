@@ -1,5 +1,9 @@
 #!/bin/bash
 
+## NOTES
+# - Check into TLD Check with hostdime.co.uk
+## END NOTES
+
     #CheckDNS_Local_NS=$(dig ns +short @localhost "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');       # Local Name Servers 1
     #CheckDNS_Global_A=$(dig a +short "$Global_DomainCheck_Domain" | awk FNR==1);                                                 # Global A Record
     #CheckDNS_Local_A=$(dig a +short @localhost "$Global_DomainCheck_Domain" | awk FNR==1);                                       # Local A Record
