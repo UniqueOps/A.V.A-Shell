@@ -39,7 +39,7 @@ function DNSCheck_Parent() {                                                    
     add_row -C 1 -T "$Color_Green" "[OK]" "Domain Registered"
     if [[ $DNSCheck_NS != "" ]]; then
       if [ -n "$DNSCheck_NS" ]; then
-        add_row -C 1 -T "$Color_Green" "[OK]" "Global Nameservers Listed"
+        add_row -C 1 -T "$Color_Green" "[OK]" "Global Nameservers Returned"
       else
         add_row -C 1 -T "$Color_Red" "[!!]" "Global Nameservers Missing"
       fi
@@ -47,7 +47,7 @@ function DNSCheck_Parent() {                                                    
     if [[ -n "$DNSCheck_NS_Glue" ]]; then
       if [[ "$DNSCheck_NS_Compare" == "$DNSCheck_NS_Glue_Compare" ]]; then
         if [[ "$DNSCheck_NS_Count" == "$DNSCheck_NS_Glue_Count" ]]; then
-          add_row -C 1 -T "$Color_Green" "[OK]" "Global Nameservers A Records"
+          add_row -C 1 -T "$Color_Green" "[OK]" "Global Nameservers (A Records)"
         else
           add_row -C 1 -T "$Color_Red" "[!!]" "Parent Server Missing Some Glue Records"
         fi
