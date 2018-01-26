@@ -59,7 +59,7 @@ function DNSCheck_Parent() {                                                    
   echo "$DNSCheck_NS_Count";
   echo "$DNSCheck_NS_Glue_Count"
   echo "$DNSCheck_NS_Compare"
-  echo "$DNSCHeck_NS_Glue_Compare"
+  echo "$DNSCheck_NS_Glue_Compare"
 }
 
 DNSCheck_Parent
