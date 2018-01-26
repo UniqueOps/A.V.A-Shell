@@ -23,7 +23,7 @@ function DNSCheck_Parent() {                                                    
   add_row "[--]" "Source Server IP: $Core_Server_IP"
   add_row "[--]" "Domain Checked: $Global_DomainCheck_Domain"
   add_row "[--]" "Domain Registrar:$DNSCheck_Registrar"
-  add_row "[--]" "Domain TLD: $Global_DomainCheck_Domain_TLD"
+  add_row "[--]" "Domain TLD: .$Global_DomainCheck_Domain_TLD"
   add_row "[--]" "Global Nameservers: $DNSCheck_Nameservers"
   if [[ "$Global_DomainCheck_Status" == "Invalid" ]]; then
     add_row -C 1 -T "$Color_Red" "[!!]" "Domain is Invalid"
@@ -40,27 +40,7 @@ function DNSCheck_Parent() {                                                    
     fi
   fi
   print_table
-  init_table -h0 -m40 "DNS Check - NS"
-  add_row -C 1 -T "$Color_Green" "[OK]" "This worked!"
-  print_table
-
   echo "";
 }
 
 DNSCheck_Parent
-
-
-#add_row "[--]" "ns1.uniqueops.com"
-
-#add_row "[OK]" "Global Nameservers Found"
-#add_row "[OK]" "Global Nameservers Have IPs"
-#add_row "[OK]" "Global Nameservers have A records"
-
-
-
-
-
-
-
-
-
