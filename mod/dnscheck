@@ -56,6 +56,10 @@ function DNSCheck_Parent() {                                                    
   fi
   print_table
   echo "";
+  echo "$DNSCheck_NS_Count//n";
+  echo "$DNSCheck_NS_Glue_Count//n"
+  echo "$DNSCheck_NS_Compare//n"
+  echo "$DNSCHeck_NS_Glue_Compare//n"
 }
 
 DNSCheck_Parent
