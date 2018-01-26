@@ -27,6 +27,7 @@ function DNSCheck_Parent() {                                                    
   add_row "[--]" "Source Server IP: $Core_Server_IP"
   add_row "[--]" "Domain Checked: $Global_DomainCheck_Domain"
   add_row "[--]" "Domain Registrar:$DNSCheck_Registrar"
+  add_row "[--]" "Parent Server: $DNSCheck_Global_Server"
   print_table
   echo ""
   init_table -h0 -m40 "DNS Check - Parent"
