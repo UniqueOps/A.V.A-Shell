@@ -46,12 +46,12 @@ function DNSCheck_Parent() {                                                    
     fi
     if [[ -n "$DNSCheck_NS_Glue" ]]; then
       if [[ "$DNSCheck_NS_Compare" == "$DNSCheck_NS_Glue_Compare" ]]; then
-        add_row -C 1 -T "$Color_Green" "[OK]" "Parent Server Sent Glue Records"
         if [[ "$DNSCheck_NS_Count" == "$DNSCheck_NS_Glue_Count" ]]; then
-          add_row -C 1 -T "$Color_Green" "[OK]" "Nameservers A Records"
+          add_row -C 1 -T "$Color_Green" "[OK]" "Global Nameservers A Records"
         else
           add_row -C 1 -T "$Color_Red" "[!!]" "Parent Server Missing Some Glue Records"
         fi
+        add_row -C 1 -T "$Color_Green" "[OK]" "Parent Server Sent Glue Records"
       else
         add_row -C 1 -T "$Color_Red" "[!!]" "Parent Server Sent Inncorrect Glue Records"
       fi
