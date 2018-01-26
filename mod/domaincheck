@@ -2,16 +2,16 @@
 
 #eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"                                # Add Global Functions (Testing Purposes Only)
 
-function Global_DomainCheck() { 
-printf "\\nDomain: "
-read -r Global_DomainCheck_Domain                                                                                                # Table Footer
+function Global_DomainCheck() {
+printf "\\nDomain: "                                                                                        # Display Question
+read -r Global_DomainCheck_Domain                                                                           # Question Entry
 
 Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | tr '[:upper:]' '[:lower:]')                 # Entry to Lowercase
 Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | sed 's/[^a-z0-9.:-\/]//g')                  # Remove Special Characters
 Global_DomainCheck_Domain=${Global_DomainCheck_Domain#*//};                                                 # Remove Protocol Prefix
 Global_DomainCheck_Domain=${Global_DomainCheck_Domain#*www.};                                               # Remove WWW. Prefix
 Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | cut -f1 -d"/")                              # Remove Domain Suffix
-
+Global_DomainCheck_Domain_TLD=$(echo "Global_DomainCheck_Domain" | awk -F "," '{print $1}')                 # TLD to Variable
 if [ -z "$Global_DomainCheck_Domain" ]; then                                                                # Empty Domain Check
   Global_DomainCheck_Status="Invalid"                                                                       # Return Invalid Domain Trigger
 else
