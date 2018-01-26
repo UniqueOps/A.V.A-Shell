@@ -9,9 +9,9 @@
     #CheckDNS_Server_DomainIP=$(cat /var/cpanel/users/"$CheckDNS_Server_DomainOwner" | grep 'IP=' | cut -d '=' -f2);              # Assigned IP
 
 eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"                                                     # Add Global Functions
-eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/mod/domaincheck)"
 
 function DNSCheck_Parent() {                                                                                            # Generate Nameserver Check Row
+  eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/mod/domaincheck)"
   Global_DomainCheck                                                                                                            # Global Domain Check Script
   echo "";
   DNSCheck_Global_Server=$(dig ns +short "$Global_DomainCheck_Domain_TLD" | head -1);
@@ -51,9 +51,9 @@ function DNSCheck_Parent() {                                                    
         else
           add_row -C 1 -T "$Color_Red" "[!!]" "Parent Server Missing Some Glue Records"
         fi
-        add_row -C 1 -T "$Color_Green" "[OK]" "Parent Server Sent Glue Records"
+        add_row -C 1 -T "$Color_Green" "[OK]" "Parent Server Returned Glue Records"
       else
-        add_row -C 1 -T "$Color_Red" "[!!]" "Parent Server Sent Inncorrect Glue Records"
+        add_row -C 1 -T "$Color_Red" "[!!]" "Parent Server Returned Inncorrect Glue Records"
       fi
     else
       add_row -C 1 -T "$Color_Red" "[!!]" "Nameservers Not Declared At Registrar"
