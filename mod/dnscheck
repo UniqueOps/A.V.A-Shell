@@ -22,9 +22,14 @@ function DNSCheck_Parent() {                                                    
   DNSCheck_NS_Glue=$(dig @c.gtld-servers.net +noall +additional "$Global_DomainCheck_Domain" | awk -F "A" '{print $NF}' | awk '{$1=$1}{ print}');
   DNSCheck_NS_Glue_Compare=$(dig @c.gtld-servers.net +noall +additional uniqueops.com | awk -F " " '{print $1}' | awk '{$1=$1}{ print}' | sort);
   DNSCheck_NS_Glue_Count=$(echo "$DNSCheck_NS_Glue" | wc -l);
-  init_table -h0 -m40 "DNS Check - Parent"
+  init_table -h0 -m40 "DNS Check - Information"
+  add_row "[--]" "Source Server: $Core_Server_Hostname"
+  add_row "[--]" "Source Server IP: $Core_Server_IP"
   add_row "[--]" "Domain Checked: $Global_DomainCheck_Domain"
   add_row "[--]" "Domain Registrar:$DNSCheck_Registrar"
+  print_table
+
+  init_table -h0 -m40 "DNS Check - Parent"
   add_row "[--]" "Global Nameservers: $DNSCheck_NS"
   if [[ -n "$DNSCheck_Global_Server" ]]; then
     add_row -C 1 -T "$Color_Green" "[OK]" "TLD Parent Check"
