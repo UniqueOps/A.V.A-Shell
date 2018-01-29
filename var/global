@@ -2,8 +2,8 @@
 # Description: Global Variables
 # Contributors: Casey McLaughlin
 
-eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/colors)"                             # Add Color Module
-eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/sys/tables/format.shl)"                  # Add Table Module
+eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/colors)"                                 # Add Color Module
+eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/sys/tables/format.shl)"                      # Add Table Module
 
 # Basic Server Information
 readonly Core_Server_Hostname=$(hostname);
@@ -11,3 +11,26 @@ readonly Core_Server_IP=$(hostname -i);
 readonly Core_Server_Processors=$(nproc);
 readonly Core_Server_Uptime=$(uptime | awk '{print $3,$4}' | tr ',' ' ');
 #Core_Server_OS=$(lsb_release -a | awk 'FNR==3 {$1=""; $6=""; print}' | tr 'C' 'C'); #Not Working
+
+function Global_DomainCheck() {
+printf "\\nDomain: "                                                                                        # Display Question
+read -r Global_DomainCheck_Domain                                                                           # Question Entry
+echo "";                                                                                                    # Line Space
+Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | tr '[:upper:]' '[:lower:]')                 # Entry to Lowercase
+Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | sed 's/[^a-z0-9.:-\/]//g')                  # Remove Special Characters
+Global_DomainCheck_Domain=${Global_DomainCheck_Domain#*//};                                                 # Remove Protocol Prefix
+Global_DomainCheck_Domain=${Global_DomainCheck_Domain#*www.};                                               # Remove WWW. Prefix
+Global_DomainCheck_Domain=$(echo "$Global_DomainCheck_Domain" | cut -f1 -d"/")                              # Remove Domain Suffix
+Global_DomainCheck_Domain_TLD=$(echo "$Global_DomainCheck_Domain" | awk -F "." '{print $NF}')               # TLD to Variable
+Global_DomainCheck_Domain_TLD=$(echo "$Global_DomainCheck_Domain_TLD" | awk '{print toupper($0)}')          # TLD to UPPERCASE
+if [ -z "$Global_DomainCheck_Domain" ]; then                                                                # Empty Domain Check
+  Global_DomainCheck_Status="Invalid"                                                                       # Return Invalid Domain Trigger
+else
+  Global_DomainCheck_Whois=$(whois "$Global_DomainCheck_Domain" | grep 'No match for')                      # Generate Domain Registered Check
+  if [ "$Global_DomainCheck_Whois" = "" ]; then                                                             # Check If Domain Is Registered
+    Global_DomainCheck_Status="Registered"                                                                  # Return Registered Trigger
+  else
+    Global_DomainCheck_Status="Unregistered"                                                                # Return Not Registered Trigger
+  fi
+fi
+}
