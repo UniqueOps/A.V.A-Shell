@@ -193,11 +193,18 @@ function _format_test()
 #
 # Arguments: Accepts a STRING to set the table title. This argument is optional.
 # 
+# Dependencies:
+# * core.shl::printerr()
 #*******************************************************************************
 
 function init_table()
 {
   local options
+  if ! options=$(getopt -o c:,C:,f,g:,h:,m:,p:,P:,t:,T: -l color:,col:,column:,footer,glyph:,heading:,min-width:,partition:,col-partition:,text-color:,col-text-color: -- "$@")
+  then
+    printerr -f "$FORMAT_FN" "$E_GETOPT"
+    return 1
+  fi
 
   eval set -- "$options"
 
@@ -285,6 +292,7 @@ function init_table()
         break
         ;;
       * )
+        printerr -f "$FORMAT_FN" "$E_OPTPARSE $1"
         return 1
         ;;
     esac
@@ -348,11 +356,18 @@ function init_table()
 # row. If the number of fields is greater than the number of columns, the row is 
 # trunctated to include only the first N fields where N is number of columns.
 # 
+# Dependencies:
+# * core.shl::printerr()
 #*******************************************************************************
 
 function add_row()
 {
   local options
+  if ! options=$(getopt -o C:,t:,T: -l col:,column:,text-color:,col-text-color: -- "$@")
+  then
+    printerr -f "$FORMAT_FN" "$E_GETOPT"
+    return 1
+  fi
 
   eval set -- "$options"
 
@@ -389,6 +404,7 @@ function add_row()
         break
         ;;
       * )
+        printerr -f "$FORMAT_FN" "$E_OPTPARSE $1"
         return 1
         ;;
     esac
@@ -577,12 +593,18 @@ function print_table()
 # line.
 # 
 # Dependencies:
+# * core.shl::printerr()
 # * mkpad()
 #*******************************************************************************
 
 function mkheader()
 {
   local options
+  if ! options=$(getopt -o c:,g:,t:,w: -l color:,glyph:,--text-color:,width: -- "$@")
+  then
+    printerr -f "$FORMAT_FN" "$E_GETOPT"
+    return 1
+  fi
 
   eval set -- "$options"
 
@@ -615,11 +637,18 @@ function mkheader()
         break
         ;;
       * )
+        printerr -f "$FORMAT_FN" "$E_OPTPARSE $1"
         return 1
         ;;
     esac
     shift
   done
+
+  if is_empty "$1"
+  then
+    printerr -f "$FORMAT_FN" "Header title cannot be empty."
+    return 1
+  fi
 
   local color=${color_arg:-$_DEFAULT_COLOR}
   local glyph=${glyph_arg:-$_DEFAULT_GLYPH}
@@ -685,11 +714,19 @@ function mkheader()
 #   Sets the length of the padding. Set to $_DEFAULT_WIDTH if the option is not 
 #   used.
 # 
+# Dependencies:
+# * core.shl::printerr()
 #*******************************************************************************
 
 function mkpad()
 {
   local options
+
+  if ! options=$(getopt -o g:,w: -l glyph:,width: -- "$@")
+  then
+    printerr -f "$FORMAT_FN" "$E_GETOPT"
+    return 1
+  fi
 
   eval set -- "$options"
 
@@ -712,6 +749,7 @@ function mkpad()
         break
         ;;
       * )
+        printerr -f "$FORMAT_FN" "$E_OPTPARSE $1"
         return 1
         ;;
     esac
