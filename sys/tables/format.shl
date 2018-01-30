@@ -1,12 +1,6 @@
 #!/bin/bash
+# Version 1.0.2
 
-################################################################################
-# format.shl
-# v1.0.1
-# 
-# Contributors:
-# * Graham L.
-# 
 # Description:
 # 
 # Globals:
@@ -58,7 +52,7 @@ include colorize.shl
 ################################################################################
 
 FORMAT_FN="format.shl"
-FORMAT_VER="1.0.1"
+FORMAT_VER="1.0.2"
 
 _DEFAULT_COLOR=$(colorize --color blue --bold)
 _DEFAULT_GLYPH='='
@@ -74,6 +68,7 @@ _TBL_HEADING=1      # Number of table heading rows.
 _TBL_PARTITION=""   # Partition character for table
 _TBL_TEXTCOLOR=""   # Table text color
 _TBL_MINWIDTH=0     # Table minimum width
+_TBL_FOOTER='false'       # Flag for table footer
 
 declare -a _TBL_ROWS            # Stores rows' contents
 declare -a _TBL_ROWTEXTCOLORS   # Stores custom color for each field in row
@@ -129,7 +124,7 @@ function _format_test()
 
 #*******************************************************************************
 # init_table()
-# v1.1.0
+# v1.2.0
 # 
 # Contributors:
 # * Graham L. - Level 2 Support Technician - graham.l@hostdime.com
@@ -149,6 +144,10 @@ function _format_test()
 #   Specifies the column for the -P, and --col-partition options. Default value 
 #   is 1. Does nothing when not used in conjunction with either the -P, or
 #   --col-partition option.
+#
+# -f, --footer
+#   When set, a string of the table glyphs with the width of the table are 
+#   printed immediately following the last row.
 #
 # -g, --glyph CHARACTER
 #   Controls the glyph character used in the table. Currently, the glyph is 
@@ -201,7 +200,7 @@ function _format_test()
 function init_table()
 {
   local options
-  if ! options=$(getopt -o c:,C:,g:,h:,m:,p:,P:,t:,T: -l color:,col:,column:,glyph:,heading:,min-width:,partition:,col-partition:,text-color:,col-text-color: -- "$@")
+  if ! options=$(getopt -o c:,C:,f,g:,h:,m:,p:,P:,t:,T: -l color:,col:,column:,footer,glyph:,heading:,min-width:,partition:,col-partition:,text-color:,col-text-color: -- "$@")
   then
     printerr -f "$FORMAT_FN" "$E_GETOPT"
     return 1
@@ -218,6 +217,7 @@ function init_table()
   _TBL_PARTITION=""
   _TBL_TEXTCOLOR=""
   _TBL_MINWIDTH=""
+  _TBL_FOOTER='false'
 
   _TBL_ROWS=()
   _TBL_ROWTEXTCOLORS=()
@@ -239,6 +239,9 @@ function init_table()
         col=$2
         (( col-- ))
         shift
+        ;;
+      -f | --footer )
+        _TBL_FOOTER='true'
         ;;
       -g | --glyph )
         _TBL_GLYPH=$2
@@ -438,7 +441,7 @@ function add_row()
 
 #*******************************************************************************
 # print_table()
-# v1.0.1
+# v1.1.0
 # 
 # Contributors:
 # * Graham L. - Level 2 Support Technician - graham.l@hostdime.com
@@ -461,56 +464,61 @@ function print_table()
   local crs=$_RESET # color reset
   local trs=$_RESET # text color reset
 
+  # Calculates table width, initializes partitions, and finds smallest column width
   for (( i = 0; i < $_TBL_ROWLEN; i++ ))
   do
-    (( minw > ${_TBL_COLW[$i]} ? (minw=${_TBL_COLW[$i]}) : (minw=minw) ))
-    _TBL_COLP[$i]=${_TBL_COLP[$i]:-$_TBL_PARTITION}
-    (( width += ${_TBL_COLW[$i]} + ${#_TBL_COLP[$i]} + 2 ))
+    (( minw > ${_TBL_COLW[$i]} ? (minw=${_TBL_COLW[$i]}) : (minw=minw) )) # find min col width
+    _TBL_COLP[$i]=${_TBL_COLP[$i]:-$_TBL_PARTITION} # initialize partitions
+    (( width += ${_TBL_COLW[$i]} + ${#_TBL_COLP[$i]} + 2 )) # calculate width
   done
 
-  (( width-- ))
+  (( width-- )) # removes extra space added
 
-  if (( width < _TBL_MINWIDTH ))
+  if (( width < _TBL_MINWIDTH )) # verifies table is at least min width
   then
 
     while (( width < _TBL_MINWIDTH ))
     do
-      for (( i = 0; i < $_TBL_ROWLEN; i++ ))
+      for (( i = 0; i < $_TBL_ROWLEN; i++ )) # iterate over columns
       do
+        # increment the size of the smallest column(s)
         if (( ${_TBL_COLW[$i]} == minw ))
         then
           _TBL_COLW[$i]=$(( ${_TBL_COLW[$i]} + 1 ))
-        (( width++ ))
+          (( width++ ))
         fi
 
 
         if (( width >= _TBL_MINWIDTH ))
         then
-          break
+          break # stop once the table is at least min width
         fi
       done
-      (( minw++ ))
+      (( minw++ )) # increment min width sentinel value
     done
   fi
 
-  (( row_count = _TBL_ROWOFFSET / _TBL_ROWLEN ))
+  (( row_count = _TBL_ROWOFFSET / _TBL_ROWLEN )) # set row count
   
+  # Print title
   if is_not_empty "$_TBL_TITLE"
   then
     mkheader -w $width "$_TBL_TITLE" -g "$_TBL_GLYPH" -c "$_TBL_COLOR" -t "$_TBL_TEXTCOLOR"
   fi
 
+  # Sets local variables for colors
   if [[ $_TBL_COLOR == "none" ]]
   then
-    color=""
+    color="" # allows no color to specified with 'none'
     crs=""
   else
     color=$_TBL_COLOR
   fi
 
+  # Print rows
   for (( i = 0; i < $row_count; i++ ))
   do
-    printf " "
+    printf " " # left pads each element with a single space
     for (( j = 0; j < $_TBL_ROWLEN; j++ ))
     do
       if is_empty "${#_TBL_ROWTEXTCOLLORS[$index]}" && is_empty "${_TBL_COLTC[$j]}"
@@ -522,18 +530,18 @@ function print_table()
 
       printf "%b%-*s%b" "${_TBL_ROWTEXTCOLORS[$index]:-$_TBL_TEXTCOLOR}" "${_TBL_COLW[$j]}" "${_TBL_ROWS[$index]}" "$trs"
 
-      if (( j + 1 != _TBL_ROWLEN ))
+      if (( j + 1 != _TBL_ROWLEN )) # verify this is not last element in row
       then
-        printf " %b%s%b " "$color" "${_TBL_COLP[$j]}" "$crs"
+        printf " %b%s%b " "$color" "${_TBL_COLP[$j]}" "$crs" # print partition
       fi
 
       (( index++ ))
     done
-    printf "\n"
+    printf "\n" # line break after each row
 
-    if (( i == (_TBL_HEADING - 1) ))
+    if (( i == (_TBL_HEADING - 1) )) # check if it's last line of headings
     then
-      for (( k = 0; k < _TBL_ROWLEN; k++ ))
+      for (( k = 0; k < _TBL_ROWLEN; k++ )) # print headings divider
       do
         printf "%b%*s%b" "$color" "$(( ${_TBL_COLW[$k]} + 2 ))" "" "$crs" |\
           tr ' ' '-'
@@ -545,6 +553,13 @@ function print_table()
       printf "\n"
     fi
   done
+
+  if $_TBL_FOOTER
+  then
+    printf "%b%s%b\n" "$color" "$(mkpad -w $width -g "$_TBL_GLYPH")" "$crs"
+  fi
+
+  return 0
 }
 
 #*******************************************************************************
