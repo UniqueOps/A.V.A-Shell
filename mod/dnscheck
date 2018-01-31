@@ -10,6 +10,7 @@ function DNSCheck_Parent() {                                                    
   Global_DomainCheck                                                                                                            # Global Domain Check Script
   DNSCheck_A=$(dig +noall +answer "$Global_DomainCheck_Domain" | grep -v CNAME | awk '{print $NF}');
   DNSCheck_A_WWW=$(dig +noall +answer www."$Global_DomainCheck_Domain" | grep -v CNAME | awk '{print $NF}');
+  DNSCheck_MX_Check=$(dig +noall +answer mx "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort);
   DNSCheck_MX=$(dig +noall +answer mx "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort | while read DNSCheck_MX_Temp; do add_row "[--]" "MX Record: $DNSCheck_MX_Temp"; done);
 
   
@@ -68,7 +69,7 @@ function DNSCheck_Parent() {                                                    
   # MX Section
   echo ""
   init_table -h0 -m40 -f "DNS Check - MX"
-  if [[ -n "$DNSCheck_MX" ]]; then
+  if [[ -n "$DNSCheck_MX_Check" ]]; then
     add_row "[--]" "MX Record: $DNSCheck_MX        "
   else
     add_row -C 1 -T "$Color_Red" "[!!]" "Missing MX Record"
