@@ -10,6 +10,8 @@ function DNSCheck_Parent() {                                                    
   Global_DomainCheck                                                                                                            # Global Domain Check Script
   DNSCheck_A=$(dig +noall +answer "$Global_DomainCheck_Domain" | grep -v CNAME | awk '{print $NF}');
   DNSCheck_A_WWW=$(dig +noall +answer www."$Global_DomainCheck_Domain" | grep -v CNAME | awk '{print $NF}');
+  DNSCheck_MX=$(dig +noall +answer mx "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort | sed -e :a -e '$!N; s/\n/ | /; ta');
+
   
   DNSCheck_GlobalServer=$(dig ns +short "$Global_DomainCheck_Domain_TLD" | head -1);
   DNSCheck_Registrar=$(whois -H "$Global_DomainCheck_Domain" | awk 'FNR==8{$1=""; print $0}');                                  # Domain's Registrar
@@ -62,6 +64,14 @@ function DNSCheck_Parent() {                                                    
     fi      
   fi
   print_table
+
+  # MX Section
+  init_table -h0 -m40 -f "DNS Check - MX"
+  if [[ -n "$DNSCheck_MX" ]]; then
+    add_row "[--]" "WWW A Record: $DNSCheck_MX"
+  else
+    add_row -C 1 -T "$Color_Red" "[!!]" "Missing MX Record"
+  fi  
 
 
   # WWW Section
