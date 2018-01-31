@@ -69,7 +69,7 @@ function DNSCheck_Parent() {                                                    
   echo ""
   init_table -h0 -m40 -f "DNS Check - MX"
   if [[ -n "$DNSCheck_MX" ]]; then
-    echo "$DNSCheck_MX" | while read temp_mx; do add_row "[--]" "MX Record: $temp_mx"; done
+    echo "$DNSCheck_MX" | while read -r temp_mx; do add_row "[--]" "MX Record: $temp_mx"; done
     #while read DNSCheck_MX_Temp; do add_row "[--]" "MX Record: $DNSCheck_MX_Temp"; done
     #add_row "[--]" "MX Record: $DNSCheck_MX        "
   else
