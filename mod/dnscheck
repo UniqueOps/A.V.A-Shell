@@ -69,7 +69,7 @@ function DNSCheck_Parent() {                                                    
   echo ""
   init_table -h0 -m40 -f "DNS Check - MX"
   if [[ -n "$DNSCheck_MX" ]]; then
-    add_row "[--]" "WWW A Record: $DNSCheck_MX"
+    add_row "[--]" "MX Record: $DNSCheck_MX        "
   else
     add_row -C 1 -T "$Color_Red" "[!!]" "Missing MX Record"
   fi  
