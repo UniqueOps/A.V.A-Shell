@@ -68,7 +68,7 @@ function DNSCheck_Parent() {                                                    
   echo ""
   init_table -h0 -m40 -f "DNS Check - WWW"
   if [[ -n "$DNSCheck_A_WWW" ]]; then
-    add_row "[--]" "WWW A Record: $DNSCheck_A_WWW TEST TEST TEST TEST TEST"
+    add_row "[--]" "WWW A Record: $DNSCheck_A_WWW TEST TEST"
     add_row -C 1 -T "$Color_Green" "[OK]" "Public IP Check"
     add_row -C 1 -T "$Color_Green" "[OK]" "CNAME Record Check"
   else
