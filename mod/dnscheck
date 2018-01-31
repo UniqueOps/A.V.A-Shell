@@ -10,7 +10,7 @@ function DNSCheck_Parent() {                                                    
   Global_DomainCheck                                                                                                            # Global Domain Check Script
   DNSCheck_A=$(dig +noall +answer "$Global_DomainCheck_Domain" | grep -v CNAME | awk '{print $NF}');
   DNSCheck_A_WWW=$(dig +noall +answer www."$Global_DomainCheck_Domain" | grep -v CNAME | awk '{print $NF}');
-  DNSCheck_MX=$(dig +noall +answer mx "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort | sed -e :a -e '$!N; s/\n/ | /; ta');
+  DNSCheck_MX=$(dig +noall +answer mx "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort | while read DNSCheck_MX_Temp; do add_row "[--]" "MX Record: $DNSCheck_MX_Temp"; done');
 
   
   DNSCheck_GlobalServer=$(dig ns +short "$Global_DomainCheck_Domain_TLD" | head -1);
