@@ -21,8 +21,8 @@ function DNSCheck_Parent() {                                                    
   DNSCheck_NS_Glue_Compare=$(dig @"$DNSCheck_GlobalServer" +noall +additional "$Global_DomainCheck_Domain" | awk -F " " '{print $1}' | awk '{$1=$1}{ print}' | sort);
   DNSCheck_NS_Glue_Count=$(echo "$DNSCheck_NS_Glue" | wc -l);
 
-  echo "DNSCheck_A"
-  echo "DNSCheck_A_WWW"
+  echo "$DNSCheck_A"
+  echo "$DNSCheck_A_WWW"
 
   init_table -h0 -m40 "DNS Check - Information"
   add_row "[--]" "Domain Checked: $Global_DomainCheck_Domain"
