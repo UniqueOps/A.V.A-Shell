@@ -49,18 +49,18 @@
 ################################### Globals ####################################
 ################################################################################
 
-readonly CORE_FILENAME="core.shl"
-readonly CORE_VERSION="1.6.1"
+#readonly CORE_FILENAME="core.shl"
+#readonly CORE_VERSION="1.6.1"
 
 # Codesilo:
-readonly TRITON_REPO_URL="https://codesilo.dimenoc.com/grahaml/triton"
-readonly TRITON_BLOB_URL="${TRITON_REPO_URL}/blob/master"
-readonly TRITON_BLOB_URL_DEV="${TRITON_REPO_URL}/blob/dev"
-readonly TRITON_RAW_URL="${TRITON_REPO_URL}/raw/master"
-readonly TRITON_RAW_URL_DEV="${TRITON_REPO_URL}/raw/dev"
+#readonly TRITON_REPO_URL="https://codesilo.dimenoc.com/grahaml/triton"
+#readonly TRITON_BLOB_URL="${TRITON_REPO_URL}/blob/master"
+#readonly TRITON_BLOB_URL_DEV="${TRITON_REPO_URL}/blob/dev"
+#readonly TRITON_RAW_URL="${TRITON_REPO_URL}/raw/master"
+#readonly TRITON_RAW_URL_DEV="${TRITON_REPO_URL}/raw/dev"
 
-readonly CORE_BLOB_URL="${TRITON_BLOB_URL}/core/core.shl"
-readonly CORE_RAW_URL="${TRITON_RAW_URL}/core/core.shl"
+#readonly CORE_BLOB_URL="${TRITON_BLOB_URL}/core/core.shl"
+#readonly CORE_RAW_URL="${TRITON_RAW_URL}/core/core.shl"
 
 # Error messages
 readonly E_EARG="Required argument is missing."
