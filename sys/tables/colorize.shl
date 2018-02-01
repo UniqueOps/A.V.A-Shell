@@ -1,80 +1,10 @@
 #!/bin/bash
-
-################################################################################
-# colorize() 
-# v1.1.0
-#
-# Contributors:
-# * Graham L. - Level 2 Support Technician - graham.l@hostdime.com
-#
-# Description:
-#
-# Globals:
-# * COLORIZE_RAW_URL
-#
-# Functions:
-# * colorize()
-# * palette()
-# * _parse_color()
-#
-# Dependencies:
-# * core.shl
-################################################################################
-
-################################################################################
-################################### Globals ####################################
-################################################################################
-
-COLORIZE_RAW_URL="${TRITON_RAW_URL}/colorize/colorize.shl"
-
-################################################################################
-################################### Includes ###################################
-################################################################################
-
-if _core_test >/dev/null 2>&1; [ $? != 3 ]
-then
-  source /proc/self/fd/0 <<<"$(< <(curl -ks https://codesilo.dimenoc.com/grahaml/triton/raw/master/core/include_core_lib))"
-fi
-
-################################################################################
-################################## Functions ###################################
-################################################################################
-
-#*******************************************************************************
-# _colorize_test() 
-# v1.0.0
-#
-# Contributors:
-# * Graham L. - Level 2 Support Technician - graham.l@hostdime.com
-#
-# Description:
-# Used to test for the presence of colorize.shl in the current shell.
-#
-# Returns:
-# Returns 3 indicating that the colorize.shl has been sourced into the current
-# shell.
-#
-# Options:
-# None.
-#
-# Arguments:
-# None.
-#
-# Dependencies:
-# None.
-#*******************************************************************************
-
-function _colorize_test()
-{
-  return 3
-}
+# Version 1.1.0
+# Contributors: Graham L.
 
 #*******************************************************************************
 # colorize()
 # v1.2.0
-#
-# Contributors:
-# * Graham L. - Level 2 Support Technician - graham.l@hostdime.com
 #
 # Description:
 # Generates color and formatting escape sequences used to stylize text printed
@@ -273,21 +203,9 @@ function colorize()
 # palette() 
 # v1.0.0
 #
-# Contributors:
-# * Graham L. - Level 2 Support Technician - graham.l@hostdime.com
-#
 # Description:
 # Prints foreground, and background color combinations along with normal, bold,
 # and underlined text in a grid.
-#
-# Returns:
-# Nothing.
-#
-# Options:
-# None.
-#
-# Arguments:
-# None.
 #
 # Dependencies:
 # colorize()
@@ -383,9 +301,6 @@ function palette()
 # _parse_color() 
 # v1.0.0
 #
-# Contributors:
-# * Graham L. - Level 2 Support Technician - graham.l@hostdime.com
-#
 # Description:
 # Used to convert a color name string into the appropriate escape sequence.
 #
@@ -393,9 +308,6 @@ function palette()
 # Outputs a two digit number to STDOUT. The first digit sets the "layer"
 # modified (foreground/text, or background), and the value or "shade" of the 
 # color (normal, or light). The second digit sets the hue.
-#
-# Options:
-# None.
 #
 # Required Arguments:
 # The first argument must be a string containing the color to be parsed.
