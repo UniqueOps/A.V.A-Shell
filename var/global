@@ -3,6 +3,7 @@
 # Contributors: Casey McLaughlin
 
 eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/colors)"                                 # Add Color Module
+eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/sys/tables/colorize.shl)"                    # Add Table Color Module
 eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/sys/tables/format.shl)"                      # Add Table Module
 
 # Basic Server Information
