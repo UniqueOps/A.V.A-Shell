@@ -283,26 +283,6 @@ function human_readable()
   return
 }
 
-################################################################################
-############################## Shell Preparation ###############################
-################################################################################
-
-readonly -f _core_test
-readonly -f printerr 
-readonly -f include 
-readonly -f bytes_to_hr
-readonly -f hr_to_bytes
-readonly -f open_fd
-readonly -f close_fd
-readonly -f is_empty 
-readonly -f is_not_empty
-readonly -f is_file
-readonly -f is_regfile
-readonly -f is_dir
-readonly -f is_symlink
-readonly -f is_command
-readonly -f is_builtin
-
 # Creates aliases for commonly used builtins and commands to avoid unexpected
 # behavior when using them.
 unalias builtin 2>/dev/null
