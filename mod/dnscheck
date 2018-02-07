@@ -4,7 +4,7 @@
 # - Check into TLD Check with hostdime.co.uk
 ## END NOTES
 
-eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"                                                         # Add Global Functions
+#eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"                                                         # Add Global Functions
 
 function DNSCheck_Parent() {                                                                                                    # Generate Nameserver Check Row
   Global_DomainCheck                                                                                                            # Global Domain Check Script
@@ -22,73 +22,95 @@ function DNSCheck_Parent() {                                                    
   DNSCheck_NS_Glue_Compare=$(dig @"$DNSCheck_GlobalServer" +noall +additional "$Global_DomainCheck_Domain" | awk -F " " '{print $1}' | awk '{$1=$1}{ print}' | sort);
   DNSCheck_NS_Glue_Count=$(echo "$DNSCheck_NS_Glue" | wc -l);
 
-  init_table -h0 -m40 -f "DNS Check - Information"
-  add_row "[--]" "Domain Checked: $Global_DomainCheck_Domain"
-  add_row "[--]" "Domain Registrar:$DNSCheck_Registrar"
-  add_row "[--]" "Parent Server: $DNSCheck_GlobalServer"
-  print_table
+  #init_table -h0 -m40 -f "DNS Check - Information"
+  #add_row "[--]" "Domain Checked: $Global_DomainCheck_Domain"
+  echo -e "[--] Domain Checked: $Global_DomainCheck_Domain"
+  #add_row "[--]" "Domain Registrar:$DNSCheck_Registrar"
+  echo -e "[--] Domain Registrar:$DNSCheck_Registrar"
+  #add_row "[--]" "Parent Server: $DNSCheck_GlobalServer"
+  echo -e "[--] Parent Server: $DNSCheck_GlobalServer"
+  #print_table
   echo ""
-  init_table -h0 -m40 -f "DNS Check - Parent"
-  add_row "[--]" "Global Nameservers: $DNSCheck_NS"
+  #init_table -h0 -m40 -f "DNS Check - Parent"
+  #add_row "[--]" "Global Nameservers: $DNSCheck_NS"
+  echo -e "[--] Global Nameservers: $DNSCheck_NS"
   if [[ -n "$DNSCheck_GlobalServer" ]]; then
-    add_row -C 1 -T "$Color_Green" "[OK]" "TLD Parent Check"
+    #add_row -C 1 -T "$Color_Green" "[OK]" "TLD Parent Check"
+    echo -e "[OK] TLD Parent Check"  
   else
-    add_row -C 1 -T "$Color_Red" "[!!]" "Parent Nameservers Missing TLD Information"
+    #add_row -C 1 -T "$Color_Red" "[!!]" "Parent Nameservers Missing TLD Information"
+    echo -e "[!!] Parent Nameservers Missing TLD Information"
   fi
   if [[ "$Global_DomainCheck_Status" == "Invalid" ]]; then
-    add_row -C 1 -T "$Color_Red" "[!!]" "Domain is Invalid"
+    #add_row -C 1 -T "$Color_Red" "[!!]" "Domain is Invalid"
+    echo -e "[!!] Domain is Invalid"
   elif [[ "$Global_DomainCheck_Status" == "Unregistered" ]]; then
-    add_row -C 1 -T "$Color_Red" "[!!]" "Domain is NOT Registered"
+    #add_row -C 1 -T "$Color_Red" "[!!]" "Domain is NOT Registered"
+    echo -e "[!!] Domain is NOT Registered"
   elif [[ "$Global_DomainCheck_Status" == "Registered" ]]; then
-    add_row -C 1 -T "$Color_Green" "[OK]" "Domain Registered"
+    #add_row -C 1 -T "$Color_Green" "[OK]" "Domain Registered"
+    echo -e "[OK] Domain Registered"
     if [[ $DNSCheck_NS != "" ]]; then
       if [ -n "$DNSCheck_NS" ]; then
-        add_row -C 1 -T "$Color_Green" "[OK]" "Global Nameservers Returned"
+        #add_row -C 1 -T "$Color_Green" "[OK]" "Global Nameservers Returned"
+        echo -e "[OK] Global Nameservers Returned"
       else
-        add_row -C 1 -T "$Color_Red" "[!!]" "Global Nameservers Missing"
+        #add_row -C 1 -T "$Color_Red" "[!!]" "Global Nameservers Missing"
+        echo -e "[!!] Global Nameservers Missing"
       fi
     fi
     if [[ -n "$DNSCheck_NS_Glue" ]]; then
       if [[ "$DNSCheck_NS_Compare" == "$DNSCheck_NS_Glue_Compare" ]]; then
         if [[ "$DNSCheck_NS_Count" == "$DNSCheck_NS_Glue_Count" ]]; then
           add_row -C 1 -T "$Color_Green" "[OK]" "Global Nameservers (A Records) Returned"
+          echo -e "[OK] Global Nameservers (A Records) Returned"
         else
-          add_row -C 1 -T "$Color_Red" "[!!]" "Global Nameservers (Glue Records) Incomplete"
+          #add_row -C 1 -T "$Color_Red" "[!!]" "Global Nameservers (Glue Records) Incomplete"
+          echo -e "[!!] Global Nameservers (Glue Records) Incomplete"
         fi
-        add_row -C 1 -T "$Color_Green" "[OK]" "Global Nameservers (Glue Records) Returned"
+        #add_row -C 1 -T "$Color_Green" "[OK]" "Global Nameservers (Glue Records) Returned"
+        echo -e "[OK] Global Nameservers (Glue Records) Returned"
       else
-        add_row -C 1 -T "$Color_Yellow" "[??]" "Global Nameservers (Glue Records) Not All Returned"
+        #add_row -C 1 -T "$Color_Yellow" "[??]" "Global Nameservers (Glue Records) Not All Returned"
+        echo -e "[??] Global Nameservers (Glue Records) Not All Returned"
       fi
     else
-      add_row -C 1 -T "$Color_Red" "[!!]" "Global Nameservers Not Registered"
+      #add_row -C 1 -T "$Color_Red" "[!!]" "Global Nameservers Not Registered"
+      echo -e "[!!] Global Nameservers Not Registered"
     fi      
   fi
-  print_table
+  #print_table
 
   # MX Section
   echo ""
-  init_table -h0 -m40 -f "DNS Check - MX"
+  #init_table -h0 -m40 -f "DNS Check - MX"
   if [[ -n "$DNSCheck_MX" ]]; then
     #temp=$(echo -e "$DNSCheck_MX" | sed -e 's/^/add_row "[--]" "MX Record: /' | sed 's/.*/&"/')
     #echo $temp
     #while read DNSCheck_MX_Temp; do add_row "[--]" "MX Record: $DNSCheck_MX_Temp"; done
-    add_row "[--]" "MX Record: $DNSCheck_MX        "
+    #add_row "[--]" "MX Record: $DNSCheck_MX        "
+    echo -e "[--] MX Record: $DNSCheck_MX"
   else
-    add_row -C 1 -T "$Color_Red" "[!!]" "Missing MX Record"
+    #add_row -C 1 -T "$Color_Red" "[!!]" "Missing MX Record"
+    echo -e "[!!] Missing MX Record"
   fi  
-  print_table
+  #print_table
 
   # WWW Section
   echo ""
-  init_table -h0 -m40 -f "DNS Check - WWW"
+  #init_table -h0 -m40 -f "DNS Check - WWW"
   if [[ -n "$DNSCheck_A_WWW" ]]; then
-    add_row "[--]" "WWW A Record: $DNSCheck_A_WWW  "
-    add_row -C 1 -T "$Color_Green" "[OK]" "Public IP Check"
-    add_row -C 1 -T "$Color_Green" "[OK]" "CNAME Record Check"
+    #add_row "[--]" "WWW A Record: $DNSCheck_A_WWW  "
+    echo -e "[--] WWW A Record: $DNSCheck_A_WWW"
+    #add_row -C 1 -T "$Color_Green" "[OK]" "Public IP Check"
+    echo -e "[OK] Public IP Check"
+    #add_row -C 1 -T "$Color_Green" "[OK]" "CNAME Record Check"
+    echo -e "[OK] CNAME Record Check"
   else
-    add_row -C 1 -T "$Color_Red" "[!!]" "Missing WWW CNAME Record"
+    #add_row -C 1 -T "$Color_Red" "[!!]" "Missing WWW CNAME Record"
+    echo -e "[!!] Missing WWW CNAME Record"
   fi
-  print_table
+  #print_table
   echo "";
 }
 
