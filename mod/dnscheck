@@ -62,7 +62,7 @@ function DNSCheck_Parent() {                                                    
     if [[ -n "$DNSCheck_NS_Glue" ]]; then
       if [[ "$DNSCheck_NS_Compare" == "$DNSCheck_NS_Glue_Compare" ]]; then
         if [[ "$DNSCheck_NS_Count" == "$DNSCheck_NS_Glue_Count" ]]; then
-          add_row -C 1 -T "$Color_Green" "[OK]" "Global Nameservers (A Records) Returned"
+          #add_row -C 1 -T "$Color_Green" "[OK]" "Global Nameservers (A Records) Returned"
           echo -e "[OK] Global Nameservers (A Records) Returned"
         else
           #add_row -C 1 -T "$Color_Red" "[!!]" "Global Nameservers (Glue Records) Incomplete"
