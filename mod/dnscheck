@@ -84,7 +84,7 @@ function DNSCheck_Parent() {                                                    
     add_row "[--]" "Expire: $DNSCheck_SOA_Expire"
     add_row "[--]" "Default TTL: $DNSCheck_SOA_TTL"
   else
-    add_row -C 1 -T "$Color_Red" "[!!]" "Missing SOA Record"
+    add_row -C 1 -T "$Color_Red" "Missing SOA Record"
   fi  
   print_table
 
@@ -97,7 +97,7 @@ function DNSCheck_Parent() {                                                    
     #while read DNSCheck_MX_Temp; do add_row "[--]" "MX Record: $DNSCheck_MX_Temp"; done
     add_row "[--]" "MX Record (Global): $DNSCheck_MX"
   else
-    add_row -C 1 -T "$Color_Red" "[!!]" "Missing MX Record"
+    add_row -C 1 -T "$Color_Red" "Missing MX Record"
   fi  
   print_table
 
@@ -109,7 +109,7 @@ function DNSCheck_Parent() {                                                    
     add_row -C 1 -T "$Color_Green" "[OK]" "Public IP Check"
     add_row -C 1 -T "$Color_Green" "[OK]" "CNAME Record Check"
   else
-    add_row -C 1 -T "$Color_Red" "[!!]" "Missing WWW CNAME Record"
+    add_row -C 1 -T "$Color_Red" "Missing WWW CNAME Record"
   fi
   print_table
   echo "";
