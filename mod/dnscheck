@@ -72,7 +72,7 @@ function DNSCheck_Parent() {                                                    
     #temp=$(echo -e "$DNSCheck_MX" | sed -e 's/^/add_row "[--]" "MX Record: /' | sed 's/.*/&"/')
     #echo $temp
     #while read DNSCheck_MX_Temp; do add_row "[--]" "MX Record: $DNSCheck_MX_Temp"; done
-    add_row "[--]" "MX Record: $DNSCheck_MX        "
+    add_row "[--]" "MX Record (Global): $DNSCheck_MX"
   else
     add_row -C 1 -T "$Color_Red" "[!!]" "Missing MX Record"
   fi  
@@ -82,7 +82,7 @@ function DNSCheck_Parent() {                                                    
   echo ""
   init_table -h0 -m40 -f "DNS Check - WWW"
   if [[ -n "$DNSCheck_A_WWW" ]]; then
-    add_row "[--]" "WWW A Record: $DNSCheck_A_WWW  "
+    add_row "[--]" "WWW A Record (Global): $DNSCheck_A_WWW"
     add_row -C 1 -T "$Color_Green" "[OK]" "Public IP Check"
     add_row -C 1 -T "$Color_Green" "[OK]" "CNAME Record Check"
   else
