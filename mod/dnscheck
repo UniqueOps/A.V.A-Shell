@@ -76,7 +76,7 @@ function DNSCheck_Parent() {                                                    
   else
     add_row -C 1 -T "$Color_Red" "[!!]" "Missing MX Record"
   fi  
-  #print_table
+  print_table
 
   # WWW Section
   echo ""
