@@ -11,7 +11,6 @@ function DNSCheck_Parent() {                                                    
   DNSCheck_A=$(dig +noall +answer "$Global_DomainCheck_Domain" | grep -v CNAME | awk '{print $NF}');
   DNSCheck_A_WWW=$(dig +noall +answer www."$Global_DomainCheck_Domain" | grep -v CNAME | awk '{print $NF}');
   DNSCheck_MX=$(dig +noall +answer mx "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort);
-
   
   DNSCheck_GlobalServer=$(dig ns +short "$Global_DomainCheck_Domain_TLD" | head -1);
   DNSCheck_Registrar=$(whois -H "$Global_DomainCheck_Domain" | awk 'FNR==8{$1=""; print $0}');                                  # Domain's Registrar
@@ -63,6 +62,30 @@ function DNSCheck_Parent() {                                                    
       add_row -C 1 -T "$Color_Red" "[!!]" "Global Nameservers Not Registered"
     fi      
   fi
+  print_table
+
+  # SOA Section
+  DNSCheck_SOA_Check=$(dig +short soa "$Global_DomainCheck_Domain");
+  DNSCheck_SOA_PrimaryNS=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $1}');
+  DNSCheck_SOA_Hostmaster=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $2}');
+  DNSCheck_SOA_Serial=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $3}');
+  DNSCheck_SOA_Refresh=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $4}');
+  DNSCheck_SOA_Retry=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $5}');
+  DNSCheck_SOA_Expire=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $6}');
+  DNSCheck_SOA_TTL=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $7}');
+  echo ""
+  init_table -h0 -m40 -f "DNS Check - SOA"
+  if [[ -n "$DNSCheck_SOA_Check" ]]; then
+    add_row "[--]" "Primary Nameserver: $DNSCheck_SOA_PrimaryNS"
+    add_row "[--]" "Hostmaster: $DNSCheck_SOA_Hostmaster"
+    add_row "[--]" "Serial #: $DNSCheck_SOA_Serial"
+    add_row "[--]" "Refresh: $DNSCheck_SOA_Refresh"
+    add_row "[--]" "Retry: $DNSCheck_SOA_Retry"
+    add_row "[--]" "Expire: $DNSCheck_SOA_Expire"
+    add_row "[--]" "Default TTL: $DNSCheck_SOA_TTL"
+  else
+    add_row -C 1 -T "$Color_Red" "[!!]" "Missing SOA Record"
+  fi  
   print_table
 
   # MX Section
