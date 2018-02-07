@@ -4,7 +4,7 @@
 # - Check into TLD Check with hostdime.co.uk
 ## END NOTES
 
-#eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"                                                         # Add Global Functions
+eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"                                                         # Add Global Functions
 
 function DNSCheck_Parent() {                                                                                                    # Generate Nameserver Check Row
   Global_DomainCheck                                                                                                            # Global Domain Check Script
