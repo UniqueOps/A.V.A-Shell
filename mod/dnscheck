@@ -98,7 +98,7 @@ function DNSCheck_Parent() {                                                    
     else
       add_row -C 1 -T "$Color_Yellow" "[??]" "Retry Interval Recommendation: 7200 Seconds (2 Hours)"
     fi
-    if [[ "$DNSCheck_SOA_Retry" < "$DNSCheck_SOA_Refresh" ]]; then
+    if [[ "$DNSCheck_SOA_Retry" > "$DNSCheck_SOA_Refresh" ]]; then
       add_row -C 1 -T "$Color_Green" "[OK]" "Retry Interval Less Than Refresh Interval"
     else
       add_row -C 1 -T "$Color_Yellow" "[??]" "Retry Interval Recommended Less Than $DNSCheck_SOA_Refresh"
