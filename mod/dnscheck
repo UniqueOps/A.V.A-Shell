@@ -8,6 +8,15 @@ eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"     
 
 function DNSCheck_Parent() {                                                                                                    # Generate Nameserver Check Row
   Global_DomainCheck                                                                                                            # Global Domain Check Script
+
+  init_table -h0 -m40 -f "DNS Check - Script Status"
+  add_row -C 1 -T "$Color_Red" "[Incomplete]" "Parent Section"
+  add_row -C 1 -T "$Color_Red" "[Incomplete]" "Nameserver Section"
+  add_row -C 1 -T "$Color_Yellow" "[Pending]" "SOA Section"
+  add_row -C 1 -T "$Color_Red" "[Incomplete]" "MX Section"
+  add_row -C 1 -T "$Color_Green" "[Complete]" "WWW Section"
+  print_table
+
   DNSCheck_A=$(dig +noall +answer "$Global_DomainCheck_Domain" | grep -v CNAME | awk '{print $NF}');
   DNSCheck_A_WWW=$(dig +noall +answer www."$Global_DomainCheck_Domain" | grep -v CNAME | awk '{print $NF}');
   DNSCheck_MX=$(dig +noall +answer mx "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort);
