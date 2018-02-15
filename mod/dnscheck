@@ -122,3 +122,4 @@ function DNSCheck_Parent() {                                                    
 
 DNSCheck_Parent
 echo ""
+echo "$DNSCheck_NS" | grep "$DNSCheck_SOA_PrimaryNS"
