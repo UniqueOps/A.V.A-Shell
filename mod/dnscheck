@@ -83,12 +83,16 @@ function DNSCheck_Parent() {                                                    
     add_row "[--]" "Retry: $DNSCheck_SOA_Retry"
     add_row "[--]" "Expire: $DNSCheck_SOA_Expire"
     add_row "[--]" "Default TTL: $DNSCheck_SOA_TTL"
-    #if [[ -n $(echo "$DNSCheck_NS" | grep "$DNSCheck_SOA_PrimaryNS") ]]; then
-    if [[ -n $(echo "$DNSCheck_NS" | grep "ns1.google.com") ]]; then
+    if [[ -n $(echo "$DNSCheck_NS" | grep "$DNSCheck_SOA_PrimaryNS") ]]; then
       add_row -C 1 -T "$Color_Green" "[OK]" "Primary Name Server Found In Your Global Nameservers"
     else
       add_row -C 1 -T "$Color_Yellow" "[??]" "Primary Name Server Not Found In Your Global Nameservers"
     fi
+    if [[ "$DNSCheck_SOA_Retry" -ge 600 -a "$DNSCheck_SOA_Retry" -le 3200 ]]; then
+      add_row -C 1 -T "$Color_Green" "[OK]" "Retry uses a interval between 600-3200 seconds"
+    else
+      add_row -C 1 -T "$Color_Yellow" "[??]" "Retry Interval Recommendation Is Between 600-3200 Seconds"
+    fi    
   else
     add_row -C 1 -T "$Color_Red" "Missing SOA Record"
   fi  
@@ -123,4 +127,3 @@ function DNSCheck_Parent() {                                                    
 
 DNSCheck_Parent
 echo ""
-echo "$DNSCheck_NS" | grep "$DNSCheck_SOA_PrimaryNS"
