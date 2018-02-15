@@ -88,11 +88,21 @@ function DNSCheck_Parent() {                                                    
     else
       add_row -C 1 -T "$Color_Yellow" "[??]" "Primary Name Server Not Found In Your Global Nameservers"
     fi
-    if [[ "$DNSCheck_SOA_Retry" -ge 600 && "$DNSCheck_SOA_Retry" -le 3200 ]]; then
-      add_row -C 1 -T "$Color_Green" "[OK]" "Retry uses a interval between 600-3200 seconds"
+    if [[ "$DNSCheck_SOA_Refresh" != 86400 ]]; then
+      add_row -C 1 -T "$Color_Green" "[OK]" "Refresh Interval Set to Recommended Value"
     else
-      add_row -C 1 -T "$Color_Yellow" "[??]" "Retry Interval Recommendation Is Between 600-3200 Seconds"
+      add_row -C 1 -T "$Color_Yellow" "[??]" "Refresh Interval Recommendation: 86400 Seconds (24 Hours)"
     fi    
+    if [[ "$DNSCheck_SOA_Retry" -ge 600 && "$DNSCheck_SOA_Retry" -le 3200 ]]; then
+      add_row -C 1 -T "$Color_Green" "[OK]" "Retry Interval Set Between Recommended Value"
+    else
+      add_row -C 1 -T "$Color_Yellow" "[??]" "Retry Interval Recommendation: 600-3200 Seconds"
+    fi
+    if [[ "$DNSCheck_SOA_Retry" < "$DNSCheck_SOA_Refresh" ]]; then
+      add_row -C 1 -T "$Color_Green" "[OK]" "Retry Interval Less Than Refresh Interval"
+    else
+      add_row -C 1 -T "$Color_Yellow" "[??]" "Retry Interval Recommended Less Than $DNSCheck_SOA_Refresh"
+    fi
   else
     add_row -C 1 -T "$Color_Red" "Missing SOA Record"
   fi  
