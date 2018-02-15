@@ -16,7 +16,8 @@ function DNSCheck_Parent() {                                                    
   add_row -C 1 -T "$Color_Red" "[Incomplete]" "MX Section"
   add_row -C 1 -T "$Color_Green" "[Complete]" "WWW Section"
   print_table
-
+  echo ""
+  
   DNSCheck_A=$(dig +noall +answer "$Global_DomainCheck_Domain" | grep -v CNAME | awk '{print $NF}');
   DNSCheck_A_WWW=$(dig +noall +answer www."$Global_DomainCheck_Domain" | grep -v CNAME | awk '{print $NF}');
   DNSCheck_MX=$(dig +noall +answer mx "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort);
