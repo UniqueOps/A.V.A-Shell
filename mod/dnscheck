@@ -83,7 +83,7 @@ function DNSCheck_Parent() {                                                    
     add_row "[--]" "Retry: $DNSCheck_SOA_Retry"
     add_row "[--]" "Expire: $DNSCheck_SOA_Expire"
     add_row "[--]" "Default TTL: $DNSCheck_SOA_TTL"
-    if [[ -n $(echo "$DNSCheck_NS" | grep "$DNSCheck_SOA_PrimaryNS") ]]
+    if [[ -n $(echo "$DNSCheck_NS" | grep "$DNSCheck_SOA_PrimaryNS") ]]; then
       add_row -C 1 -T "$Color_Green" "[OK]" "Primary Name Server Found In Your Global Nameservers"
     else
       add_row -C 1 -T "$Color_Yellow" "[??]" "Primary Name Server Not Found In Your Global Nameservers"
