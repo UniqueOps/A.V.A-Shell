@@ -95,9 +95,21 @@ function DNSCheck_Parent() {                                                    
     add_row "[--]" "Expire: $DNSCheck_SOA_Expire"
     add_row "[--]" "Minimum TTL: $DNSCheck_SOA_TTL"
     export IFS=" | "
-    for nameserver in $DNSCheck_NS; do
-      add_row -C 1 -T "$Color_Yellow" "[OK]" "$nameserver"    
+    for DNSCheck_NS_Temp in $DNSCheck_NS; do
+      DNSCheck_NS_Temp=$(dig +short soa @"$DNSCheck_NS_Temp" "$Global_DomainCheck_Domain" | awk -F " " '{print $3}')
+      if [[ "$DNSCheck_NS_Temp" == "$DNSCheck_SOA_Serial" ]]; then
+        if [[ "$DNSCheck_NS_Temp_Status" != "Failed" ]]; then
+          DNSCheck_NS_Temp_Status="Success"
+        fi        
+      else
+        DNSCheck_NS_Temp_Status="Failed"
+      fi
     done
+    if [[ "$DNSCheck_NS_Temp_Status" != "Success" ]]; then
+      add_row -C 1 -T "$Color_Green" "[OK]" "All Nameservers Return Same Serial #"
+    else
+      add_row -C 1 -T "$Color_Yellow" "[??]" "Nameservers Don't Return Same Serial #"
+    fi   
     if [[ -n $(echo "$DNSCheck_NS" | grep "$DNSCheck_SOA_PrimaryNS") ]]; then
       add_row -C 1 -T "$Color_Green" "[OK]" "Primary Name Server Listed In Global Nameservers"
     else
