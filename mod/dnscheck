@@ -100,7 +100,6 @@ function DNSCheck_Parent() {                                                    
       add_row -C 1 -T "$Color_Yellow" "[??]" "Primary Name Server Not Found In Your Global Nameservers"
     fi
     if [[ ${#DNSCheck_SOA_Serial} == 10 ]]; then
-      add_row -C 1 -T "$Color_Green" "[OK]" "Passed Serial Format Count Check"
       if [[ "$DNSCheck_SOA_Serial_Format" -ge 19 && "$DNSCheck_SOA_Serial_Format" -le 20 ]]; then
         add_row -C 1 -T "$Color_Green" "[OK]" "Serial # Appears To Use Recommended Format: YYYYMMDDnn"
       else
