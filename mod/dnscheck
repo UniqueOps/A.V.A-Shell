@@ -12,7 +12,7 @@ function DNSCheck_Parent() {                                                    
   init_table -h0 -m40 -f "DNS Check - Script Status"
   add_row -C 1 -T "$Color_Red" "[Incomplete]" "Parent Section"
   add_row -C 1 -T "$Color_Red" "[Incomplete]" "Nameserver Section"
-  add_row -C 1 -T "$Color_Yellow" "[Pending]" "SOA Section"
+  add_row -C 1 -T "$Color_Green" "[Complete]" "SOA Section"
   add_row -C 1 -T "$Color_Red" "[Incomplete]" "MX Section"
   add_row -C 1 -T "$Color_Green" "[Complete]" "WWW Section"
   print_table
