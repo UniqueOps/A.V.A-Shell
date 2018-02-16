@@ -97,7 +97,9 @@ function DNSCheck_Parent() {                                                    
     export IFS=" | "
     for DNSCheck_NS_Temp in $DNSCheck_NS; do
       DNSCheck_NS_Temp=$(dig +short soa @"$DNSCheck_NS_Temp" "$Global_DomainCheck_Domain" | awk -F " " '{print $3}')
+      add_row "[--]" "Serial #: DNSCheck_NS_Temp"
       if [[ "$DNSCheck_NS_Temp" == "$DNSCheck_SOA_Serial" ]]; then
+        add_row "[--]" "Serial #: Passed Check"
         if [[ "$DNSCheck_NS_Temp_Status" != "Failed" ]]; then
           DNSCheck_NS_Temp_Status="Success"
         fi        
