@@ -94,6 +94,10 @@ function DNSCheck_Parent() {                                                    
     add_row "[--]" "Retry: $DNSCheck_SOA_Retry"
     add_row "[--]" "Expire: $DNSCheck_SOA_Expire"
     add_row "[--]" "Minimum TTL: $DNSCheck_SOA_TTL"
+    export IFS=" | "
+    for nameserver in $DNSCheck_NS; do
+      add_row -C 1 -T "$Color_Yellow" "[OK]" "$nameserver"    
+    done
     if [[ -n $(echo "$DNSCheck_NS" | grep "$DNSCheck_SOA_PrimaryNS") ]]; then
       add_row -C 1 -T "$Color_Green" "[OK]" "Primary Name Server Listed In Global Nameservers"
     else
