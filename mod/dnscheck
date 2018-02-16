@@ -79,6 +79,7 @@ function DNSCheck_Parent() {                                                    
   DNSCheck_SOA_PrimaryNS=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $1}');
   DNSCheck_SOA_Hostmaster=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $2}');
   DNSCheck_SOA_Serial=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $3}');
+  DNSCheck_SOA_Serial_Format=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $3}' | head -c2);
   DNSCheck_SOA_Refresh=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $4}');
   DNSCheck_SOA_Retry=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $5}');
   DNSCheck_SOA_Expire=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $6}');
@@ -166,4 +167,6 @@ function DNSCheck_Parent() {                                                    
 }
 
 DNSCheck_Parent
+echo ""
+echo $DNSCheck_SOA_Serial_Format
 echo ""
