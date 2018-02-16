@@ -113,6 +113,11 @@ function DNSCheck_Parent() {                                                    
     else
       add_row -C 1 -T "$Color_Yellow" "[??]" "Retry Interval Recommended Less Than $DNSCheck_SOA_Refresh"
     fi
+    if [[ "$DNSCheck_SOA_Expire" =< 2419200 ]]; then
+      add_row -C 1 -T "$Color_Green" "[OK]" "Expire Interval Within 2419200 (672 Hours)"
+    else
+      add_row -C 1 -T "$Color_Yellow" "[??]" "Expire Interval Higher Than 2419200 (672 Hours)"
+    fi    
   else
     add_row -C 1 -T "$Color_Red" "Missing SOA Record"
   fi  
