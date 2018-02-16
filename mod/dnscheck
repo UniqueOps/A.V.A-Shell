@@ -100,8 +100,13 @@ function DNSCheck_Parent() {                                                    
     fi
     if [[ ${#DNSCheck_SOA_Serial} == 10 ]]; then
       add_row -C 1 -T "$Color_Green" "[OK]" "Passed Serial Format Count Check"
+      if [[ "$DNSCheck_SOA_Serial" -ge 19 && "$DNSCheck_SOA_Serial" -le 20 ]]; then
+        add_row -C 1 -T "$Color_Green" "[OK]" "Serial # Appears To Use Recommended Format: YYYYMMDDnn"
+      else
+        add_row -C 1 -T "$Color_Yellow" "[??]" "Serial # Format Recommended: YYYYMMDDnn"
+      fi
     else
-      add_row -C 1 -T "$Color_Yellow" "[??]" "Serial Format Recommended: YYYYMMDDnn"
+      add_row -C 1 -T "$Color_Yellow" "[??]" "Serial # Format Recommended: YYYYMMDDnn"
     fi
     if [[ "$DNSCheck_SOA_Refresh" != 86400 ]]; then
       add_row -C 1 -T "$Color_Green" "[OK]" "Refresh Interval Set to Recommended Value"
