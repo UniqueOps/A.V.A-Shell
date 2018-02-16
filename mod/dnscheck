@@ -118,10 +118,10 @@ function DNSCheck_Parent() {                                                    
     else
       add_row -C 1 -T "$Color_Yellow" "[??]" "Expire Interval Higher Than 2419200 (672 Hours)"
     fi
-    if [[ "$DNSCheck_SOA_TTL" -ge 3600 && "$DNSCheck_SOA_TTL" -le 10800 ]]; then
-      add_row -C 1 -T "$Color_Green" "[OK]" "Negative Cache Interval Between 3600-10800 (1-3 Hours)"
+    if [[ "$DNSCheck_SOA_TTL" -ge 180 && "$DNSCheck_SOA_TTL" -le 172800 ]]; then
+      add_row -C 1 -T "$Color_Green" "[OK]" "Negative Cache Interval Between 180-172800 (3 Min – 2 Days)"
     else
-      add_row -C 1 -T "$Color_Yellow" "[??]" "Negative Cache Recommended Between 3600-10800 (1-3 Hours)"
+      add_row -C 1 -T "$Color_Yellow" "[??]" "Negative Cache Recommended Between 180-172800 (3 Min – 2 Days)"
     fi    
   else
     add_row -C 1 -T "$Color_Red" "Missing SOA Record"
