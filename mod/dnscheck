@@ -92,7 +92,7 @@ function DNSCheck_Parent() {                                                    
     add_row "[--]" "Refresh: $DNSCheck_SOA_Refresh"
     add_row "[--]" "Retry: $DNSCheck_SOA_Retry"
     add_row "[--]" "Expire: $DNSCheck_SOA_Expire"
-    add_row "[--]" "Default TTL: $DNSCheck_SOA_TTL"
+    add_row "[--]" "Negative Cache: $DNSCheck_SOA_TTL"
     if [[ -n $(echo "$DNSCheck_NS" | grep "$DNSCheck_SOA_PrimaryNS") ]]; then
       add_row -C 1 -T "$Color_Green" "[OK]" "Primary Name Server Found In Your Global Nameservers"
     else
@@ -117,6 +117,11 @@ function DNSCheck_Parent() {                                                    
       add_row -C 1 -T "$Color_Green" "[OK]" "Expire Interval Within 2419200 (672 Hours)"
     else
       add_row -C 1 -T "$Color_Yellow" "[??]" "Expire Interval Higher Than 2419200 (672 Hours)"
+    fi
+    if [[ "$DNSCheck_SOA_TTL" -ge 3600 && "$DNSCheck_SOA_TTL" -le 10800 ]]; then
+      add_row -C 1 -T "$Color_Green" "[OK]" "Negative Cache Interval Between 3600-10800 (1-3 Hours)"
+    else
+      add_row -C 1 -T "$Color_Yellow" "[??]" "Negative Cache Recommended Between 3600-10800 (1-3 Hours)"
     fi    
   else
     add_row -C 1 -T "$Color_Red" "Missing SOA Record"
