@@ -167,5 +167,3 @@ function DNSCheck_Parent() {                                                    
 
 DNSCheck_Parent
 echo ""
-echo $DNSCheck_SOA_Serial_Format
-echo ""
