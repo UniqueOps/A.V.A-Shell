@@ -199,5 +199,5 @@ function DNSCheck_WWW() {
   print_table
 }
 
-DNSCheck_FULL
+DNSCheck_Full
 echo ""
