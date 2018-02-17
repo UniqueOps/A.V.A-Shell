@@ -18,7 +18,6 @@ function DNSCheck_Full() {                                                      
   if [[ "$Global_DomainCheck_Domain" == "" ]]; then
     Global_DomainCheck                                                                                                            # Global Domain Check Script
   fi
-  echo ""
   DNSCheck_Parent
   DNSCheck_NS
   DNSCheck_SOA
@@ -188,6 +187,7 @@ function DNSCheck_WWW() {
   if [[ "$Global_DomainCheck_Domain" == "" ]]; then                                
     Global_DomainCheck
   fi
+  echo ""
   DNSCheck_A_WWW=$(dig +noall +answer www."$Global_DomainCheck_Domain" | grep -v CNAME | awk '{print $NF}');
   init_table -h0 -m40 -f "DNS Check - WWW"
   if [[ -n "$DNSCheck_A_WWW" ]]; then
@@ -198,7 +198,7 @@ function DNSCheck_WWW() {
     add_row -C 1 -T "$Color_Red" "Missing WWW CNAME Record"
   fi
   print_table
+  echo ""
 }
 
 DNSCheck_Full
-echo ""
