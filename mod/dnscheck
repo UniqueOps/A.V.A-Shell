@@ -13,7 +13,6 @@ add_row -C 1 -T "$Color_Green" "[Complete]" "SOA Section"
 add_row -C 1 -T "$Color_Red" "[Incomplete]" "MX Section"
 add_row -C 1 -T "$Color_Green" "[Complete]" "WWW Section"
 print_table
-echo ""
 
 function DNSCheck_Full() {                                                                                                    # Generate Nameserver Check Row
   if [[ -n "$Global_DomainCheck_Domain" ]]; then
