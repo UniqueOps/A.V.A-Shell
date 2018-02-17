@@ -170,7 +170,7 @@ function DNSCheck_SOA() {
   print_table
 }
 function DNSCheck_MX() {
-  if [[ -n "$Global_DomainCheck_Domain" ]]; then
+  if [[ "$Global_DomainCheck_Domain" == "" ]]; then
     Global_DomainCheck
   fi
   DNSCheck_MX=$(dig +noall +answer mx "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort);
