@@ -191,7 +191,6 @@ function DNSCheck_WWW() {
     Global_DomainCheck
   fi
   DNSCheck_A_WWW=$(dig +noall +answer www."$Global_DomainCheck_Domain" | grep -v CNAME | awk '{print $NF}');
-  echo ""
   init_table -h0 -m40 -f "DNS Check - WWW"
   if [[ -n "$DNSCheck_A_WWW" ]]; then
     add_row "[--]" "WWW A Record (Global): $DNSCheck_A_WWW"
@@ -201,7 +200,6 @@ function DNSCheck_WWW() {
     add_row -C 1 -T "$Color_Red" "Missing WWW CNAME Record"
   fi
   print_table
-  echo "";
 }
 
 DNSCheck_WWW
