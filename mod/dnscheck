@@ -86,7 +86,7 @@ function DNSCheck_NS() {
   fi
 }
 function DNSCheck_SOA() {
-  if [[ -n "$Global_DomainCheck_Domain" ]]; then
+  if [[ "$Global_DomainCheck_Domain" == "" ]]; then
     Global_DomainCheck
   fi
   DNSCheck_NS=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');  # Global Name Servers 1
@@ -99,7 +99,6 @@ function DNSCheck_SOA() {
   DNSCheck_SOA_Retry=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $5}');
   DNSCheck_SOA_Expire=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $6}');
   DNSCheck_SOA_TTL=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $7}');
-  echo ""
   init_table -h0 -m40 -f "DNS Check - SOA"
   if [[ -n "$DNSCheck_SOA_Check" ]]; then
     add_row "[--]" "Primary Nameserver: $DNSCheck_SOA_PrimaryNS"
@@ -201,5 +200,5 @@ function DNSCheck_WWW() {
   print_table
 }
 
-DNSCheck_MX
+DNSCheck_SOA
 echo ""
