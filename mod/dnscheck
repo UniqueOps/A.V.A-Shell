@@ -18,6 +18,7 @@ function DNSCheck_Full() {                                                      
   if [[ "$Global_DomainCheck_Domain" == "" ]]; then
     Global_DomainCheck                                                                                                            # Global Domain Check Script
   fi
+  echo ""
   DNSCheck_Parent
   DNSCheck_NS
   DNSCheck_SOA
