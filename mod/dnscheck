@@ -188,7 +188,7 @@ function DNSCheck_MX() {
   print_table
 }
 function DNSCheck_WWW() {
-  if [[ -n "$Global_DomainCheck_Domain" ]]; then                                
+  if [[ "$Global_DomainCheck_Domain" == "" ]]; then                                
     Global_DomainCheck
   fi
   DNSCheck_A_WWW=$(dig +noall +answer www."$Global_DomainCheck_Domain" | grep -v CNAME | awk '{print $NF}');
