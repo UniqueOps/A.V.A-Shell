@@ -87,6 +87,9 @@ function DNSCheck_NS() {
   fi
 }
 function DNSCheck_SOA() {
+  if [[ -n "$Global_DomainCheck_Domain" ]]; then
+    Global_DomainCheck
+  fi
   DNSCheck_NS=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');  # Global Name Servers 1
   DNSCheck_SOA_Check=$(dig +short soa "$Global_DomainCheck_Domain");
   DNSCheck_SOA_PrimaryNS=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $1}');
@@ -97,9 +100,6 @@ function DNSCheck_SOA() {
   DNSCheck_SOA_Retry=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $5}');
   DNSCheck_SOA_Expire=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $6}');
   DNSCheck_SOA_TTL=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $7}');
-  if [[ -n "$Global_DomainCheck_Domain" ]]; then
-    Global_DomainCheck
-  fi
   echo ""
   init_table -h0 -m40 -f "DNS Check - SOA"
   if [[ -n "$DNSCheck_SOA_Check" ]]; then
@@ -171,10 +171,10 @@ function DNSCheck_SOA() {
   print_table
 }
 function DNSCheck_MX() {
-  DNSCheck_MX=$(dig +noall +answer mx "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort);
   if [[ -n "$Global_DomainCheck_Domain" ]]; then
     Global_DomainCheck
   fi
+  DNSCheck_MX=$(dig +noall +answer mx "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort);
   echo ""
   init_table -h0 -m40 -f "DNS Check - MX"
   if [[ -n "$DNSCheck_MX" ]]; then
@@ -188,10 +188,10 @@ function DNSCheck_MX() {
   print_table
 }
 function DNSCheck_WWW() {
-  DNSCheck_A_WWW=$(dig +noall +answer www."$Global_DomainCheck_Domain" | grep -v CNAME | awk '{print $NF}');
   if [[ -n "$Global_DomainCheck_Domain" ]]; then                                
     Global_DomainCheck
   fi
+  DNSCheck_A_WWW=$(dig +noall +answer www."$Global_DomainCheck_Domain" | grep -v CNAME | awk '{print $NF}');
   echo ""
   init_table -h0 -m40 -f "DNS Check - WWW"
   if [[ -n "$DNSCheck_A_WWW" ]]; then
