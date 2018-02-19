@@ -178,17 +178,17 @@ function DNSCheck_MX() {
   init_table -h0 -m40 -f "DNS Check - MX"
   if [[ -n "$DNSCheck_MX" ]]; then
     add_row "[--]" "MX Record (Global): $DNSCheck_MX"
-    export IFS=" | "
-    for DNSCheck_MX_Temp in $DNSCheck_MX; do
-      DNSCheck_MX_Temp=$(dig +noall +answer mx @"$DNSCheck_MX_Temp" "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort)
-      if [[ "$DNSCheck_MX_Temp" == "$DNSCheck_MX" ]]; then
-        if [[ "$DNSCheck_MX_Temp_Status" != "Failed" ]]; then
-          DNSCheck_MX_Temp_Status="Success"
-        fi        
-      else
-        DNSCheck_MX_Temp_Status="Failed"
-      fi
-    done    
+    #export IFS=" | "
+    #for DNSCheck_MX_Temp in $DNSCheck_MX; do
+     # DNSCheck_MX_Temp=$(dig +noall +answer mx @"$DNSCheck_MX_Temp" "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort)
+      #if [[ "$DNSCheck_MX_Temp" == "$DNSCheck_MX" ]]; then
+       # if [[ "$DNSCheck_MX_Temp_Status" != "Failed" ]]; then
+        #  DNSCheck_MX_Temp_Status="Success"
+        #fi        
+      #else
+      #  DNSCheck_MX_Temp_Status="Failed"
+      #fi
+    #done    
     if [[ "$DNSCheck_MX_Temp_Status" == "Success" ]]; then
       add_row -C 1 -T "$Color_Green" "[OK]" "All Nameservers Return Same MX Records"
     else
