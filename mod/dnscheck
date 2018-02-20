@@ -181,8 +181,6 @@ function DNSCheck_MX() {
     #DNSCheck_MX_Short=$(echo "$DNSCheck_MX" | grep "alt1.aspmx.l.google.com");
     if [[ -n "$(echo "$DNSCheck_MX" | grep "alt1.aspmx.l.google.com")" ]]; then
      DNSCheck_MX_Short="G Suite"
-    elif [[ -n "$(echo "$DNSCheck_MX" | grep "$Global_DomainCheck_Domain")" ]]; then
-     DNSCheck_MX_Short="Local Mail Exchanger"
     else
      DNSCheck_MX_Short="$DNSCheck_MX"
     fi
@@ -204,12 +202,16 @@ function DNSCheck_MX() {
     else
       add_row -C 1 -T "$Color_Yellow" "[??]" "Nameservers Don't Return Same MX Records"
     fi
-    DNSCheck_MX_Count=$(echo "${DNSCheck_MX}" | tr -cd ' | ' | wc -c);
-    if [[ "$DNSCheck_MX_Count" > 1 ]]; then
-      add_row -C 1 -T "$Color_Green" "[OK]" "Single MX Record Not Detected"
+    if [[ -n "$(echo "$DNSCheck_MX" | grep "$Global_DomainCheck_Domain")" ]]; then
+      add_row -C 1 -T "$Color_Green" "[OK]" "Local Mail Exchange Detected"
     else
-      add_row -C 1 -T "$Color_Yellow" "[??]" "Single MX Record Detected"
-    fi    
+      DNSCheck_MX_Count=$(echo "${DNSCheck_MX}" | tr -cd ' | ' | wc -c);
+      if [[ "$DNSCheck_MX_Count" > 1 ]]; then
+        add_row -C 1 -T "$Color_Green" "[OK]" "Single MX Record Not Detected"
+      else
+        add_row -C 1 -T "$Color_Yellow" "[??]" "Single MX Record Detected"
+      fi
+    fi
   else
     add_row -C 1 -T "$Color_Red" "Missing MX Record"
   fi
