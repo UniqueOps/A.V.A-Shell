@@ -111,7 +111,9 @@ function DNSCheck_SOA() {
     export IFS=" | "
     DNSCheck_NS=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');  # Global Name Servers 1
     for DNSCheck_NS_Temp in $DNSCheck_NS; do
+      add_row "[--]" "$DNSCheck_NS_Temp"
       DNSCheck_NS_Temp=$(dig +short soa @"$DNSCheck_NS_Temp" "$Global_DomainCheck_Domain" | awk -F " " '{print $3}')
+      add_row "[--]" "$DNSCheck_NS_Temp"
       if [[ "$DNSCheck_NS_Temp" == "$DNSCheck_SOA_Serial" ]]; then
         if [[ "$DNSCheck_NS_Temp_Status" != "Failed" ]]; then
           DNSCheck_NS_Temp_Status="Success"
@@ -182,8 +184,9 @@ function DNSCheck_MX() {
     export IFS=" | "
     DNSCheck_NS=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');
     for DNSCheck_MX_Temp in $DNSCheck_NS; do
+      add_row "[--]" "$DNSCheck_MX_Temp"
       DNSCheck_MX_Temp=$(dig +noall +answer mx @"$DNSCheck_NS_Temp" "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort | sed -e :a -e '$!N; s/\n/ | /; ta')
-      add_row "[--]" "MX Record (Test): $DNSCheck_MX_Temp"
+      add_row "[--]" "$DNSCheck_MX_Temp"
       if [[ "$DNSCheck_MX_Temp" == "$DNSCheck_MX" ]]; then
         if [[ "$DNSCheck_MX_Temp_Status" != "Failed" ]]; then
           DNSCheck_MX_Temp_Status="Success"
