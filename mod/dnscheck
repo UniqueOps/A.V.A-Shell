@@ -94,8 +94,8 @@ function DNSCheck_SOA() {
   DNSCheck_SOA_Check=$(dig +short soa "$Global_DomainCheck_Domain");
   init_table -h0 -m40 -f "DNS Check - SOA"
   if [[ -n "$DNSCheck_SOA_Check" ]]; then
-    DNSCheck_SOA_PrimaryNS=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $1}');
-    DNSCheck_SOA_Hostmaster=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $2}');
+    DNSCheck_SOA_PrimaryNS=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $1}' | sed s'/[.]$//');
+    DNSCheck_SOA_Hostmaster=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $2}' | sed s'/[.]$//');
     DNSCheck_SOA_Serial=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $3}');
     DNSCheck_SOA_Refresh=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $4}');
     DNSCheck_SOA_Retry=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $5}');
@@ -111,9 +111,7 @@ function DNSCheck_SOA() {
     export IFS=" | "
     DNSCheck_NS=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed s'/[.]$//' | sed -e :a -e '$!N; s/\n/ | /; ta');
     for DNSCheck_NS_Temp in $DNSCheck_NS; do
-      add_row "[--]" "$DNSCheck_NS_Temp"
       DNSCheck_NS_Temp=$(dig +short soa @"$DNSCheck_NS_Temp" "$Global_DomainCheck_Domain" | awk -F " " '{print $3}')
-      add_row "[--]" "$DNSCheck_NS_Temp"
       if [[ "$DNSCheck_NS_Temp" == "$DNSCheck_SOA_Serial" ]]; then
         if [[ "$DNSCheck_NS_Temp_Status" != "Failed" ]]; then
           DNSCheck_NS_Temp_Status="Success"
@@ -177,7 +175,7 @@ function DNSCheck_MX() {
   if [[ "$Global_DomainCheck_Domain" == "" ]]; then
     Global_DomainCheck
   fi
-  DNSCheck_MX=$(dig +noall +answer mx "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort | sed -e :a -e '$!N; s/\n/ | /; ta');
+  DNSCheck_MX=$(dig +noall +answer mx "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort | sed s'/[.]$//' | sed -e :a -e '$!N; s/\n/ | /; ta');
   init_table -h0 -m40 -f "DNS Check - MX"
   if [[ -n "$DNSCheck_MX" ]]; then
     add_row "[--]" "MX Record (Global): $DNSCheck_MX"
