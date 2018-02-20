@@ -178,7 +178,6 @@ function DNSCheck_MX() {
   DNSCheck_MX=$(dig +noall +answer mx "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort | sed s'/[.]$//' | sed -e :a -e '$!N; s/\n/ | /; ta');
   init_table -h0 -m40 -f "DNS Check - MX"
   if [[ -n "$DNSCheck_MX" ]]; then
-    #DNSCheck_MX_Short=$(echo "$DNSCheck_MX" | grep "alt1.aspmx.l.google.com");
     if [[ -n "$(echo "$DNSCheck_MX" | grep "alt1.aspmx.l.google.com")" ]]; then
      DNSCheck_MX_Short="G Suite"
     else
@@ -213,7 +212,8 @@ function DNSCheck_MX() {
         add_row -C 1 -T "$Color_Yellow" "[??]" "Single MX Record Detected"
       fi
     fi
-    if [[ $ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    $DNSCheck_MX='190.190.190.190'
+    if [[ $DNSCheck_MX =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
       add_row -C 1 -T "$Color_Yellow" "[??]" "IP Address For MX Record Detected"
     else
       add_row -C 1 -T "$Color_Green" "[OK]" "MX Record Is Not An IP Address"
