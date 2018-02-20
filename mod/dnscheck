@@ -212,7 +212,7 @@ function DNSCheck_MX() {
         add_row -C 1 -T "$Color_Yellow" "[??]" "Single MX Record Detected"
       fi
     fi
-    $DNSCheck_MX='190.190.190.190'
+    DNSCheck_MX='190.190.190.190'
     if [[ $DNSCheck_MX =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
       add_row -C 1 -T "$Color_Yellow" "[??]" "IP Address For MX Record Detected"
     else
