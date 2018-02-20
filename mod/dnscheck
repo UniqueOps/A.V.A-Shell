@@ -217,6 +217,13 @@ function DNSCheck_MX() {
     else
       add_row -C 1 -T "$Color_Green" "[OK]" "MX Record Is Not An IP Address"
     fi
+    DNSCheck_MX_PTR=$(dig -x 198.49.64.128 | grep -A 1 "ANSWER SECTION:" | tail -n 1 | awk -F " " '{print $NF}' | sed s'/[.]$//')
+    if [[ -n "DNSCheck_MX_PTR" ]]; then
+      add_row "[--]" "PTR Record: $DNSCheck_MX_PTR"
+      add_row -C 1 -T "$Color_Green" "[OK]" "PTR Record Detected"
+    else
+      add_row -C 1 -T "$Color_Red" "[!!]" "PTR Record Not Found"
+    fi
   else
     add_row -C 1 -T "$Color_Red" "Missing MX Record"
   fi
