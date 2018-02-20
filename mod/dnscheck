@@ -181,6 +181,8 @@ function DNSCheck_MX() {
     #DNSCheck_MX_Short=$(echo "$DNSCheck_MX" | grep "alt1.aspmx.l.google.com");
     if [[ -n "$(echo "$DNSCheck_MX" | grep "alt1.aspmx.l.google.com")" ]]; then
      DNSCheck_MX_Short="G Suite"
+    elif [[ -n "$(echo "$DNSCheck_MX" | grep "$Global_DomainCheck_Domain")" ]]; then
+     DNSCheck_MX_Short="Local Mail Exchanger"
     else
      DNSCheck_MX_Short="$DNSCheck_MX"
     fi
