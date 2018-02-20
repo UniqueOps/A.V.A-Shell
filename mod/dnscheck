@@ -176,6 +176,7 @@ function DNSCheck_MX() {
     Global_DomainCheck
   fi
   DNSCheck_MX=$(dig +noall +answer mx "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort | sed s'/[.]$//' | sed -e :a -e '$!N; s/\n/ | /; ta');
+  DNSCheck_MX_PTR=$(dig -x 198.49.64.128 | grep -A 1 "ANSWER SECTION:" | tail -n 1 | awk -F " " '{print $NF}' | sed s'/[.]$//');
   init_table -h0 -m40 -f "DNS Check - MX"
   if [[ -n "$DNSCheck_MX" ]]; then
     if [[ -n "$(echo "$DNSCheck_MX" | grep "alt1.aspmx.l.google.com")" ]]; then
@@ -184,6 +185,9 @@ function DNSCheck_MX() {
      DNSCheck_MX_Short="$DNSCheck_MX"
     fi
     add_row "[--]" "MX Record (Global): $DNSCheck_MX_Short"
+    if [[ -n "DNSCheck_MX_PTR" ]]; then
+      add_row "[--]" "PTR Record: $DNSCheck_MX_PTR"
+    fi
     export IFS=" | "
     DNSCheck_NS=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed s'/[.]$//' | sed -e :a -e '$!N; s/\n/ | /; ta');
     for DNSCheck_NS_Temp in $DNSCheck_NS; do
@@ -217,9 +221,7 @@ function DNSCheck_MX() {
     else
       add_row -C 1 -T "$Color_Green" "[OK]" "MX Record Is Not An IP Address"
     fi
-    DNSCheck_MX_PTR=$(dig -x 198.49.64.128 | grep -A 1 "ANSWER SECTION:" | tail -n 1 | awk -F " " '{print $NF}' | sed s'/[.]$//')
     if [[ -n "DNSCheck_MX_PTR" ]]; then
-      add_row "[--]" "PTR Record: $DNSCheck_MX_PTR"
       add_row -C 1 -T "$Color_Green" "[OK]" "PTR Record Detected"
     else
       add_row -C 1 -T "$Color_Red" "[!!]" "PTR Record Not Found"
