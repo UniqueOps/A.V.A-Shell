@@ -183,7 +183,7 @@ function DNSCheck_MX() {
     DNSCheck_NS=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed s'/[.]$//' | sed -e :a -e '$!N; s/\n/ | /; ta');
     for DNSCheck_MX_Temp in $DNSCheck_NS; do
       add_row "[--]" "$DNSCheck_MX_Temp"
-      DNSCheck_MX_Temp=$(dig +noall +answer mx @"$DNSCheck_MX_Temp" "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort | sed s'/[.]$//' | sed -e :a -e '$!N; s/\n/ | /; ta')
+      #DNSCheck_MX_Temp=$(dig +noall +answer mx @"$DNSCheck_MX_Temp" "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort | sed s'/[.]$//' | sed -e :a -e '$!N; s/\n/ | /; ta')
       add_row "[--]" "$DNSCheck_MX_Temp"
       if [[ "$DNSCheck_MX_Temp" == "$DNSCheck_MX" ]]; then
         if [[ "$DNSCheck_MX_Temp_Status" != "Failed" ]]; then
