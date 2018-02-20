@@ -181,6 +181,8 @@ function DNSCheck_MX() {
     DNSCheck_MX_Short=$(echo "$DNSCheck_MX" | grep "alt1.aspmx.l.google.com");
     if [[ -n "$DNSCheck_MX_Short" ]]; then
      DNSCheck_MX_Short="G Suite"
+    else
+     DNSCheck_MX_Short="$DNSCheck_MX"
     fi
     add_row "[--]" "MX Record (Global): $DNSCheck_MX_Short"
     export IFS=" | "
