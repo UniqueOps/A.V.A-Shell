@@ -91,18 +91,16 @@ function DNSCheck_SOA() {
   if [[ "$Global_DomainCheck_Domain" == "" ]]; then
     Global_DomainCheck
   fi
-  DNSCheck_NS=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');  # Global Name Servers 1
   DNSCheck_SOA_Check=$(dig +short soa "$Global_DomainCheck_Domain");
-  DNSCheck_SOA_PrimaryNS=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $1}');
-  DNSCheck_SOA_Hostmaster=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $2}');
-  DNSCheck_SOA_Serial=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $3}');
-  DNSCheck_SOA_Serial_Format=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $3}' | head -c2);
-  DNSCheck_SOA_Refresh=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $4}');
-  DNSCheck_SOA_Retry=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $5}');
-  DNSCheck_SOA_Expire=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $6}');
-  DNSCheck_SOA_TTL=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $7}');
   init_table -h0 -m40 -f "DNS Check - SOA"
   if [[ -n "$DNSCheck_SOA_Check" ]]; then
+    DNSCheck_SOA_PrimaryNS=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $1}');
+    DNSCheck_SOA_Hostmaster=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $2}');
+    DNSCheck_SOA_Serial=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $3}');
+    DNSCheck_SOA_Refresh=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $4}');
+    DNSCheck_SOA_Retry=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $5}');
+    DNSCheck_SOA_Expire=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $6}');
+    DNSCheck_SOA_TTL=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $7}');
     add_row "[--]" "Primary Nameserver: $DNSCheck_SOA_PrimaryNS"
     add_row "[--]" "Hostmaster: $DNSCheck_SOA_Hostmaster"
     add_row "[--]" "Serial #: $DNSCheck_SOA_Serial"
@@ -111,6 +109,7 @@ function DNSCheck_SOA() {
     add_row "[--]" "Expire: $DNSCheck_SOA_Expire"
     add_row "[--]" "Minimum TTL: $DNSCheck_SOA_TTL"
     export IFS=" | "
+    DNSCheck_NS=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');  # Global Name Servers 1
     for DNSCheck_NS_Temp in $DNSCheck_NS; do
       DNSCheck_NS_Temp=$(dig +short soa @"$DNSCheck_NS_Temp" "$Global_DomainCheck_Domain" | awk -F " " '{print $3}')
       if [[ "$DNSCheck_NS_Temp" == "$DNSCheck_SOA_Serial" ]]; then
@@ -132,6 +131,7 @@ function DNSCheck_SOA() {
       add_row -C 1 -T "$Color_Yellow" "[??]" "Primary Name Server Not Found In Global Nameservers"
     fi
     if [[ ${#DNSCheck_SOA_Serial} == 10 ]]; then
+      DNSCheck_SOA_Serial_Format=$(dig +short soa "$Global_DomainCheck_Domain" | awk -F " " '{print $3}' | head -c2);
       if [[ "$DNSCheck_SOA_Serial_Format" -ge 19 && "$DNSCheck_SOA_Serial_Format" -le 20 ]]; then
         add_row -C 1 -T "$Color_Green" "[OK]" "Serial # Appears To Use Recommended Format: YYYYMMDDnn"
       else
@@ -179,6 +179,23 @@ function DNSCheck_MX() {
   init_table -h0 -m40 -f "DNS Check - MX"
   if [[ -n "$DNSCheck_MX" ]]; then
     add_row "[--]" "MX Record (Global): $DNSCheck_MX"
+    export IFS=" | "
+    DNSCheck_NS=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');
+    for DNSCheck_MX_Temp in $DNSCheck_NS; do
+      DNSCheck_MX_Temp=$(dig +noall +answer mx @"$DNSCheck_NS_Temp" "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort | sed -e :a -e '$!N; s/\n/ | /; ta')
+      if [[ "$DNSCheck_MX_Temp" == "$DNSCheck_MX" ]]; then
+        if [[ "$DNSCheck_MX_Temp_Status" != "Failed" ]]; then
+          DNSCheck_MX_Temp_Status="Success"
+        fi        
+      else
+        DNSCheck_MX_Temp_Status="Failed"
+      fi
+    done
+    if [[ "$DNSCheck_MX_Temp_Status" == "Success" ]]; then
+      add_row -C 1 -T "$Color_Green" "[OK]" "All Nameservers Return The Same MX Records"
+    else
+      add_row -C 1 -T "$Color_Yellow" "[??]" "Nameservers Don't Return Same MX Records"
+    fi
   else
     add_row -C 1 -T "$Color_Red" "Missing MX Record"
   fi
