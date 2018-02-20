@@ -109,7 +109,7 @@ function DNSCheck_SOA() {
     add_row "[--]" "Expire: $DNSCheck_SOA_Expire"
     add_row "[--]" "Minimum TTL: $DNSCheck_SOA_TTL"
     export IFS=" | "
-    DNSCheck_NS=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');  # Global Name Servers 1
+    DNSCheck_NS=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta' | 'x;${s/,$//;p;x;};1d');
     for DNSCheck_NS_Temp in $DNSCheck_NS; do
       add_row "[--]" "$DNSCheck_NS_Temp"
       DNSCheck_NS_Temp=$(dig +short soa @"$DNSCheck_NS_Temp" "$Global_DomainCheck_Domain" | awk -F " " '{print $3}')
@@ -182,7 +182,7 @@ function DNSCheck_MX() {
   if [[ -n "$DNSCheck_MX" ]]; then
     add_row "[--]" "MX Record (Global): $DNSCheck_MX"
     export IFS=" | "
-    DNSCheck_NS=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta');
+    DNSCheck_NS=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed -e :a -e '$!N; s/\n/ | /; ta' | 'x;${s/,$//;p;x;};1d');
     for DNSCheck_MX_Temp in $DNSCheck_NS; do
       add_row "[--]" "$DNSCheck_MX_Temp"
       DNSCheck_MX_Temp=$(dig +noall +answer mx @"$DNSCheck_NS_Temp" "$Global_DomainCheck_Domain" | awk -F " " '{print $NF}' | sort | sed -e :a -e '$!N; s/\n/ | /; ta')
