@@ -54,7 +54,7 @@ function Global_DecimalConvert() {
   Global_DecimalConvert_Output=$temp1$temp2$temp3$temp4
 }
 
-function Global_IPCheck
+function Global_IPCheck() {
   Global_IPConvert $1
   echo "$Global_IPConvert_Output"
 }
