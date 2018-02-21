@@ -56,14 +56,13 @@ Global_ConvertDecimal_Output=$temp1$temp2$temp3$temp4
 
 function Global_CheckIP() {
 Global_ConvertIP "$1"
-#if [[ "$1" -ge "167772160" && "$1" -le "184549375" ]]; then                                                 # Trigger If IP = 10.0.0.0-10.255.255.255
-#  Global_CheckIP_Result="Private";
-#elif [[ "$1" -ge "2886729728" && "$1" -le "2887778303" ]]; then                                             # Trigger If IP = 172.16.0.0-172.31.255.255
-#  Global_CheckIP_Result="Private";
-#elif [[ "$1" -ge "3232235520" && "$1" -le "3232301055" ]]; then                                             # Trigger If IP = 192.168.0.0-192.168.255.255
-#  Global_CheckIP_Result="Private";
-#else
-#  Global_CheckIP_Result="Public";
-#fi
-echo $1
+if [[ "$Global_ConvertIP_Output" -ge "167772160" && "$Global_ConvertIP_Output" -le "184549375" ]]; then                                                 # Trigger If IP = 10.0.0.0-10.255.255.255
+  Global_CheckIP_Result="Private";
+elif [[ "$Global_ConvertIP_Output" -ge "2886729728" && "$Global_ConvertIP_Output" -le "2887778303" ]]; then                                             # Trigger If IP = 172.16.0.0-172.31.255.255
+  Global_CheckIP_Result="Private";
+elif [[ "$Global_ConvertIP_Output" -ge "3232235520" && "$Global_ConvertIP_Output" -le "3232301055" ]]; then                                             # Trigger If IP = 192.168.0.0-192.168.255.255
+  Global_CheckIP_Result="Private";
+else
+  Global_CheckIP_Result="Public";
+fi
 }
