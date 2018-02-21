@@ -210,7 +210,7 @@ function DNSCheck_MX() {
     else
       add_row -C 1 -T "$Color_Green" "[OK]" "Remote Mail Exchange Detected"
       DNSCheck_MX_Count=$(echo "${DNSCheck_MX}" | tr -cd ' | ' | wc -c);
-      if [[ "$DNSCheck_MX_Count" > 1 ]]; then
+      if [[ "$DNSCheck_MX_Count" -gt 1 ]]; then
         add_row -C 1 -T "$Color_Green" "[OK]" "Single MX Record Not Detected"
       else
         add_row -C 1 -T "$Color_Yellow" "[??]" "Single MX Record Detected"
