@@ -250,5 +250,5 @@ function DNSCheck_WWW() {
 }
 
 #DNSCheck_Full
-#Global_CheckIP 192.168.1.1
+Global_CheckIP 192.168.1.1
 #echo "$Global_CheckIP_Result"
