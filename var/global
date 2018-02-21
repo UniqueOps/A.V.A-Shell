@@ -53,3 +53,8 @@ function Global_DecimalConvert() {
   temp4=$((${1}%256))
   Global_DecimalConvert_Output=$temp1$temp2$temp3$temp4
 }
+
+function Global_IPCheck
+  Global_IPConvert $1
+  echo "$Global_IPConvert_Output"
+}
