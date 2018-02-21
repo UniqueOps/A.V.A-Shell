@@ -121,9 +121,9 @@ function DNSCheck_SOA() {
       fi
     done
     if [[ "$DNSCheck_NS_Temp_Status" == "Success" ]]; then
-      add_row -C 1 -T "$Color_Green" "[OK]" "All Nameservers Return Same Serial #"
+      add_row -C 1 -T "$Color_Green" "[OK]" "All Nameservers Return Same SOA Record"
     else
-      add_row -C 1 -T "$Color_Yellow" "[??]" "Nameservers Don't Return Same Serial #"
+      add_row -C 1 -T "$Color_Yellow" "[??]" "Nameservers Don't Return Same SOA Record"
     fi   
     if [[ -n $(echo "$DNSCheck_NS" | grep "$DNSCheck_SOA_PrimaryNS") ]]; then
       add_row -C 1 -T "$Color_Green" "[OK]" "Primary Name Server Listed In Global Nameservers"
