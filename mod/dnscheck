@@ -241,7 +241,7 @@ function DNSCheck_WWW() {
   if [[ -n "$DNSCheck_A_WWW" ]]; then
     add_row "[--]" "WWW A Record (Global): $DNSCheck_A_WWW"
     Global_CheckIP $DNSCheck_A_WWW
-    if [[ "$DNSCheck_A_WWW" == "Public" ]]; then
+    if [[ "$Global_CheckIP_Result" == "Public" ]]; then
       add_row -C 1 -T "$Color_Green" "[OK]" "Public IP Check"
     else
       add_row -C 1 -T "$Color_Red" "[!!]" "A Record Is Private"
