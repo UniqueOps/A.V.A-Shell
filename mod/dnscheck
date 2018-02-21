@@ -249,8 +249,8 @@ function DNSCheck_WWW() {
   echo ""
 }
 
-DNSCheck_Full
+#DNSCheck_Full
 Global_IPConvert "192.168.1.1"
 echo "$Global_DecimalConvert_Output"
-Global_DecimalConvert "3232235777"
-echo "$Global_DecimalConvert_Output"
+#Global_DecimalConvert "3232235777"
+#echo "$Global_DecimalConvert_Output"
