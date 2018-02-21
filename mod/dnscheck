@@ -250,3 +250,4 @@ function DNSCheck_WWW() {
 }
 
 DNSCheck_Full
+IP_2_Decimal 192.168.1.1
