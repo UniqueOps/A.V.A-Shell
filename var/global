@@ -65,4 +65,5 @@ Global_ConvertIP "$1"
 #else
 #  Global_CheckIP_Result="Public";
 #fi
+echo $1
 }
