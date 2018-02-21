@@ -240,7 +240,12 @@ function DNSCheck_WWW() {
   init_table -h0 -m40 -f "DNS Check - WWW"
   if [[ -n "$DNSCheck_A_WWW" ]]; then
     add_row "[--]" "WWW A Record (Global): $DNSCheck_A_WWW"
-    add_row -C 1 -T "$Color_Green" "[OK]" "Public IP Check"
+    Global_CheckIP $DNSCheck_A_WWW
+    if [[ "$DNSCheck_A_WWW" == "Public" ]]; then
+      add_row -C 1 -T "$Color_Green" "[OK]" "Public IP Check"
+    else
+      add_row -C 1 -T "$Color_Red" "[!!]" "A Record Is Private"
+    fi
     add_row -C 1 -T "$Color_Green" "[OK]" "CNAME Record Check"
   else
     add_row -C 1 -T "$Color_Red" "Missing WWW CNAME Record"
@@ -250,5 +255,3 @@ function DNSCheck_WWW() {
 }
 
 DNSCheck_Full
-#Global_CheckIP 192.168.1.1
-#echo "$Global_CheckIP_Result"
