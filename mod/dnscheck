@@ -29,18 +29,18 @@ function DNSCheck_Parent() {
   if [[ "$Global_DomainCheck_Domain" == "" ]]; then
     Global_DomainCheck
   fi
-  DNSCheck_A=$(dig +noall +answer "$Global_DomainCheck_Domain" | grep -v CNAME | awk '{print $NF}');
+  #DNSCheck_Registrar=$(whois -H "$Global_DomainCheck_Domain" | grep "Registrar:" | sed -e 's/^[ \t]*//' | cut -d " " -f2-);
   DNSCheck_GlobalServer=$(dig ns +short "$Global_DomainCheck_Domain_TLD" | head -1);
-  DNSCheck_Registrar=$(whois -H "$Global_DomainCheck_Domain" | awk 'FNR==8{$1=""; print $0}');
   DNSCheck_NS=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed s'/[.]$//' | sed -e :a -e '$!N; s/\n/ | /; ta');
-  DNSCheck_NS_Compare=$(dig ns +short "$Global_DomainCheck_Domain" | sort)
-  DNSCheck_NS_Count=$(dig ns +short "$Global_DomainCheck_Domain" | wc -l);  # Global Name Servers 1
-  DNSCheck_NS_Glue=$(dig @"$DNSCheck_GlobalServer" +noall +additional "$Global_DomainCheck_Domain" | awk -F "A" '{print $NF}' | awk '{$1=$1}{ print}');
-  DNSCheck_NS_Glue_Compare=$(dig @"$DNSCheck_GlobalServer" +noall +additional "$Global_DomainCheck_Domain" | awk -F " " '{print $1}' | awk '{$1=$1}{ print}' | sort);
-  DNSCheck_NS_Glue_Count=$(echo "$DNSCheck_NS_Glue" | wc -l);
   init_table -h0 -m40 -f "DNS Check - Information"
   add_row "[--]" "Domain Checked: $Global_DomainCheck_Domain"
-  add_row "[--]" "Domain Registrar:$DNSCheck_Registrar"
+  if [[ -n "$(whois -H "$Global_DomainCheck_Domain" | grep "Registrar:" | sed -e 's/^[ \t]*//' | cut -d " " -f2-)" ]]; then
+    if [[ "$Global_DomainCheck_Domain_TLD" == ".co.uk"  ]]; then
+      add_row "[--]" "Domain Registrar:$DNSCheck_Registrar"
+    fi
+  else
+    add_row "[--]" "Domain Registrar:$DNSCheck_Registrar"
+  fi
   add_row "[--]" "Parent Server: $DNSCheck_GlobalServer"
   print_table
   echo ""
@@ -64,9 +64,14 @@ function DNSCheck_Parent() {
         add_row -C 1 -T "$Color_Red" "[!!]" "Global Nameservers Missing"
       fi
     fi
+    DNSCheck_NS_Glue=$(dig @"$DNSCheck_GlobalServer" +noall +additional "$Global_DomainCheck_Domain" | awk -F "A" '{print $NF}' | awk '{$1=$1}{ print}');
     if [[ -n "$DNSCheck_NS_Glue" ]]; then
+      DNSCheck_NS_Compare=$(dig ns +short "$Global_DomainCheck_Domain" | sort)
+      DNSCheck_NS_Glue_Compare=$(dig @"$DNSCheck_GlobalServer" +noall +additional "$Global_DomainCheck_Domain" | awk -F " " '{print $1}' | awk '{$1=$1}{ print}' | sort);
       if [[ "$DNSCheck_NS_Compare" == "$DNSCheck_NS_Glue_Compare" ]]; then
-        if [[ "$DNSCheck_NS_Count" == "$DNSCheck_NS_Glue_Count" ]]; then
+	  DNSCheck_NS_Count=$(dig ns +short "$Global_DomainCheck_Domain" | wc -l);  # Global Name Servers 1
+      DNSCheck_NS_Glue_Count=$(echo "$DNSCheck_NS_Glue" | wc -l);
+	  if [[ "$DNSCheck_NS_Count" == "$DNSCheck_NS_Glue_Count" ]]; then
           add_row -C 1 -T "$Color_Green" "[OK]" "Global Nameservers (A Records) Returned"
         else
           add_row -C 1 -T "$Color_Red" "[!!]" "Global Nameservers (Glue Records) Incomplete"
