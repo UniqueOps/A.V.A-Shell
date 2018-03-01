@@ -37,7 +37,7 @@ function DNSCheck_Parent() {
   if [[ -n "$DNSCheck_Registrar" ]]; then
     if [[ "$Global_DomainCheck_Domain_TLD" == "UK"  ]]; then
       DNSCheck_Registrar=$(whois -H "$Global_DomainCheck_Domain" | grep -A 1 "Registrar:" | tail -n 1 | sed -e 's/^[ \t]*//' | sed -e 's/\[[^][]*\]//g');
-      add_row "[--]" "Domain Registrar (Test): $DNSCheck_Registrar"
+      add_row "[--]" "Domain Registrar: $DNSCheck_Registrar"
     else
       add_row "[--]" "Domain Registrar: $DNSCheck_Registrar"
     fi
