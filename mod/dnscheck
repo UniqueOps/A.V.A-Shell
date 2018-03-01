@@ -34,9 +34,8 @@ function DNSCheck_Parent() {
   DNSCheck_NS=$(dig ns +short "$Global_DomainCheck_Domain" | sort | sed s'/[.]$//' | sed -e :a -e '$!N; s/\n/ | /; ta');
   init_table -h0 -m40 -f "DNS Check - Information"
   add_row "[--]" "Domain Checked: $Global_DomainCheck_Domain"
-  add_row "[--]" "Domain Registrar: $Global_DomainCheck_Domain_TLD"
   if [[ -n "$DNSCheck_Registrar" ]]; then
-    if [[ "$Global_DomainCheck_Domain_TLD" == "uk"  ]]; then
+    if [[ "$Global_DomainCheck_Domain_TLD" == "UK"  ]]; then
       DNSCheck_Registrar=$(whois -H "$Global_DomainCheck_Domain" | grep -A 1 "Registrar:" | sed -e 's/^[ \t]*//' | sed -e 's/\[[^][]*\]//g');
       add_row "[--]" "Domain Registrar: $DNSCheck_Registrar"
     else
