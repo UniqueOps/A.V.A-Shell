@@ -8,6 +8,7 @@ eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"
 
 echo ""
 init_table -h0 -m40 -f "DNS Check - Script Status"
+add_row -C 1 -T "$Color_Green" "[Complete]" "Information Section"
 add_row -C 1 -T "$Color_Yellow" "[In Progress]" "Parent Section"
 add_row -C 1 -T "$Color_Yellow" "[In Progress]" "Nameserver Section"
 add_row -C 1 -T "$Color_Green" "[Complete]" "SOA Section"
