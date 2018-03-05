@@ -1,5 +1,5 @@
 #!/bin/bash
-# SSH Command: eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/ava)";
+# SSH Command: eval "$(curl -ks https://raw.githubusercontent.com/UniqueOps/A.V.A/master/ava)";
 # Description: This is the launcher for Project: A.V.A
 # Contributors: Casey McLaughlin
 
@@ -13,13 +13,13 @@ echo -e "                             ";
 echo -e "[--] Project: Ava launcher has been initiated";
 echo -e "[--] Version 0.1 of project has been detected\\n";
 echo -e "[--] Loading a splash of color for visual appeal"
-eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/var/colors)"; # Splash of Color
+eval "$(curl -ks https://raw.githubusercontent.com/UniqueOps/A.V.A/master/var/colors)"; # Splash of Color
 echo -e "$Color_Green[OK]$Color_Reset Splash of color has now been detected"
 echo -e "[--] Loading global vairables"
-eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/var/global)"; # Splash of Color
+eval "$(curl -ks https://raw.githubusercontent.com/UniqueOps/A.V.A/master/var/global)"; # Splash of Color
 echo -e "$Color_Green[OK]$Color_Reset Global variables have now been activated"
 echo -e "[--] Loading the table library"
-eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/sys/tables)"; # Splash of Color
+eval "$(curl -ks https://raw.githubusercontent.com/UniqueOps/A.V.A/master/sys/tables)"; # Splash of Color
 echo -e "$Color_Green[OK]$Color_Reset Table library has been successfully loaded"
 echo -e "[--] Begining troubleshoot and analysis workflow\\n"
 
@@ -34,7 +34,7 @@ select opt in "${options[@]}"
 do
     case $opt in
         "Verbose")
-            bash <(curl -ks https://gitlab.com/uniqueops/ava/raw/master/mod/quickinfo) -o
+            bash <(curl -ks https://raw.githubusercontent.com/UniqueOps/A.V.A/master/mod/quickinfo) -o
             ;;
         "Silent")
             echo "you chose choice 2"
