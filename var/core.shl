@@ -51,8 +51,8 @@ readonly CORE_FILENAME="core.shl"
 readonly CORE_VERSION="1.6.1"
 
 # Codesilo:
-readonly TRITON_REPO_URL="https://gitlab.com/uniqueops/ava"
-readonly TRITON_RAW_URL="${TRITON_REPO_URL}/raw/master"
+readonly TRITON_REPO_URL="https://raw.githubusercontent.com/UniqueOps/A.V.A"
+readonly TRITON_RAW_URL="${TRITON_REPO_URL}/master"
 readonly CORE_RAW_URL="${TRITON_RAW_URL}/core/core.shl"
 
 # Error messages
