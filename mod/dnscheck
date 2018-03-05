@@ -4,7 +4,7 @@
 # - Check into TLD Check with hostdime.co.uk
 ## END NOTES
 
-eval "$(curl -k -s https://gitlab.com/uniqueops/ava/raw/master/var/global)"
+eval "$(curl -k -s https://raw.githubusercontent.com/UniqueOps/A.V.A/master/var/global)"
 
 echo ""
 init_table -h0 -m40 -f "DNS Check - Script Status"
