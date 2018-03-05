@@ -9,7 +9,7 @@
 # - NONE
 
 # Include Colors
-eval "$(curl -ks https://gitlab.com/uniqueops/ava/raw/master/var/colors)";
+eval "$(curl -ks https://raw.githubusercontent.com/UniqueOps/A.V.A/master/var/colors)";
 
 # Let's ask the user for the domain we are testing
 echo -e "\n$Color_Blue===============================$Color_Reset Email Troubleshoot Script $Color_Blue===============================$Color_Reset\n";
