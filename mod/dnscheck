@@ -28,8 +28,8 @@ function DNSCheck_Full() {
   DNSCheck_WWW
 }
 function DNSCheck_Overview() {
-init_table -m40 -f "DNS Check - Overview"
-add_row "Parent Records" "NS Records" "SOA Records" "MX Records" "WWW Records"
+init_table -m100 -f "DNS Check - Overview"
+add_row "Parent" "NS" "SOA" "MX" "WWW"
 add_row -C 1 -T "$Color_Green" -C 2 -T "$Color_Red" -C 3 -T "$Color_Yellow" -C 4 -T "$Color_Green" -C 5 -T "$Color_Green" "PASSED" "FAILED" "WARNING" "PASSED" "PASSED"
 print_table
 echo ""
