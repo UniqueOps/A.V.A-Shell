@@ -20,11 +20,19 @@ function DNSCheck_Full() {
   if [[ "$Global_DomainCheck_Domain" == "" ]]; then
     Global_DomainCheck
   fi
+  DNSCheck_Overview
   DNSCheck_Parent
   DNSCheck_NS
   DNSCheck_SOA
   DNSCheck_MX
   DNSCheck_WWW
+}
+function DNSCheck_Overview() {
+echo ""
+init_table -m40 -f "DNS Check - Overview"
+add_row "Parent" "NS" "SOA" "MX" "WWW"
+add_row -C 1 -T "$Color_Green" -C 2 -T "$Color_Red" -C 3 -T "$Color_Yellow" -C 4 -T "$Color_Green" -C 5 -T "$Color_Green" "PASS" "FAIL" "WARNING" "PASS" "PASS"
+print_table
 }
 function DNSCheck_Parent() {
   if [[ "$Global_DomainCheck_Domain" == "" ]]; then
