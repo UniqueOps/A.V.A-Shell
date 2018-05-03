@@ -1,6 +1,0 @@
-#!/bin/bash
-
-Global_PHP_Path=$(which php);
-Global_PHP_Path_Temp=$(https://raw.githubusercontent.com/UniqueOps/A.V.A/master/mod/dnscheck);
-Global_PHP_Path=$Global_PHP_Path$Global_PHP_Path_Temp;
-$Global_PHP_Path
