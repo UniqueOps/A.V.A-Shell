@@ -6,21 +6,21 @@
 
 eval "$(curl -k -s https://raw.githubusercontent.com/UniqueOps/A.V.A/master/var/global)"
 
-#echo ""
-#init_table -h0 -m40 -f "DNS Check - Script Status"
-#add_row -C 1 -T "$Color_Green" "[Complete]" "Information Section"
-#add_row -C 1 -T "$Color_Yellow" "[In Progress]" "Parent Section"
-#add_row -C 1 -T "$Color_Yellow" "[In Progress]" "Nameserver Section"
-#add_row -C 1 -T "$Color_Green" "[Complete]" "SOA Section"
-#add_row -C 1 -T "$Color_Yellow" "[In Progress]" "MX Section"
-#add_row -C 1 -T "$Color_Green" "[Complete]" "WWW Section"
-#print_table
+echo ""
+init_table -h0 -m40 -f "DNS Check - Script Status"
+add_row -C 1 -T "$Color_Yellow" "[In Progress]" "Information Section"
+add_row -C 1 -T "$Color_Yellow" "[In Progress]" "Parent Section"
+add_row -C 1 -T "$Color_Yellow" "[In Progress]" "Nameserver Section"
+add_row -C 1 -T "$Color_Yellow" "[In Progress]" "SOA Section"
+add_row -C 1 -T "$Color_Yellow" "[In Progress]" "MX Section"
+add_row -C 1 -T "$Color_Green" "[Complete]" "WWW Section"
+print_table
 
 function DNSCheck_Full() {
   if [[ "$Global_DomainCheck_Domain" == "" ]]; then
     Global_DomainCheck
   fi
-  DNSCheck_Overview
+#  DNSCheck_Overview
   DNSCheck_Parent
   DNSCheck_NS
   DNSCheck_SOA
