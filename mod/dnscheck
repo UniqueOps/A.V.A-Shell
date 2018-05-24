@@ -6,15 +6,15 @@
 
 eval "$(curl -k -s https://raw.githubusercontent.com/UniqueOps/A.V.A/master/var/global)"
 
-echo ""
-init_table -h0 -m40 -f "DNS Check - Script Status"
-add_row -C 1 -T "$Color_Green" "[Complete]" "Information Section"
-add_row -C 1 -T "$Color_Yellow" "[In Progress]" "Parent Section"
-add_row -C 1 -T "$Color_Yellow" "[In Progress]" "Nameserver Section"
-add_row -C 1 -T "$Color_Green" "[Complete]" "SOA Section"
-add_row -C 1 -T "$Color_Yellow" "[In Progress]" "MX Section"
-add_row -C 1 -T "$Color_Green" "[Complete]" "WWW Section"
-print_table
+#echo ""
+#init_table -h0 -m40 -f "DNS Check - Script Status"
+#add_row -C 1 -T "$Color_Green" "[Complete]" "Information Section"
+#add_row -C 1 -T "$Color_Yellow" "[In Progress]" "Parent Section"
+#add_row -C 1 -T "$Color_Yellow" "[In Progress]" "Nameserver Section"
+#add_row -C 1 -T "$Color_Green" "[Complete]" "SOA Section"
+#add_row -C 1 -T "$Color_Yellow" "[In Progress]" "MX Section"
+#add_row -C 1 -T "$Color_Green" "[Complete]" "WWW Section"
+#print_table
 
 function DNSCheck_Full() {
   if [[ "$Global_DomainCheck_Domain" == "" ]]; then
@@ -258,7 +258,7 @@ function DNSCheck_WWW() {
     add_row "[--]" "WWW A Record (Global): $DNSCheck_A_WWW"
     Global_CheckIP $DNSCheck_A_WWW
     if [[ "$Global_CheckIP_Result" == "Public" ]]; then
-      add_row -C 1 -T "$Color_Green" "[OK]" "Public IP Check"
+      add_row -C 1 -T "$Color_Green" "[OK]" "Public IP Check - [$Global_CheckIP_Result]"
     else
       add_row -C 1 -T "$Color_Red" "[!!]" "A Record Is Private"
     fi
