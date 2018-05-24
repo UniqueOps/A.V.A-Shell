@@ -266,7 +266,7 @@ function DNSCheck_WWW() {
     if [[ "$DNSCheck_A" == "$DNSCheck_A_WWW" ]]; then
       add_row -C 1 -T "$Color_Green" "[OK]" "CNAME Record Check"
     else
-      add_row -C 1 -T "$Color_Red" "[!!]" "WWW Record Doesn't Match A Record"
+      add_row -C 1 -T "$Color_Yellow" "[??]" "WWW Record vs A Record Mismatch"
     fi
   else
     add_row -C 1 -T "$Color_Red" "Missing WWW CNAME Record"
