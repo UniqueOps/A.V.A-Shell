@@ -13,8 +13,6 @@ echo -e "                             ";
 echo -e "[--] Project: Ava launcher has been initiated";
 echo -e "[--] Version 0.1 of project has been detected\\n";
 echo -e "[--] Loading a splash of color for visual appeal"
-eval "$(curl -ks https://raw.githubusercontent.com/UniqueOps/A.V.A/master/var/colors)"; # Splash of Color
-echo -e "$Color_Green[OK]$Color_Reset Splash of color has now been detected"
 echo -e "[--] Loading global vairables"
 eval "$(curl -ks https://raw.githubusercontent.com/UniqueOps/A.V.A/master/var/global)"; # Splash of Color
 echo -e "$Color_Green[OK]$Color_Reset Global variables have now been activated"
@@ -23,30 +21,41 @@ eval "$(curl -ks https://raw.githubusercontent.com/UniqueOps/A.V.A/master/sys/ta
 echo -e "$Color_Green[OK]$Color_Reset Table library has been successfully loaded"
 echo -e "[--] Begining troubleshoot and analysis workflow\\n"
 
-echo -e "Output Options:";
-echo -e "- Verbose: Standard script output";
-echo -e "- Silent: Standard script output but minimized where possible";
-echo -e "- Ticket: Will display the Silent output mode and at the end make a ticket formatted section\\n"
 
-PS3='Which output would you like: '
-options=("Verbose" "Silent" "Ticket" "Quit")
-select opt in "${options[@]}"
-do
-    case $opt in
-        "Verbose")
-            bash <(curl -ks https://raw.githubusercontent.com/UniqueOps/A.V.A/master/mod/quickinfo) -o
-            ;;
-        "Silent")
-            echo "you chose choice 2"
-            ;;
-        "Ticket")
-            echo "you chose choice 3"
-            ;;
-        "Quit")
-            break
-            ;;
-        *) echo invalid option;;
-    esac
-done
 
-echo -e "";
+
+
+
+
+
+
+
+
+
+
+#echo -e "Output Options:";
+#echo -e "- Verbose: Standard script output";
+#echo -e "- Silent: Standard script output but minimized where possible";
+#echo -e "- Ticket: Will display the Silent output mode and at the end make a ticket formatted section\\n"
+
+#PS3='Which output would you like: '
+#options=("Verbose" "Silent" "Ticket" "Quit")
+#select opt in "${options[@]}"
+#do
+#    case $opt in
+#        "Verbose")
+#            bash <(curl -ks https://raw.githubusercontent.com/UniqueOps/A.V.A/master/mod/quickinfo) -o
+#            ;;
+#        "Silent")
+#            echo "you chose choice 2"
+#            ;;
+#        "Ticket")
+#            echo "you chose choice 3"
+#            ;;
+#        "Quit")
+#            break
+#            ;;
+#        *) echo invalid option;;
+#    esac
+#done
+#echo -e "";
