@@ -13,7 +13,7 @@ echo -e "                             ";
 echo -e "[--] Project: Ava launcher has been initiated";
 echo -e "[--] Version 0.1 of project has been detected\\n";
 global_os=$(uname 2>/dev/null);
-if [[ "$global_os" == "UK"  ]]; then
+if [[ -n "$global_os" == "UK"  ]]; then
  echo -e "[--] String not matched.";
 fi
 
