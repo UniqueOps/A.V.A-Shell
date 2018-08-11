@@ -12,19 +12,22 @@ echo -e "=============================";
 echo -e "                             ";
 echo -e "[--] Project: Ava launcher has been initiated";
 echo -e "[--] Version 0.1 of project has been detected\\n";
+echo -e "[--] Loading Global Vairables"
+eval "$(curl -ks https://raw.githubusercontent.com/UniqueOps/A.V.A/master/var/global 2>/dev/null)"; # Splash of Color
+echo -e "$Color_Green[OK]$Color_Reset Global Variables have now been activated successfully"
 global_os=$(uname 2>/dev/null);
-if [[ -n "$global_os" == "UK"  ]]; then
- echo -e "[--] String not matched.";
+if [[ "$global_os" != "Linux" ]]; then
+ echo -e "[--] Unsupported Operating System Detected";
+ echo -e "[--] Shutting Down";
+ exit
 fi
-
+echo -e "[--] $global_os Operating System Detected";
 #echo -e "[--] Detecting 
 #source "/etc/*-release";
 
 
 
 #echo -e "[--] Loading global vairables"
-#eval "$(curl -ks https://raw.githubusercontent.com/UniqueOps/A.V.A/master/var/global2)"; # Splash of Color
-#echo -e "$Color_Green[OK]$Color_Reset Global variables have now been activated"
 #echo -e "[--] Loading the table library"
 #eval "$(curl -ks https://raw.githubusercontent.com/UniqueOps/A.V.A/master/sys/tables2)"; # Splash of Color
 #echo -e "$Color_Green[OK]$Color_Reset Table library has been successfully loaded"
