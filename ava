@@ -12,14 +12,21 @@ echo -e "=============================";
 echo -e "                             ";
 echo -e "[--] Project: Ava launcher has been initiated";
 echo -e "[--] Version 0.1 of project has been detected\\n";
-echo -e "[--] Loading a splash of color for visual appeal"
-echo -e "[--] Loading global vairables"
+echo -e "[--] Test 1: $global_os";
+global_os=$(uname 2>/dev/null);
+echo -e "[--] Test 1: $global_os";
+#echo -e "[--] Detecting 
+#source "/etc/*-release";
+
+
+
+#echo -e "[--] Loading global vairables"
 #eval "$(curl -ks https://raw.githubusercontent.com/UniqueOps/A.V.A/master/var/global2)"; # Splash of Color
 #echo -e "$Color_Green[OK]$Color_Reset Global variables have now been activated"
-echo -e "[--] Loading the table library"
+#echo -e "[--] Loading the table library"
 #eval "$(curl -ks https://raw.githubusercontent.com/UniqueOps/A.V.A/master/sys/tables2)"; # Splash of Color
 #echo -e "$Color_Green[OK]$Color_Reset Table library has been successfully loaded"
-echo -e "[--] Begining troubleshoot and analysis workflow\\n"
+#echo -e "[--] Begining troubleshoot and analysis workflow\\n"
 
 
 
