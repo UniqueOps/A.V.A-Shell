@@ -12,9 +12,11 @@ echo -e "=============================";
 echo -e "                             ";
 echo -e "[--] Project: Ava launcher has been initiated";
 echo -e "[--] Version 0.1 of project has been detected\\n";
-echo -e "[--] Test 1: $global_os";
 global_os=$(uname 2>/dev/null);
-echo -e "[--] Test 1: $global_os";
+if [[ "$global_os" == "UK"  ]]; then
+ echo -e "[--] String not matched.";
+fi
+
 #echo -e "[--] Detecting 
 #source "/etc/*-release";
 
