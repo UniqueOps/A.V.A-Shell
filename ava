@@ -3,7 +3,7 @@
 # Information: https://github.com/UniqueOps/A.V.A-Shell
 
 # Declare A.V.A Version
-ava_version = "0.1"
+ava_version="0.1"
 
 echo -e "                             ";
 echo -e " █████╗   ██╗   ██╗   █████╗ ";
@@ -15,7 +15,7 @@ echo -e "╚═╝  ╚═╝╚═╝ ╚═══╝ ╚═╝╚═╝  ╚�
 echo -e "                             ";
 
 # Confirm Working Environment
-os-release = /etc/os-release
+os-release=/etc/os-release
 if [ -f "$os-release" ]; then
   echo -e "[--] A.V.A script has been initiated";
   echo -e "[--] Version $ava_version detected\\n";
