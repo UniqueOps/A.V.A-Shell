@@ -15,8 +15,7 @@ echo -e "╚═╝  ╚═╝╚═╝ ╚═══╝ ╚═╝╚═╝  ╚�
 echo -e "                             ";
 
 # Confirm Working Environment
-os_release="/etc/os-release"
-if [ -f "$os_release" ]; then
+if [[ -f "/etc/os-release" ]]; then
   echo -e "[--] A.V.A script has been initiated";
   echo -e "[--] Version $ava_version detected\\n";
 else
