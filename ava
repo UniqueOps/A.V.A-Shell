@@ -3,12 +3,13 @@
 # Description: This is the launcher for Project: A.V.A
 # Contributors: Casey McLaughlin
 
-echo -e "     _    __     __    _     ";
-echo -e "    / \   \ \   / /   / \    ";
-echo -e "   / _ \   \ \ / /   / _ \   ";
-echo -e "  / ___ \  _\ V /_  / ___ \  ";
-echo -e " /_/   \_\(_)\_/(_)/_/   \_\ ";
-echo -e "=============================";
+echo -e "                             ";
+echo -e " █████╗   ██╗   ██╗   █████╗ ";
+echo -e "██╔══██╗  ██║   ██║  ██╔══██╗";
+echo -e "███████║  ██║   ██║  ███████║";
+echo -e "██╔══██║  ╚██╗ ██╔╝  ██╔══██║";
+echo -e "██║  ██║██╗╚████╔╝██╗██║  ██║";
+echo -e "╚═╝  ╚═╝╚═╝ ╚═══╝ ╚═╝╚═╝  ╚═╝";
 echo -e "                             ";
 echo -e "[--] Project: Ava launcher has been initiated";
 echo -e "[--] Version 0.1 of project has been detected\\n";
