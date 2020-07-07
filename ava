@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # SSH Command: bash <(curl -ks https://raw.githubusercontent.com/UniqueOps/A.V.A/master/ava)";
 # Information: https://github.com/UniqueOps/A.V.A-Shell
 
