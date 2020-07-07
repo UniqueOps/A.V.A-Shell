@@ -14,13 +14,11 @@ echo -e "                             ";
 echo -e "[--] Project: Ava launcher has been initiated";
 echo -e "[--] Version 0.1 of project has been detected\\n";
 echo -e "[--] Loading Global Vairables"
-eval "$(curl -ks https://raw.githubusercontent.com/UniqueOps/A.V.A/master/var/global 2>/dev/null)"; # Splash of Color
-echo -e "$Color_Green[OK]$Color_Reset Global Variables Activated"
 global_os=$(uname 2>/dev/null);
 if [[ "$global_os" != "Linux2" ]]; then
  echo -e "$Color_Red[!!]$Color_Reset Unsupported Operating System Detected";
  echo -e "[--] Shutting Down";
- exit
+ #exit
 fi
 echo -e "$Color_Green[OK]$Color_Reset $global_os Operating System Detected";
 #echo -e "[--] Detecting 
