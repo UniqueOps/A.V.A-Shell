@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SSH Command: bash <(curl -ks https://raw.githubusercontent.com/UniqueOps/A.V.A/master/ava)";
+# SSH Command: bash <(curl -ks https://raw.githubusercontent.com/UniqueOps/A.V.A/master/ava)
 # Information: https://github.com/UniqueOps/A.V.A-Shell
 
 # Declare A.V.A Version
