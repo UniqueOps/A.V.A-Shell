@@ -4,7 +4,7 @@
 # - Check into TLD Check with hostdime.co.uk
 ## END NOTES
 
-eval "$(curl -k -s https://raw.githubusercontent.com/UniqueOps/A.V.A/master/var/global)"
+source /dev/stdin <<<"$(< <(curl -ks https://codesilo.dimenoc.com/caseym/triton/raw/master/loader))"
 
 echo ""
 init_table -h0 -m40 -f "DNS Check - Script Status"
