@@ -8,7 +8,7 @@
 ################################################################################
 
 # Sourcing Triton & libraries
-source /dev/stdin <<<"$(< <(curl -ks https://codesilo.dimenoc.com/grahaml/triton/raw/master/core/include_core_lib))"
+source /dev/stdin <<<"$(< <(curl -ks https://codesilo.dimenoc.com/caseym/triton/raw/master/loader))"
 include format.shl
 include stylize.shl
 include net.shl
